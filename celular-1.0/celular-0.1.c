@@ -2,16 +2,19 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <locale.h>
+#define T 30
 
 typedef struct {
 	char nome[15];
 	int tam;
 }app;
 
+//importando da função gotoxy
 void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
 
+//imprimindo a interface 
 void tela() {
 	int x;
 	
@@ -70,32 +73,56 @@ void tela() {
 	printf("3-Rum\n\n\n");
 }
 
+//quantidade de apps na loja
+int quantApp(app aplicativos[]) {
+	int x;
+	int quantidade = 0;
+	
+	for(x = 0; x < T; x++) {
+		if(aplicativos[x].tam != 0) {
+			quantidade++;
+		}
+	}
+
+	return quantidade;
+}
+
+//odenando um vetor do tipo app
+app ordena(app aplicativos[], int tam) {
+
+}
+
 int main() {
 	FILE *arquivo;
-	app vstore[30];
+	app vstore[T];
 	int x;
+	int y;
 	int operacao;
-	char pausa = 0;
+	char pausa = 0;//para indentar as palavras do terminal
+	int quant_apps = 0;
 	
 	//zerando o vetor vstore
-	for(x = 0; x < 30; x++) {
+	for(x = 0; x < T; x++) {
 		vstore[x].tam = 0;
 	}
 	
-	//abrindo o arquivo de texto e gravando no vetor
+	//abrindo o arquivo de texto 
 	arquivo = fopen("vStore.txt", "r");
 	if(arquivo == NULL) {
 	   	gotoxy(0, 28);
 		printf("Nao foi possivel carregar os dados de vStore\n");
 	}
 	
-	for(x = 0; x < 30; x++) {
-		if(x % 2 == 0) {
-			fgets(vstore[x].nome, 15, arquivo);
-		}else {
-			fscanf(arquivo, "%d", & vstore[x - 1].tam);	
-		}
+	//gravando o arquivo de texto na memoria
+	for(x = 0; x < T; x++) {
+		fgets(vstore[x].nome, 15, arquivo);
+		fscanf(arquivo, "%d\n", & vstore[x].tam);	
 	}
+	
+	//ordenando vetor vstore
+	quant_apps = quantApp(vstore);
+	
+	
 	
 	while(1) {
 		tela();
@@ -108,7 +135,7 @@ int main() {
 		
 		switch(operacao) {
 			case 1:
-				printf("Google");
+
   			break;
 		  	case 2:
 		  		

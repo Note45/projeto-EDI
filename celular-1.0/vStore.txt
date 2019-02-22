@@ -1,10 +1,5 @@
-Pedron 
-10
-Master 
-20
-Singh 
-50
-Network 
-100
-VPN 
-5
+StormBreak     10
+Mastern        20
+Singh          50
+Network        100
+VPN            5
