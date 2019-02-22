@@ -71,15 +71,30 @@ void tela() {
 }
 
 int main() {
-	int operacao;
-	char pausa = 0;
 	FILE *arquivo;
 	app vstore[30];
 	int x;
+	int operacao;
+	char pausa = 0;
 	
 	//zerando o vetor vstore
 	for(x = 0; x < 30; x++) {
 		vstore[x].tam = 0;
+	}
+	
+	//abrindo o arquivo de texto e gravando no vetor
+	arquivo = fopen("vStore.txt", "r");
+	if(arquivo == NULL) {
+	   	gotoxy(0, 28);
+		printf("Nao foi possivel carregar os dados de vStore\n");
+	}
+	
+	for(x = 0; x < 30; x++) {
+		if(x % 2 == 0) {
+			fgets(vstore[x].nome, 15, arquivo);
+		}else {
+			fscanf(arquivo, "%d", & vstore[x - 1].tam);	
+		}
 	}
 	
 	while(1) {
@@ -102,8 +117,9 @@ int main() {
 			break;	  
   			default:
   				gotoxy(10, 18);
-  				printf(" :Action not found");
-  				while(pausa < 10) {
+  				printf(" - Action not found\n");
+  				pausa = 0;
+  				while(pausa < 9) {
 					  printf("\n");
 					  pausa++;
 				  }
