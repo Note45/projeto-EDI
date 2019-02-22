@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <locale.h>
 
 void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
 
-int main() {
+void tela() {
 	int x;
 	
 	system("cls");
 	//topo
-	int y;
 	for(x = 0; x < 37; x++) {
 		gotoxy(0, 0);
 		printf("%c", 219);
@@ -37,6 +37,11 @@ int main() {
 		printf("%c", 220);
 	}
 	
+	for(x = 2; x < 38; x++) {
+	gotoxy(x, 17);
+	printf("%c", 220);
+	}
+	
 	//divisorias
 	for(x = 20; x < 25; x++) {
 		gotoxy(12, x);
@@ -57,6 +62,20 @@ int main() {
 	
 	gotoxy(29, 22);
 	printf("3-Rum\n\n\n");
+}
+
+int main() {
+	int operacao;
+	
+	while(1) {
+		tela();
+	
+		//Recebendo operação selecionada
+		gotoxy(2,18);
+		printf("Action:");
+		scanf("%d", & operacao);
+		gotoxy(50, 50);
+	}
 	
 	return 0;
 }                  
