@@ -3,6 +3,11 @@
 #include <windows.h>
 #include <locale.h>
 
+typedef struct {
+	char nome[15];
+	int tam;
+}app;
+
 void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
@@ -11,6 +16,7 @@ void tela() {
 	int x;
 	
 	system("cls");
+	
 	//topo
 	for(x = 0; x < 37; x++) {
 		gotoxy(0, 0);
@@ -31,7 +37,7 @@ void tela() {
 		printf("%c",219);
 	}
 	
-	//espaçamento superior
+	//espaçamentos superiores
 	for(x = 2; x < 38; x++) {
 		gotoxy(x, 19);
 		printf("%c", 220);
@@ -66,6 +72,15 @@ void tela() {
 
 int main() {
 	int operacao;
+	char pausa = 0;
+	FILE *arquivo;
+	app vstore[30];
+	int x;
+	
+	//zerando o vetor vstore
+	for(x = 0; x < 30; x++) {
+		vstore[x].tam = 0;
+	}
 	
 	while(1) {
 		tela();
@@ -74,7 +89,27 @@ int main() {
 		gotoxy(2,18);
 		printf("Action:");
 		scanf("%d", & operacao);
-		gotoxy(50, 50);
+		gotoxy(0, 50);
+		
+		switch(operacao) {
+			case 1:
+				printf("Google");
+  			break;
+		  	case 2:
+		  		
+			break;
+			case 3:
+			break;	  
+  			default:
+  				gotoxy(10, 18);
+  				printf(" :Action not found");
+  				while(pausa < 10) {
+					  printf("\n");
+					  pausa++;
+				  }
+				system("PAUSE");
+  				break;
+		}
 	}
 	
 	return 0;
