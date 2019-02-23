@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <windows.h>
 
 #define T 30 //define o tanto de apps maximo
@@ -38,7 +39,7 @@ void tela() {
 	//parte de baixo
 	for(x = 0; x < 38; x++) {
 		gotoxy(0, x);
-		printf("%c",219);
+		printf("%c", 219);
 	}
 	
 	//espaçamentos superiores
@@ -75,7 +76,7 @@ void tela() {
 }
 
 //interface da 1(vstore) opção do menu
-void telaVstore() {
+void telaVstore(app aplicativos[], int quant) {
 	int x;
 	
 	system("cls");
@@ -117,65 +118,29 @@ void telaVstore() {
 		printf("%c", 219);
 	}
 		
+	//complementando a interface para vStore
+	gotoxy(2, 2);
+	printf("Nome:");
+	gotoxy(15, 2);
+	printf("Tamanho:");
+	gotoxy(29, 2);
+	printf("Id:");
+	
+	for(x = 2; x < quant + 2; x++) {
+		gotoxy(2, x + 1);
+		printf("%s", aplicativos[x - 2].nome);
+		gotoxy(18, x + 1);
+		printf("%d MB",aplicativos[x - 2].tam);
+		gotoxy(32, x + 1);
+		printf("%d", aplicativos[x - 2].id);
+	}
+		
 	//comandos da tela
 	gotoxy(5, 22);
 	printf("1-Install\n\n\n");
 	
 	gotoxy(25, 22);
 	printf("0-Exit\n\n\n");
-}
-
-//opção 1(vstore) do meu
-int funVstore(app aplicativos[], int quant) {	
-	int x;
-	int operacao;
-	int pausa;
-	
-	//imprimindo interface vstore
-	while(1) {
-		telaVstore();
-		
-		//complementando a interface
-		gotoxy(2, 2);
-		printf("Nome:");
-		gotoxy(15, 2);
-		printf("Tamanho:");
-		gotoxy(29, 2);
-		printf("Id:");
-	
-		for(x = 2; x < quant + 2; x++) {
-			gotoxy(2, x + 1);
-			printf("%s", aplicativos[x - 2].nome);
-			gotoxy(18, x + 1);
-			printf("%d MB",aplicativos[x - 2].tam);
-			gotoxy(32, x + 1);
-			printf("%d", aplicativos[x - 2].id);
-		}
-		
-		//Recebendo operação selecionada
-		gotoxy(2,18);
-		printf("Action:");
-		scanf("%d", & operacao);
-		gotoxy(0, 50);
-		
-		switch(operacao) {
-			case 0:
-				return 0;
- 			break;
- 			case 1:
-     			 
-            break;
-        	default:
-        		gotoxy(10, 18);
-  				printf(" - Action not found\n");
-  				pausa = 0;
-  				while(pausa < 9) {
-					  printf("\n");
-					  pausa++;
-				  }
-				system("PAUSE");	
-		}
-	}	
 }
 
 //quantidade de apps na loja
@@ -190,6 +155,88 @@ int quantApp(app aplicativos[]) {
 	}
 
 	return quantidade;
+}
+
+//função para instalar apps
+void funInsta(app aplicativos[], int quant, app myapps[]) {
+	int id = 0;
+	int x;
+	int insta = 0;//recebe quanto apps estão instalados
+	
+	while(1) {
+		telaVstore(aplicativos, quant);
+		
+		//Recebendo operação selecionada
+		gotoxy(2,18);
+		printf("Id:");
+		scanf("%d", & id);
+		gotoxy(0, 50);
+		
+		//procurando o indice referete a esse id
+		for(x = 0; x < quant; x++) {
+			if(aplicativos[x].id == id) {
+  				insta = quantApp(myapps);
+     			myapps[insta].id = aplicativos[x].id;
+     			myapps[insta].tam = aplicativos[x].tam;
+     			strcpy(myapps[insta].nome, aplicativos[x].nome);
+				return;	
+			}
+		}			
+		
+		//caso o id não seja encontrado
+		while(1){
+			system("cls");
+			telaVstore(aplicativos, quant);
+			gotoxy(2,18);
+			printf("Id nao encontrado - Id:");
+			scanf("%d", & id);
+			gotoxy(0, 50);
+				
+			for(x = 0; x < quant; x++) {
+				if(aplicativos[x].id == id) {
+   					insta = quantApp(myapps);
+     				myapps[insta].id = aplicativos[x].id;
+     				myapps[insta].tam = aplicativos[x].tam;
+     				strcpy(myapps[insta].nome, aplicativos[x].nome);
+					return;	
+				}
+			}			
+		}		
+	}
+}
+
+//opção 1(vstore) do meu
+int funVstore(app aplicativos[], int quant, app myapps[]) {	
+	int operacao;
+	int pausa;
+	
+	//imprimindo interface vstore
+	while(1) {
+		telaVstore(aplicativos, quant);
+		//Recebendo operação selecionada
+		gotoxy(2,18);
+		printf("Action:");
+		scanf("%d", & operacao);
+		gotoxy(0, 50);
+		
+		switch(operacao) {
+			case 0:
+				return 0;
+ 			break;
+ 			case 1:
+     			funInsta(aplicativos, quant, myapps);
+            break;
+        	default:
+        		gotoxy(10, 18);
+  				printf(" - Action not found\n");
+  				pausa = 0;
+  				while(pausa < 9) {
+					  printf("\n");
+					  pausa++;
+				  }
+				system("PAUSE");	
+		}
+	}	
 }
 
 //odenando um vetor do tipo app
@@ -219,6 +266,7 @@ void ordena(app aplicativos[], int tam) {
 int main() {
 	FILE *arquivo;
 	app vstore[T];
+	app myapps[T];
 	int x;
 	int operacao;
 	char pausa = 0;//para indentar as palavras do terminal
@@ -228,6 +276,12 @@ int main() {
 	for(x = 0; x < T; x++) {
 		vstore[x].tam = 0;
 		vstore[x].id = 0;
+	}
+	
+	//zererando vetor myapps
+	for(x = 0; x < T; x++) {
+		myapps[x].tam = 0;
+		myapps[x].id = 0;
 	}
 	
 	//abrindo o arquivo de texto 
@@ -260,7 +314,7 @@ int main() {
 		
 		switch(operacao) {
 			case 1:
-				funVstore(vstore, quant_apps);
+				funVstore(vstore, quant_apps, myapps);
   			break;
 		  	case 2:
 		  		
