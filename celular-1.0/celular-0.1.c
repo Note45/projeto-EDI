@@ -7,6 +7,7 @@
 typedef struct {
 	char nome[15];
 	int tam;
+	int id;
 }app;
 
 //importando da função gotoxy
@@ -90,6 +91,8 @@ int quantApp(app aplicativos[]) {
 //odenando um vetor do tipo app
 app ordena(app aplicativos[], int tam) {
 
+	
+	
 }
 
 int main() {
@@ -104,6 +107,7 @@ int main() {
 	//zerando o vetor vstore
 	for(x = 0; x < T; x++) {
 		vstore[x].tam = 0;
+		vstore[x].id = 0;
 	}
 	
 	//abrindo o arquivo de texto 
@@ -116,7 +120,8 @@ int main() {
 	//gravando o arquivo de texto na memoria
 	for(x = 0; x < T; x++) {
 		fgets(vstore[x].nome, 15, arquivo);
-		fscanf(arquivo, "%d\n", & vstore[x].tam);	
+		fscanf(arquivo, "%d\n", & vstore[x].tam);
+		fscanf(arquivo, "%d\n", & vstore[x].id);	
 	}
 	
 	//ordenando vetor vstore
