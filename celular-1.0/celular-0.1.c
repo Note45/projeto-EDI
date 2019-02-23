@@ -99,7 +99,7 @@ void ordena(app aplicativos[], int tam) {
 		troca = 0;//variavel de controle para saber se a ordenação continua
 		
 		for(x = 0; x < tam; x++) {
-			if(aplicativos[x].tam > aplicativos[x + 1].tam) {
+			if(aplicativos[x].tam > aplicativos[x + 1].tam && aplicativos[x + 1].tam != 0) {
 				aux = aplicativos[x];//jogando valor para area de troca
 				aplicativos[x] = aplicativos[x + 1];//valor do proximo indice no atual
 				aplicativos[x + 1] = aux; //pegando valor da area de troca e colocando no proximo indice
@@ -109,15 +109,6 @@ void ordena(app aplicativos[], int tam) {
 		
 		if(troca == 0) { //verificar se tem trocas a fazer
 			break;
-		}
-	}
-	
-	for(x = 1; x <= tam; x++) {
-		aplicativos[x - 1] = aplicativos[x];
-		if(x == tam) {//corrigindo erro de duplicação
-			aplicativos[x].tam = 0;
-			aplicativos[x].id = 0;
-			strcpy(aplicativos[x].nome, "adfa");
 		}
 	}
 }
