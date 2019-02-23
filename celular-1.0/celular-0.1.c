@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <locale.h>
-#define T 30
+#include <string.h>
+#define T 30 //define o tanto de apps
 
 typedef struct {
 	char nome[15];
@@ -89,17 +90,42 @@ int quantApp(app aplicativos[]) {
 }
 
 //odenando um vetor do tipo app
-app ordena(app aplicativos[], int tam) {
-
+void ordena(app aplicativos[], int tam) {
+	int x;
+	int troca;
+	app aux;
 	
+	while(1) {
+		troca = 0;//variavel de controle para saber se a ordenação continua
+		
+		for(x = 0; x < tam; x++) {
+			if(aplicativos[x].tam > aplicativos[x + 1].tam) {
+				aux = aplicativos[x];//jogando valor para area de troca
+				aplicativos[x] = aplicativos[x + 1];//valor do proximo indice no atual
+				aplicativos[x + 1] = aux; //pegando valor da area de troca e colocando no proximo indice
+				troca = 1; //ouve troca
+			}
+		}
+		
+		if(troca == 0) { //verificar se tem trocas a fazer
+			break;
+		}
+	}
 	
+	for(x = 1; x <= tam; x++) {
+		aplicativos[x - 1] = aplicativos[x];
+		if(x == tam) {//corrigindo erro de duplicação
+			aplicativos[x].tam = 0;
+			aplicativos[x].id = 0;
+			strcpy(aplicativos[x].nome, "adfa");
+		}
+	}
 }
 
 int main() {
 	FILE *arquivo;
 	app vstore[T];
 	int x;
-	int y;
 	int operacao;
 	char pausa = 0;//para indentar as palavras do terminal
 	int quant_apps = 0;
@@ -127,7 +153,7 @@ int main() {
 	//ordenando vetor vstore
 	quant_apps = quantApp(vstore);
 	
-	
+	ordena(vstore, quant_apps);
 	
 	while(1) {
 		tela();
