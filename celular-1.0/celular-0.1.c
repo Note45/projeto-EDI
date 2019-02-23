@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
-#include <locale.h>
-#include <string.h>
-#define T 30 //define o tanto de apps
+
+#define T 30 //define o tanto de apps maximo
 
 typedef struct {
 	char nome[15];
@@ -73,6 +72,110 @@ void tela() {
 	
 	gotoxy(29, 22);
 	printf("3-Rum\n\n\n");
+}
+
+//interface da 1(vstore) opção do menu
+void telaVstore() {
+	int x;
+	
+	system("cls");
+	
+	//topo
+	for(x = 0; x < 37; x++) {
+		gotoxy(0, 0);
+		printf("%c", 219);
+	}
+	
+	//esquerda e direita
+	for(x = 1; x < 25; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+		gotoxy(38, x);
+		printf("%c\n", 219);
+	}
+
+	//parte de baixo
+	for(x = 0; x < 38; x++) {
+		gotoxy(0, x);
+		printf("%c",219);
+	}
+	
+	//espaçamentos superiores
+	for(x = 2; x < 38; x++) {
+		gotoxy(x, 19);
+		printf("%c", 220);
+	}
+	
+	for(x = 2; x < 38; x++) {
+	gotoxy(x, 17);
+	printf("%c", 220);
+	}
+	
+	//divisorias
+	for(x = 20; x < 25; x++) {
+		gotoxy(19, x);
+		printf("%c", 219);
+	}
+		
+	//comandos da tela
+	gotoxy(5, 22);
+	printf("1-Install\n\n\n");
+	
+	gotoxy(25, 22);
+	printf("0-Exit\n\n\n");
+}
+
+//opção 1(vstore) do meu
+int funVstore(app aplicativos[], int quant) {	
+	int x;
+	int operacao;
+	int pausa;
+	
+	//imprimindo interface vstore
+	while(1) {
+		telaVstore();
+		
+		//complementando a interface
+		gotoxy(2, 2);
+		printf("Nome:");
+		gotoxy(15, 2);
+		printf("Tamanho:");
+		gotoxy(29, 2);
+		printf("Id:");
+	
+		for(x = 2; x < quant + 2; x++) {
+			gotoxy(2, x + 1);
+			printf("%s", aplicativos[x - 2].nome);
+			gotoxy(18, x + 1);
+			printf("%d MB",aplicativos[x - 2].tam);
+			gotoxy(32, x + 1);
+			printf("%d", aplicativos[x - 2].id);
+		}
+		
+		//Recebendo operação selecionada
+		gotoxy(2,18);
+		printf("Action:");
+		scanf("%d", & operacao);
+		gotoxy(0, 50);
+		
+		switch(operacao) {
+			case 0:
+				return 0;
+ 			break;
+ 			case 1:
+     			 
+            break;
+        	default:
+        		gotoxy(10, 18);
+  				printf(" - Action not found\n");
+  				pausa = 0;
+  				while(pausa < 9) {
+					  printf("\n");
+					  pausa++;
+				  }
+				system("PAUSE");	
+		}
+	}	
 }
 
 //quantidade de apps na loja
@@ -157,12 +260,16 @@ int main() {
 		
 		switch(operacao) {
 			case 1:
-
+				funVstore(vstore, quant_apps);
   			break;
 		  	case 2:
 		  		
 			break;
 			case 3:
+			break;
+			case 0:
+				gotoxy(60,60);
+				return 0;
 			break;	  
   			default:
   				gotoxy(10, 18);
