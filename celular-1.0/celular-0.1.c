@@ -257,6 +257,54 @@ void ordena(app aplicativos[], int tam) {
 	}
 }
 
+//função para rodar apps
+void funRum(app myapps[], int quant, app rum[]) {
+	int id = 0;
+	int x;
+	int rodando = quantApp(rum);//recebe quanto apps estão rodando
+	
+	while(1) {
+		telaMyapps(myapps, quant);
+		
+		//Recebendo operação selecionada
+		gotoxy(2,18);
+		printf("Id:");
+		scanf("%d", & id);
+		gotoxy(0, 50);
+		
+		//procurando o indice referete a esse id
+		for(x = 0; x < quant; x++) {
+			if(myapps[x].id == id) {
+  				rodando = quantApp(rum);
+     			rum[rodando].id = myapps[x].id;
+     			rum[rodando].tam = myapps[x].tam;
+     			strcpy(rum[rodando].nome, myapps[x].nome);
+				return;	
+			}
+		}			
+		
+		//caso o id não seja encontrado
+		while(1){
+			system("cls");
+			telaMyapps(myapps, quant);
+			gotoxy(2,18);
+			printf("Id nao encontrado - Id:");
+			scanf("%d", & id);
+			gotoxy(0, 50);
+				
+			for(x = 0; x < quant; x++) {
+				if(myapps[x].id == id) {
+	  				rodando = quantApp(rum);
+	     			rum[rodando].id = myapps[x].id;
+	     			rum[rodando].tam = myapps[x].tam;
+	     			strcpy(rum[rodando].nome, myapps[x].nome);
+					return;	
+				}
+			}			
+		}		
+	}	
+}
+
 //função para instalar apps
 void funInsta(app aplicativos[], int quant, app myapps[]) {
 	int id = 0;
@@ -305,14 +353,14 @@ void funInsta(app aplicativos[], int quant, app myapps[]) {
 	}
 }
 
-//opção 1(vstore) do menu
-void funMyapps(app aplicativos[], int quant) {
+//opção 2(myapps) do menu
+void funMyapps(app myapps[], int quant, app rum[]) {
 	int operacao;
 	int pausa;
 	
 	//imprimindo interface
 	while(1) {
-		telaMyapps(aplicativos, quant);
+		telaMyapps(myapps, quant);
 		//Recebendo operação selecionada
 		gotoxy(2, 18);
 		printf("Action:");
@@ -324,7 +372,7 @@ void funMyapps(app aplicativos[], int quant) {
 				return;
  			break;
  			case 1:
-     			
+     			funRum(myapps, quant, rum);
             break;
         	case 2:
         		
@@ -342,6 +390,7 @@ void funMyapps(app aplicativos[], int quant) {
 	}
 }
 
+//opção 1(vstore) do menu
 void funVstore(app aplicativos[], int quant, app myapps[]) {	
 	int operacao;
 	int pausa;
@@ -357,7 +406,7 @@ void funVstore(app aplicativos[], int quant, app myapps[]) {
 		
 		switch(operacao) {
 			case 0:
-				return 0;
+				return;
  			break;
  			case 1:
      			funInsta(aplicativos, quant, myapps);
@@ -375,16 +424,16 @@ void funVstore(app aplicativos[], int quant, app myapps[]) {
 	}	
 }
 
-//opção 2(myapps) do menu
 int main() {
 	FILE *arquivo;
 	app vstore[T];
 	app myapps[T];
+	app rum[T];
 	int x;
 	int operacao;
 	char pausa = 0;//para indentar as palavras do terminal
 	int quant_apps = 0;
-	int quant_insta;//recebe a quantidade de apps instalados
+	int quant_insta = 0;//recebe a quantidade de apps instalados
 	
 	//zerando o vetor vstore
 	for(x = 0; x < T; x++) {
@@ -396,6 +445,12 @@ int main() {
 	for(x = 0; x < T; x++) {
 		myapps[x].tam = 0;
 		myapps[x].id = 0;
+	}
+	
+	//zerando rum
+	for(x = 0; x < T; x++) {
+		rum[x].tam = 0;
+		rum[x].id = 0;
 	}
 	
 	//abrindo o arquivo de texto 
@@ -437,7 +492,7 @@ int main() {
 		  		ordena(myapps, quant_insta);
 		  		
 		  		//chamando função dessa opção
-		  		funMyapps(myapps, quant_insta);
+		  		funMyapps(myapps, quant_insta, rum);
 			break;
 			case 3:
 				
