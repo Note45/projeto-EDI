@@ -16,7 +16,7 @@ void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
 
-//imprimindo a interface 
+//imprimindo a interface inicial
 void tela() {
 	int x;
 	
@@ -143,6 +143,82 @@ void telaVstore(app aplicativos[], int quant) {
 	printf("0-Exit\n\n\n");
 }
 
+//imprimindo da 2(myapps) opção do menu
+void telaMyapps(app aplicativos[], int quant) {
+	int x;
+	
+	system("cls");
+	
+	//topo
+	for(x = 0; x < 37; x++) {
+		gotoxy(0, 0);
+		printf("%c", 219);
+	}
+	
+	//esquerda e direita
+	for(x = 1; x < 25; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+		gotoxy(38, x);
+		printf("%c\n", 219);
+	}
+
+	//parte de baixo
+	for(x = 0; x < 38; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+	}
+	
+	//espaçamentos superiores
+	for(x = 2; x < 38; x++) {
+		gotoxy(x, 19);
+		printf("%c", 220);
+	}
+	
+	for(x = 2; x < 38; x++) {
+	gotoxy(x, 17);
+	printf("%c", 220);
+	}
+	
+	//divisorias
+	for(x = 20; x < 25; x++) {
+		gotoxy(12, x);
+		printf("%c", 219);
+	}
+	
+	for(x = 20; x < 25; x++) {
+		gotoxy(25, x);
+		printf("%c", 219);
+	}
+	
+	//complementando a interface para myapps
+	gotoxy(2, 2);
+	printf("Nome:");
+	gotoxy(15, 2);
+	printf("Tamanho:");
+	gotoxy(29, 2);
+	printf("Id:");
+	
+	for(x = 2; x < quant + 2; x++) {
+		gotoxy(2, x + 1);
+		printf("%s", aplicativos[x - 2].nome);
+		gotoxy(18, x + 1);
+		printf("%d MB",aplicativos[x - 2].tam);
+		gotoxy(32, x + 1);
+		printf("%d", aplicativos[x - 2].id);
+	}
+	
+	//comandos da tela
+	gotoxy(3, 22);
+	printf("1-Rum\n\n\n");
+	
+	gotoxy(14, 22);
+	printf("2-Remove\n\n\n");
+	
+	gotoxy(29, 22);
+	printf("0-Exit\n\n\n");
+}
+
 //quantidade de apps na loja
 int quantApp(app aplicativos[]) {
 	int x;
@@ -155,6 +231,30 @@ int quantApp(app aplicativos[]) {
 	}
 
 	return quantidade;
+}
+
+//odenando um vetor do tipo app
+void ordena(app aplicativos[], int tam) {
+	int x;
+	int troca;
+	app aux;
+	
+	while(1) {
+		troca = 0;//variavel de controle para saber se a ordenação continua
+		
+		for(x = 0; x < tam; x++) {
+			if(aplicativos[x].tam > aplicativos[x + 1].tam && aplicativos[x + 1].tam != 0) {
+				aux = aplicativos[x];//jogando valor para area de troca
+				aplicativos[x] = aplicativos[x + 1];//valor do proximo indice no atual
+				aplicativos[x + 1] = aux; //pegando valor da area de troca e colocando no proximo indice
+				troca = 1; //ouve troca
+			}
+		}
+		
+		if(troca == 0) { //verificar se tem trocas a fazer
+			break;
+		}
+	}
 }
 
 //função para instalar apps
@@ -205,8 +305,44 @@ void funInsta(app aplicativos[], int quant, app myapps[]) {
 	}
 }
 
-//opção 1(vstore) do meu
-int funVstore(app aplicativos[], int quant, app myapps[]) {	
+//opção 1(vstore) do menu
+void funMyapps(app aplicativos[], int quant) {
+	int operacao;
+	int pausa;
+	
+	//imprimindo interface
+	while(1) {
+		telaMyapps(aplicativos, quant);
+		//Recebendo operação selecionada
+		gotoxy(2, 18);
+		printf("Action:");
+		scanf("%d", & operacao);
+		gotoxy(0, 50);
+		
+		switch(operacao) {
+			case 0:
+				return;
+ 			break;
+ 			case 1:
+     			
+            break;
+        	case 2:
+        		
+        	break;	
+        	default:
+        		gotoxy(10, 18);
+  				printf(" - Action not found\n");
+  				pausa = 0;
+  				while(pausa < 9) {
+					  printf("\n");
+					  pausa++;
+				  }
+				system("PAUSE");	
+		}	
+	}
+}
+
+void funVstore(app aplicativos[], int quant, app myapps[]) {	
 	int operacao;
 	int pausa;
 	
@@ -239,30 +375,7 @@ int funVstore(app aplicativos[], int quant, app myapps[]) {
 	}	
 }
 
-//odenando um vetor do tipo app
-void ordena(app aplicativos[], int tam) {
-	int x;
-	int troca;
-	app aux;
-	
-	while(1) {
-		troca = 0;//variavel de controle para saber se a ordenação continua
-		
-		for(x = 0; x < tam; x++) {
-			if(aplicativos[x].tam > aplicativos[x + 1].tam && aplicativos[x + 1].tam != 0) {
-				aux = aplicativos[x];//jogando valor para area de troca
-				aplicativos[x] = aplicativos[x + 1];//valor do proximo indice no atual
-				aplicativos[x + 1] = aux; //pegando valor da area de troca e colocando no proximo indice
-				troca = 1; //ouve troca
-			}
-		}
-		
-		if(troca == 0) { //verificar se tem trocas a fazer
-			break;
-		}
-	}
-}
-
+//opção 2(myapps) do menu
 int main() {
 	FILE *arquivo;
 	app vstore[T];
@@ -271,6 +384,7 @@ int main() {
 	int operacao;
 	char pausa = 0;//para indentar as palavras do terminal
 	int quant_apps = 0;
+	int quant_insta;//recebe a quantidade de apps instalados
 	
 	//zerando o vetor vstore
 	for(x = 0; x < T; x++) {
@@ -317,9 +431,16 @@ int main() {
 				funVstore(vstore, quant_apps, myapps);
   			break;
 		  	case 2:
+		  		//contando e ordenando os apps instalados
+		  		quant_insta = quantApp(myapps);
 		  		
+		  		ordena(myapps, quant_insta);
+		  		
+		  		//chamando função dessa opção
+		  		funMyapps(myapps, quant_insta);
 			break;
 			case 3:
+				
 			break;
 			case 0:
 				gotoxy(60,60);
