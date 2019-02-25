@@ -257,6 +257,30 @@ void ordena(app aplicativos[], int tam) {
 	}
 }
 
+//função para ordenar apos ser removido algum app
+void ordenaInver(app aplicativos[], int tam) {
+	int x;
+	int troca;
+	app aux;
+	
+	while(1) {
+		troca = 0;//variavel de controle para saber se a ordenação continua
+		
+		for(x = 0; x < tam; x++) {
+			if(aplicativos[x].tam < aplicativos[x + 1].tam) {
+				aux = aplicativos[x];//jogando valor para area de troca
+				aplicativos[x] = aplicativos[x + 1];//valor do proximo indice no atual
+				aplicativos[x + 1] = aux; //pegando valor da area de troca e colocando no proximo indice
+				troca = 1; //ouve troca
+			}
+		}
+		
+		if(troca == 0) { //verificar se tem trocas a fazer
+			break;
+		}
+	}
+}
+
 //função para rodar apps
 void funRum(app myapps[], int quant, app rum[]) {
 	int id = 0;
@@ -301,6 +325,70 @@ void funRum(app myapps[], int quant, app rum[]) {
 					return;	
 				}
 			}			
+		}		
+	}	
+}
+
+//função para remover apps
+void funRemove(app myapps[], int quant) {
+	int id = 0;
+	int x;
+	int encontrado = 0;
+	
+	while(1) {
+		telaMyapps(myapps, quant);
+		
+		//Recebendo operação selecionada
+		gotoxy(2,18);
+		printf("Id:");
+		scanf("%d", & id);
+		gotoxy(0, 50);
+		
+		//procurando o indice referete a esse id
+		for(x = 0; x < quant; x++) {
+			if(myapps[x].id == id) {
+				strcpy(myapps[x].nome, "");
+   				myapps[x].id = 0;
+   				myapps[x].tam = 0;
+   				encontrado = 1;
+	   	   	    break;
+			}
+		}
+		
+		//ordenando para retirar a posição vazia
+		ordenaInver(myapps, quant);	
+		ordena(myapps, quant);	
+		
+		if(encontrado == 1) {
+			return;
+		
+		}else {
+			//caso o id não seja encontrado
+			while(1){
+				system("cls");
+				telaMyapps(myapps, quant);
+				gotoxy(2,18);
+				printf("Id nao encontrado - Id:");
+				scanf("%d", & id);
+				gotoxy(0, 50);
+					
+				for(x = 0; x < quant; x++) {
+					if(myapps[x].id == id) {
+						strcpy(myapps[x].nome, "");
+		     			myapps[x].id = 0;
+		     			myapps[x].tam = 0;
+						break;	
+					}
+				}
+				
+				//ordenando para retirar a posição vazia
+				ordenaInver(myapps, quant);	
+				ordena(myapps, quant);
+				
+				if(encontrado == 1) {
+					return;
+				}						
+			}					
 		}		
 	}	
 }
@@ -360,7 +448,13 @@ void funMyapps(app myapps[], int quant, app rum[]) {
 	
 	//imprimindo interface
 	while(1) {
+		//caso algum app seja removido do vetor
+		quant = quantApp(myapps);
+		ordenaInver(myapps, quant);
+		ordena(myapps, quant);
+		
 		telaMyapps(myapps, quant);
+		
 		//Recebendo operação selecionada
 		gotoxy(2, 18);
 		printf("Action:");
@@ -375,7 +469,7 @@ void funMyapps(app myapps[], int quant, app rum[]) {
      			funRum(myapps, quant, rum);
             break;
         	case 2:
-        		
+        		funRemove(myapps, quant);
         	break;	
         	default:
         		gotoxy(10, 18);
@@ -437,18 +531,21 @@ int main() {
 	
 	//zerando o vetor vstore
 	for(x = 0; x < T; x++) {
+		strcpy(vstore[x].nome, "");
 		vstore[x].tam = 0;
 		vstore[x].id = 0;
 	}
 	
 	//zererando vetor myapps
 	for(x = 0; x < T; x++) {
+		strcpy(myapps[x].nome, "");
 		myapps[x].tam = 0;
 		myapps[x].id = 0;
 	}
 	
 	//zerando rum
 	for(x = 0; x < T; x++) {
+		strcpy(rum[x].nome, "");
 		rum[x].tam = 0;
 		rum[x].id = 0;
 	}
@@ -482,7 +579,7 @@ int main() {
 		gotoxy(0, 50);
 		
 		switch(operacao) {
-			case 1:
+			case 1:				
 				funVstore(vstore, quant_apps, myapps);
   			break;
 		  	case 2:
