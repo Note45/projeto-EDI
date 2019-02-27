@@ -4,10 +4,12 @@
 #include <windows.h>
 
 #define T 30 //define o tanto de apps maximo
-#define X 3 //define o tamanho da matriz da tela inicial
+#define Y 3 //define o tanto de colunos da matriz inicial
+#define X 2	//define o tanto de linhas da matriz inicial
+#define N 15 //define o tamanho do nome dos apps
 
 typedef struct {
-	char nome[15];
+	char nome[N];
 	int tam;
 	int id;
 }App;
@@ -15,6 +17,68 @@ typedef struct {
 //importando da função gotoxy
 void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
+}
+
+//quantidade de apps na loja
+int quantApp(App aplicativos[]) {
+	int x;
+	int quantidade = 0;
+	
+	for(x = 0; x < T; x++) {
+		if(aplicativos[x].tam != 0) {
+			quantidade++;
+		}
+	}
+
+	return quantidade;
+}
+
+//odenando um vetor do tipo app
+void ordena(App aplicativos[], int tam) {
+	int x;
+	int troca;
+	App aux;
+	
+	while(1) {
+		troca = 0;//variavel de controle para saber se a ordenação continua
+		
+		for(x = 0; x < tam; x++) {
+			if(aplicativos[x].tam > aplicativos[x + 1].tam && aplicativos[x + 1].tam != 0) {
+				aux = aplicativos[x];//jogando valor para area de troca
+				aplicativos[x] = aplicativos[x + 1];//valor do proximo indice no atual
+				aplicativos[x + 1] = aux; //pegando valor da area de troca e colocando no proximo indice
+				troca = 1; //ouve troca
+			}
+		}
+		
+		if(troca == 0) { //verificar se tem trocas a fazer
+			break;
+		}
+	}
+}
+
+//função para ordenar para colocar os zerados para o final
+void ordenaInver(App aplicativos[], int tam) {
+	int x;
+	int troca;
+	App aux;
+	
+	while(1) {
+		troca = 0;//variavel de controle para saber se a ordenação continua
+		
+		for(x = 0; x < tam; x++) {
+			if(aplicativos[x].tam < aplicativos[x + 1].tam) {
+				aux = aplicativos[x];//jogando valor para area de troca
+				aplicativos[x] = aplicativos[x + 1];//valor do proximo indice no atual
+				aplicativos[x + 1] = aux; //pegando valor da area de troca e colocando no proximo indice
+				troca = 1; //ouve troca
+			}
+		}
+		
+		if(troca == 0) { //verificar se tem trocas a fazer
+			break;
+		}
+	}
 }
 
 //imprimindo a interface inicial
@@ -95,9 +159,42 @@ void telaIni(App aplicativos[X][X]) {
 }
 
 int main() {
-	App myappsed_Ini[X][X];
+	App StoreEd[T];
+	App MeusAppsEd_Ini[X][Y];
+	App MeusAppsEd[T];
+	App AppRumEd[T];
+	int x;	
+	int y;
 	
-	telaIni(myappsed_Ini);
+	//zerando o vetor StoreEd
+	for(x = 0; x < T; x++) {
+		strcpy(StoreEd[x].nome, "");
+		StoreEd[x].tam = 0;
+		StoreEd[x].id = 0;
+	}
+	
+	//zererando vetor MeusAppsEd_Ini
+	for(x = 0; x < X; x++) {
+		for(y = 0; y < Y; y++) {
+			strcpy(MeusAppsEd_Ini[x][y].nome, "");
+			MeusAppsEd_Ini[x][y].tam = 0;
+			MeusAppsEd_Ini[x][y].id = 0;
+		}
+	}
+	
+	//zerando MeusAppsEd
+	for(x = 0; x < T; x++) {
+		strcpy(MeusAppsEd[x].nome, "");
+		MeusAppsEd[x].tam = 0;
+		MeusAppsEd[x].id = 0;
+	}
+	
+	//zerando AppRumEd
+	for(x = 0; x < T; x++) {
+		strcpy(AppRumEd[x].nome, "");
+		AppRumEd[x].tam = 0;
+		AppRumEd[x].id = 0;
+	}
 	
 	return 0;
 }
