@@ -178,6 +178,109 @@ void telaIni(App aplicativos[X][Y]) {
 
 }
 
+//interface da 1(vstore) opção do menu
+void telaStoreED(App aplicativos[], int quant) {
+	int x;
+	
+	system("cls");
+	
+	//topo
+	for(x = 0; x < 41; x++) {
+		gotoxy(0, 0);
+		printf("%c", 219);
+	}
+	
+	//esquerda e direita
+	for(x = 1; x < 25; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+		gotoxy(42, x);
+		printf("%c\n", 219);
+	}
+
+	//parte de baixo
+	for(x = 0; x < 42; x++) {
+		gotoxy(0, x);
+		printf("%c",219);
+	}
+	
+	//espaçamentos superiores
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 21);
+		printf("%c", 220);
+	}
+	
+	for(x = 2; x < 42; x++) {
+	gotoxy(x, 19);
+	printf("%c", 220);
+	}
+	
+	//divisorias
+	for(x = 22; x < 25; x++) {
+		gotoxy(20, x);
+		printf("%c", 219);
+	}
+		
+	//complementando a interface para vStore
+	gotoxy(2, 2);
+	printf("Nome:");
+	gotoxy(15, 2);
+	printf("Tamanho:");
+	gotoxy(29, 2);
+	printf("Id:");
+	
+	for(x = 2; x < quant + 2; x++) {
+		gotoxy(2, x + 1);
+		printf("%s", aplicativos[x - 2].nome);
+		gotoxy(18, x + 1);
+		printf("%d MB",aplicativos[x - 2].tam);
+		gotoxy(32, x + 1);
+		printf("%d", aplicativos[x - 2].id);
+	}
+		
+	//comandos da tela
+	gotoxy(5, 23);
+	printf("1-Instalar\n\n\n");
+	
+	gotoxy(28, 23);
+	printf("0-Sair\n\n\n");
+}
+
+//Função para a 1 opção(StoreED) do menu
+void funStoreED(App aplicativos[], int quant, App meusappsed[]) {	
+	int operacao;
+	int pausa;
+	
+	//imprimindo interface vstore
+	while(1) {
+		telaStoreED(aplicativos, quant);
+		
+		//Recebendo operação selecionada
+		gotoxy(2,20);
+		printf("Operacao:");
+		scanf("%d", & operacao);
+		gotoxy(0, 50);
+		
+		switch(operacao) {
+			case 0:
+				return;
+ 			break;
+ 			case 1:
+     			
+            break;
+        	default:
+        		gotoxy(12, 20);
+  				printf(" - Operacao nao encontrada\n");
+  				pausa = 0;
+  				while(pausa < 9) {
+					  printf("\n");
+					  pausa++;
+				  }
+				system("PAUSE");	
+		}
+	}	
+}
+
 int main() {
 	App StoreED[T];
 	App MeusAppsED_Ini[X][Y];
@@ -185,7 +288,7 @@ int main() {
 	App AppRumED[T];
 	int x;	
 	int y;
-	int quant_apps;
+	int quant_apps = 0;
 	int operacao;
 	int pausa;
 	
@@ -239,7 +342,7 @@ int main() {
 		
 		switch(operacao) {
 			case 1:				
-				
+				funStoreED(StoreED, quant_apps, MeusAppsED);
   			break;
 		  	case 2:
 		 
