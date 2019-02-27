@@ -82,7 +82,7 @@ void ordenaInver(App aplicativos[], int tam) {
 }
 
 //lendo o arquivo e adicionando no vetor
-void lerArq(App StoreEd[]) {
+void lerArq(App StoreED[]) {
 	FILE *arquivo;
 	int x;
 	 	
@@ -95,9 +95,9 @@ void lerArq(App StoreEd[]) {
 	
 	//gravando o arquivo de texto na memoria
 	for(x = 0; x < T; x++) {
-		fgets(StoreEd[x].nome, 15, arquivo);
-		fscanf(arquivo, "%d\n", & StoreEd[x].tam);
-		fscanf(arquivo, "%d\n", & StoreEd[x].id);	
+		fgets(StoreED[x].nome, 15, arquivo);
+		fscanf(arquivo, "%d\n", & StoreED[x].tam);
+		fscanf(arquivo, "%d\n", & StoreED[x].id);	
 	}
 }
 
@@ -134,12 +134,12 @@ void telaIni(App aplicativos[X][Y]) {
 	
 	//divisorias
 	for(x = 22; x < 25; x++) {
-		gotoxy(14, x);
+		gotoxy(13, x);
 		printf("%c", 219);
 	}
 	
 	for(x = 22; x < 25; x++) {
-		gotoxy(30, x);
+		gotoxy(29, x);
 		printf("%c", 219);
 	}
 	
@@ -170,19 +170,19 @@ void telaIni(App aplicativos[X][Y]) {
 	gotoxy(3, 23);
 	printf("1-StoreED\n");
 	
-	gotoxy(16, 23);
+	gotoxy(15, 23);
 	printf("2-Meus AppsED\n");
 	
-	gotoxy(32, 23);
-	printf("3-AppRum\n\n\n");
+	gotoxy(31, 23);
+	printf("3-AppRumED\n\n\n");
 
 }
 
 int main() {
-	App StoreEd[T];
-	App MeusAppsEd_Ini[X][Y];
-	App MeusAppsEd[T];
-	App AppRumEd[T];
+	App StoreED[T];
+	App MeusAppsED_Ini[X][Y];
+	App MeusAppsED[T];
+	App AppRumED[T];
 	int x;	
 	int y;
 	int quant_apps;
@@ -191,45 +191,45 @@ int main() {
 	
 	//zerando o vetor StoreEd
 	for(x = 0; x < T; x++) {
-		strcpy(StoreEd[x].nome, "");
-		StoreEd[x].tam = 0;
-		StoreEd[x].id = 0;
+		strcpy(StoreED[x].nome, "");
+		StoreED[x].tam = 0;
+		StoreED[x].id = 0;
 	}
 	
 	//zererando vetor MeusAppsEd_Ini
 	for(x = 0; x < X; x++) {
 		for(y = 0; y < Y; y++) {
-			strcpy(MeusAppsEd_Ini[x][y].nome, "");
-			MeusAppsEd_Ini[x][y].tam = 0;
-			MeusAppsEd_Ini[x][y].id = 0;
+			strcpy(MeusAppsED_Ini[x][y].nome, "");
+			MeusAppsED_Ini[x][y].tam = 0;
+			MeusAppsED_Ini[x][y].id = 0;
 		}
 	}
 	
 	//zerando MeusAppsEd
 	for(x = 0; x < T; x++) {
-		strcpy(MeusAppsEd[x].nome, "");
-		MeusAppsEd[x].tam = 0;
-		MeusAppsEd[x].id = 0;
+		strcpy(MeusAppsED[x].nome, "");
+		MeusAppsED[x].tam = 0;
+		MeusAppsED[x].id = 0;
 	}
 	
 	//zerando AppRumEd
 	for(x = 0; x < T; x++) {
-		strcpy(AppRumEd[x].nome, "");
-		AppRumEd[x].tam = 0;
-		AppRumEd[x].id = 0;
+		strcpy(AppRumED[x].nome, "");
+		AppRumED[x].tam = 0;
+		AppRumED[x].id = 0;
 	}
 
 	//chamando a leitura do arquivo
-	lerArq(StoreEd);
+	lerArq(StoreED);
 	
 	//ordenando o vetor StoreEd
-	quant_apps = quantApp(StoreEd);
+	quant_apps = quantApp(StoreED);
 	
-	ordena(StoreEd, quant_apps);
+	ordena(StoreED, quant_apps);
 	
 	//chamando a interface inicial
 	while(1) {
-		telaIni(MeusAppsEd_Ini);
+		telaIni(MeusAppsED_Ini);
 		
 		//Recebendo operação selecionada
 		gotoxy(2,20);
@@ -252,7 +252,7 @@ int main() {
 				return 0;
 			break;	  
   			default:
-  				gotoxy(10, 18);
+  				gotoxy(12, 20);
   				printf(" - Operacao nao encontrada\n");
   				pausa = 0;
   				while(pausa < 9) {
