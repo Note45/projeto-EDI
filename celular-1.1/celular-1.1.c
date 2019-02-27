@@ -236,6 +236,64 @@ void telaStoreED() {
 	printf("w -Sair\n\n\n");
 }
 
+//tela da função Insta
+void telaInsta() {
+	int x;
+	
+	system("cls");
+	
+	//topo
+	for(x = 0; x < 41; x++) {
+		gotoxy(0, 0);
+		printf("%c", 219);
+	}
+	
+	//esquerda e direita
+	for(x = 1; x < 25; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+		gotoxy(42, x);
+		printf("%c\n", 219);
+	}
+
+	//parte de baixo
+	for(x = 0; x < 42; x++) {
+		gotoxy(0, x);
+		printf("%c",219);
+	}
+	
+	//legenda para mudar de pagina
+	gotoxy(3, 18);
+	printf(", - anterior");
+	
+	gotoxy(30, 18);
+	printf(". - proximo");
+	
+	//espaçamentos superiores
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 21);
+		printf("%c", 220);
+	}
+	
+	for(x = 2; x < 42; x++) {
+	gotoxy(x, 19);
+	printf("%c", 220);
+	}
+	
+	//divisorias
+	for(x = 22; x < 25; x++) {
+		gotoxy(20, x);
+		printf("%c", 219);
+	}
+		
+	//comandos da tela
+	gotoxy(5, 23);
+	printf("q -Instalar\n\n\n");
+	
+	gotoxy(28, 23);
+	printf("w -Sair\n\n\n");
+}
+
 //Função para imprimir app
 void imprimirED(App aplicativos[], int quant) {
 	int x;
@@ -282,6 +340,68 @@ void imprimirEDpro(App aplicativos[], int quant, int inicio) {
 	}	
 }
 
+//Função para intalação de apps
+void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
+	int id = 0;
+	int x;
+	int insta = 0;//recebe quanto apps estão instalados
+	
+	while(1) {
+		if(pagina == 15) {
+			system("cls");
+			telaInsta();
+			imprimirED(aplicativos, 15);
+		}else {
+			system("cls");
+			telaInsta();
+			imprimirEDpro(aplicativos, quant, pagina);
+		}
+		
+		//Recebendo operação selecionada
+		gotoxy(2,20);
+		printf("Id:");
+		scanf("%d", & id);
+		gotoxy(0, 50);
+		
+		//procurando o indice referete a esse id
+		for(x = 0; x < quant; x++) {
+			if(aplicativos[x].id == id) {
+  				insta = quantApp(myapps);
+     			myapps[insta].id = aplicativos[x].id;
+     			myapps[insta].tam = aplicativos[x].tam;
+     			strcpy(myapps[insta].nome, aplicativos[x].nome);
+				return;	
+			}
+		}			
+		
+		//caso o id não seja encontrado
+		while(1){
+			if(pagina == 15) {
+				telaInsta();
+				imprimirED(aplicativos, 15);
+			}else {
+				telaInsta();
+				imprimirEDpro(aplicativos, quant, pagina);
+			}
+						
+			gotoxy(2,20);
+			printf("Id nao encontrado - Id:");
+			scanf("%d", & id);
+			gotoxy(0, 50);
+				
+			for(x = 0; x < quant; x++) {
+				if(aplicativos[x].id == id) {
+   					insta = quantApp(myapps);
+     				myapps[insta].id = aplicativos[x].id;
+     				myapps[insta].tam = aplicativos[x].tam;
+     				strcpy(myapps[insta].nome, aplicativos[x].nome);
+					return;	
+				}
+			}			
+		}		
+	}
+}
+
 //Função para a 1 opção(StoreED) do menu
 void funStoreED(App aplicativos[], int quant, App meusappsed[]) {	
 	char operacao;
@@ -307,7 +427,7 @@ void funStoreED(App aplicativos[], int quant, App meusappsed[]) {
 				return;
  			break;
  			case 'q':
-     			
+     			funInsta(aplicativos, quant, meusappsed, pagina);
             break;
         	case ',':
 				if(pagina != 15) {
