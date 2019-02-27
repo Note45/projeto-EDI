@@ -82,7 +82,7 @@ void ordenaInver(App aplicativos[], int tam) {
 }
 
 //imprimindo a interface inicial
-void telaIni(App aplicativos[X][X]) {
+void telaIni(App aplicativos[X][Y]) {
 	int x;
 	
 	system("cls");
@@ -163,8 +163,10 @@ int main() {
 	App MeusAppsEd_Ini[X][Y];
 	App MeusAppsEd[T];
 	App AppRumEd[T];
+	FILE *arquivo;
 	int x;	
 	int y;
+	int quant_apps;
 	
 	//zerando o vetor StoreEd
 	for(x = 0; x < T; x++) {
@@ -194,6 +196,33 @@ int main() {
 		strcpy(AppRumEd[x].nome, "");
 		AppRumEd[x].tam = 0;
 		AppRumEd[x].id = 0;
+	}
+	
+	//abrindo o arquivo de texto 
+	arquivo = fopen("vStore.txt", "r");
+	if(arquivo == NULL) {
+	   	gotoxy(0, 28);
+		printf("Nao foi possivel carregar os dados de vStore\n");
+	}
+	
+	//gravando o arquivo de texto na memoria
+	for(x = 0; x < T; x++) {
+		fgets(StoreEd[x].nome, 15, arquivo);
+		fscanf(arquivo, "%d\n", & StoreEd[x].tam);
+		fscanf(arquivo, "%d\n", & StoreEd[x].id);	
+	}
+	
+	//ordenando o vetor StoreEd
+	quant_apps = quantApp(StoreEd);
+	
+	ordena(StoreEd, quant_apps);
+	
+	//chamando a interface inicial
+	while(1) {
+		telaIni(MeusAppsEd_Ini);
+		
+		
+			
 	}
 	
 	return 0;

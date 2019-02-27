@@ -3,8 +3,31 @@ StormBreak     25
 Mastern        15
 200
 Singh          30
-45
+235
 Network        50
-72
+833
 VPN            10
-60
+234
+Hello          300
+345
+Book           100
+875
+PhotoMath      250
+654
+Dolby          90
+476
+Leno           40
+345
+Facebook       50
+980
+Google         80
+704
+Youtube        75
+390
+Dorgos         46
+397
+Drink          23
+901
+Demer          34
+702
+
