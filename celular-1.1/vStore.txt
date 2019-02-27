@@ -30,4 +30,11 @@ Drink          23
 901
 Demer          34
 702
-
+Autodesk       55
+392
+RedeS          36
+341
+Plac           234
+184
+Vida           421
+129

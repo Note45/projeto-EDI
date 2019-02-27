@@ -168,18 +168,18 @@ void telaIni(App aplicativos[X][Y]) {
 	
 	//comandos da tela
 	gotoxy(3, 23);
-	printf("1-StoreED\n");
+	printf("q-StoreED\n");
 	
 	gotoxy(15, 23);
-	printf("2-Meus AppsED\n");
+	printf("w-Meus AppsED\n");
 	
 	gotoxy(31, 23);
-	printf("3-AppRumED\n\n\n");
+	printf("e-AppRumED\n\n\n");
 
 }
 
 //interface da 1(vstore) opção do menu
-void telaStoreED(App aplicativos[], int quant) {
+void telaStoreED() {
 	int x;
 	
 	system("cls");
@@ -204,6 +204,13 @@ void telaStoreED(App aplicativos[], int quant) {
 		printf("%c",219);
 	}
 	
+	//legenda para mudar de pagina
+	gotoxy(3, 18);
+	printf(", - anterior");
+	
+	gotoxy(30, 18);
+	printf(". - proximo");
+	
 	//espaçamentos superiores
 	for(x = 2; x < 42; x++) {
 		gotoxy(x, 21);
@@ -221,53 +228,119 @@ void telaStoreED(App aplicativos[], int quant) {
 		printf("%c", 219);
 	}
 		
-	//complementando a interface para vStore
+	//comandos da tela
+	gotoxy(5, 23);
+	printf("q -Instalar\n\n\n");
+	
+	gotoxy(28, 23);
+	printf("w -Sair\n\n\n");
+}
+
+//Função para imprimir app
+void imprimirED(App aplicativos[], int quant) {
+	int x;
+	
+	//complementando a interface para StoreEd
 	gotoxy(2, 2);
 	printf("Nome:");
 	gotoxy(15, 2);
 	printf("Tamanho:");
 	gotoxy(29, 2);
 	printf("Id:");
-	
-	for(x = 2; x < quant + 2; x++) {
+		
+	for(x = 2; x < quant; x++) {
 		gotoxy(2, x + 1);
 		printf("%s", aplicativos[x - 2].nome);
 		gotoxy(18, x + 1);
 		printf("%d MB",aplicativos[x - 2].tam);
 		gotoxy(32, x + 1);
 		printf("%d", aplicativos[x - 2].id);
-	}
-		
-	//comandos da tela
-	gotoxy(5, 23);
-	printf("1-Instalar\n\n\n");
+	}	
+}
+
+//Imprimindo proximas paginas
+void imprimirEDpro(App aplicativos[], int quant, int inicio) {
+	int x;
+	int y = 3;
 	
-	gotoxy(28, 23);
-	printf("0-Sair\n\n\n");
+	//complementando a interface para StoreEd
+	gotoxy(2, 2);
+	printf("Nome:");
+	gotoxy(18, 2);
+	printf("Tamanho:");
+	gotoxy(29, 2);
+	printf("Id:");
+		
+	for(x = inicio; x < quant; x++) {
+		gotoxy(2, y);
+		printf("%s", aplicativos[x].nome);
+		gotoxy(18, y);
+		printf("%d MB",aplicativos[x].tam);
+		gotoxy(32, y);
+		printf("%d", aplicativos[x].id);
+		y++;
+	}	
 }
 
 //Função para a 1 opção(StoreED) do menu
 void funStoreED(App aplicativos[], int quant, App meusappsed[]) {	
-	int operacao;
+	char operacao;
 	int pausa;
+	int pagina = 15;
 	
 	//imprimindo interface vstore
 	while(1) {
-		telaStoreED(aplicativos, quant);
+		if(pagina == 15) {
+			//imprimindo os 14 apps iniciais
+			telaStoreED();
+			imprimirED(aplicativos, 15);
+		}
 		
 		//Recebendo operação selecionada
 		gotoxy(2,20);
 		printf("Operacao:");
-		scanf("%d", & operacao);
+		scanf(" %c", & operacao);
 		gotoxy(0, 50);
 		
 		switch(operacao) {
-			case 0:
+			case 'w':
 				return;
  			break;
- 			case 1:
+ 			case 'q':
      			
             break;
+        	case ',':
+				if(pagina != 15) {
+					pagina--;;
+					telaStoreED();
+					imprimirEDpro(aplicativos, quant, pagina);
+				}else {
+	        		gotoxy(12, 20);
+	  				printf(" - Pagina Inicial\n");
+	  				pausa = 0;
+	  				while(pausa < 9) {
+						  printf("\n");
+						  pausa++;
+				   }			
+					system("PAUSE");					  	
+				}        		
+        	break;
+			case '.':
+				if(operacao == '.') {
+					pagina++;
+					telaStoreED();
+					imprimirEDpro(aplicativos, quant, pagina);
+				}else {
+		       		gotoxy(12, 20);
+		  				printf(" - Pagina Final\n");
+		  				pausa = 0;
+		  				while(pausa < 9) {
+							  printf("\n");
+							  pausa++;
+						}				
+						system("PAUSE");  
+				}				
+			break;	
         	default:
         		gotoxy(12, 20);
   				printf(" - Operacao nao encontrada\n");
@@ -275,7 +348,7 @@ void funStoreED(App aplicativos[], int quant, App meusappsed[]) {
   				while(pausa < 9) {
 					  printf("\n");
 					  pausa++;
-				  }
+				}
 				system("PAUSE");	
 		}
 	}	
@@ -289,7 +362,7 @@ int main() {
 	int x;	
 	int y;
 	int quant_apps = 0;
-	int operacao;
+	char operacao;
 	int pausa;
 	
 	//zerando o vetor StoreEd
@@ -337,20 +410,20 @@ int main() {
 		//Recebendo operação selecionada
 		gotoxy(2,20);
 		printf("Operacao:");
-		scanf("%d", & operacao);
+		scanf(" %c", & operacao);
 		gotoxy(0, 50);
 		
 		switch(operacao) {
-			case 1:				
+			case 'q':				
 				funStoreED(StoreED, quant_apps, MeusAppsED);
   			break;
-		  	case 2:
+		  	case 'w':
 		 
 			break;
-			case 3:
+			case 'e':
 				
 			break;
-			case 0:
+			case ';':
 				gotoxy(60,60);
 				return 0;
 			break;	  
