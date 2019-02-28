@@ -341,14 +341,9 @@ void imprimirEDpro(App aplicativos[], int quant, int inicio) {
 }
 
 //Função para intalação de apps
-void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App MeusAppsED_Ini[X][Y]) {
+void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 	int id = 0;
 	int x;
-	int y;
-	int z;
-	int inilinha = 0; //recebe o indice do ultimo app da pagina inicial
-	int inicoluna = 0; //recebe o indice do ultimo app da pagina inicial
-	int naoinst = 0;
 	int insta = 0;//recebe quanto apps estão instalados
 	
 	while(1) {
@@ -360,23 +355,8 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App MeusAp
 			system("cls");
 			telaInsta();
 			imprimirEDpro(aplicativos, quant, pagina);
-		}
-		
-		//verificando quantos apps já foram para a pagina inicial
-		for(y = 0; y < X; y++) {
-			for(z =0; z < Y; z++) {
-				if(MeusAppsED_Ini[y][z].tam == 0) {
-					inilinha = y;
-					inicoluna = z;
-					break;
-				}
-			}
-					
-			if((inilinha != 0) || (inicoluna != 0) || (y == X && z == Y)) {
-			   	break;
-			}					
 		}	
-		
+
 		//Recebendo operação selecionada
 		gotoxy(2,20);
 		printf("Id:");
@@ -390,13 +370,6 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App MeusAp
      			myapps[insta].id = aplicativos[x].id;
      			myapps[insta].tam = aplicativos[x].tam;
      			strcpy(myapps[insta].nome, aplicativos[x].nome);
-								
-				//adicionando o app instalado a tela inicial
-				if(naoinst == 0) {
-					strcpy(MeusAppsED_Ini[inilinha - 1][inicoluna].nome, aplicativos[x].nome);
-					MeusAppsED_Ini[inilinha - 1][inicoluna].id = aplicativos[x].id;
-					MeusAppsED_Ini[inilinha - 1][inicoluna].tam = aplicativos[x].tam;
-				}
 				 
 				return;	
 			}
@@ -423,13 +396,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App MeusAp
      				myapps[insta].id = aplicativos[x].id;
      				myapps[insta].tam = aplicativos[x].tam;
      				strcpy(myapps[insta].nome, aplicativos[x].nome);
-					
-					//adicionando o app instalado a tela inicial
-					if(naoinst == 0) {
-						strcpy(MeusAppsED_Ini[inilinha - 1][inicoluna].nome, aplicativos[x].nome);
-						MeusAppsED_Ini[inilinha - 1][inicoluna].id = aplicativos[x].id;
-						MeusAppsED_Ini[inilinha - 1][inicoluna].tam = aplicativos[x].tam;
-					} 
+
 					return;						
 				}
 			}			
@@ -438,7 +405,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App MeusAp
 }
 
 //Função para a 1 opção(StoreED) do menu
-void funStoreED(App aplicativos[], int quant, App meusappsed[], App MeusAppsED_Ini[X][Y]) {	
+void funStoreED(App aplicativos[], int quant, App meusappsed[]) {	
 	char operacao;
 	int pausa;
 	int pagina = 15;
@@ -462,7 +429,7 @@ void funStoreED(App aplicativos[], int quant, App meusappsed[], App MeusAppsED_I
 				return;
  			break;
  			case 'q':
-     			funInsta(aplicativos, quant, meusappsed, pagina, MeusAppsED_Ini);
+     			funInsta(aplicativos, quant, meusappsed, pagina);
             break;
         	case ',':
 				if(pagina != 15) {
@@ -553,11 +520,8 @@ int main() {
 	//chamando a leitura do arquivo
 	lerArq(StoreED);
 	
-	//ordenando o vetor StoreEd
 	quant_apps = quantApp(StoreED);
-	
-	ordena(StoreED, quant_apps);
-	
+		
 	//chamando a interface inicial
 	while(1) {
 		telaIni(MeusAppsED_Ini);
@@ -570,7 +534,7 @@ int main() {
 		
 		switch(operacao) {
 			case 'q':				
-				funStoreED(StoreED, quant_apps, MeusAppsED, MeusAppsED_Ini);
+				funStoreED(StoreED, quant_apps, MeusAppsED);
   			break;
 		  	case 'w':
 		 
