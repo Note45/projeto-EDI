@@ -33,72 +33,56 @@ int quantApp(App aplicativos[]) {
 	return quantidade;
 }
 
-//odenando um vetor do tipo app
-void ordena(App aplicativos[], int tam) {
+//Função para checar o indice onde pode ser adiciondo
+int checargemInd(App aplicativos[],int tam, App adicionar) {
 	int x;
-	int troca;
-	App aux;
 	
-	while(1) {
-		troca = 0;//variavel de controle para saber se a ordenação continua
-		
-		for(x = 0; x < tam; x++) {
-			if(aplicativos[x].tam > aplicativos[x + 1].tam && aplicativos[x + 1].tam != 0) {
-				aux = aplicativos[x];//jogando valor para area de troca
-				aplicativos[x] = aplicativos[x + 1];//valor do proximo indice no atual
-				aplicativos[x + 1] = aux; //pegando valor da area de troca e colocando no proximo indice
-				troca = 1; //ouve troca
-			}
+	for(x = 0; x < tam; x++) {
+		if(adicionar.tam < aplicativos[x].tam || aplicativos[x].tam == 0) {
+			return x;
 		}
-		
-		if(troca == 0) { //verificar se tem trocas a fazer
-			break;
-		}
-	}
+	} 
+	return x;
 }
 
-//função para ordenar para colocar os zerados para o final
-void ordenaInver(App aplicativos[], int tam) {
+//Função para adicionar ordenar o elemento
+void addOrd(App aplicativos[], int tam, App adicionar) {
 	int x;
-	int troca;
-	App aux;
-	
-	while(1) {
-		troca = 0;//variavel de controle para saber se a ordenação continua
-		
-		for(x = 0; x < tam; x++) {
-			if(aplicativos[x].tam < aplicativos[x + 1].tam) {
-				aux = aplicativos[x];//jogando valor para area de troca
-				aplicativos[x] = aplicativos[x + 1];//valor do proximo indice no atual
-				aplicativos[x + 1] = aux; //pegando valor da area de troca e colocando no proximo indice
-				troca = 1; //ouve troca
-			}
-		}
-		
-		if(troca == 0) { //verificar se tem trocas a fazer
-			break;
-		}
-	}
+	int pos = checargemInd(aplicativos, T, adicionar);//encontrando onde devo adcionar
+
+	//ordenando para no final adicionar	
+	for(x = tam; x > pos; x--) {
+		aplicativos[x] = aplicativos[x - 1];
+	} 	
+	aplicativos[pos] = adicionar;
 }
 
-//lendo o arquivo e adicionando no vetor
+//Função para ler o arquivo
 void lerArq(App StoreED[]) {
+	int x = 0;
+	App elemento;
 	FILE *arquivo;
-	int x;
-	 	
-	//abrindo o arquivo de texto 
+	
+	//abrindo o arquivo
 	arquivo = fopen("vStore.txt", "r");
 	if(arquivo == NULL) {
-	   	gotoxy(0, 28);
+	   	gotoxy(0, 60);
 		printf("Nao foi possivel carregar os dados de vStore\n");
+		exit(1);
 	}
 	
-	//gravando o arquivo de texto na memoria
-	for(x = 0; x < T; x++) {
-		fgets(StoreED[x].nome, 15, arquivo);
-		fscanf(arquivo, "%d\n", & StoreED[x].tam);
-		fscanf(arquivo, "%d\n", & StoreED[x].id);	
+	//ordenando e adicionando até o final do arquivo
+	while(feof(arquivo) == 0) {
+			fgets(elemento.nome, 15, arquivo);
+			fscanf(arquivo, "%d\n", & elemento.tam);
+			fscanf(arquivo, "%d\n", & elemento.id);
+			
+			x++;
+			addOrd(StoreED, x, elemento);
 	}
+	
+	//fechando arquivo
+	fclose(arquivo);
 }
 
 //imprimindo a interface inicial

@@ -4,7 +4,7 @@ Mastern        15
 200
 Singh          30
 235
-Network        50
+Network        52
 833
 VPN            10
 234
