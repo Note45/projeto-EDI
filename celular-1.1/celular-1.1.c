@@ -329,6 +329,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 	int id = 0;
 	int x;
 	int insta = 0;//recebe quanto apps estão instalados
+	App elemento;//recebe o elemento a ser ordenado
 	
 	while(1) {
 		if(pagina == 15) {
@@ -350,11 +351,14 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 		//procurando o indice referete a esse id
 		for(x = 0; x < quant; x++) {
 			if(aplicativos[x].id == id) {
+				//recebendo a quantidade de apps istalados
   				insta = quantApp(myapps);
-     			myapps[insta].id = aplicativos[x].id;
-     			myapps[insta].tam = aplicativos[x].tam;
-     			strcpy(myapps[insta].nome, aplicativos[x].nome);
-				 
+  				
+  				//recebendo o elemento com base no id
+  				elemento = aplicativos[x];
+				
+				addOrd(myapps, insta, elemento);
+				   
 				return;	
 			}
 		}			
@@ -376,11 +380,14 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 				
 			for(x = 0; x < quant; x++) {
 				if(aplicativos[x].id == id) {
-   					insta = quantApp(myapps);
-     				myapps[insta].id = aplicativos[x].id;
-     				myapps[insta].tam = aplicativos[x].tam;
-     				strcpy(myapps[insta].nome, aplicativos[x].nome);
-
+					//recebendo a quantidade de apps istalados
+	  				insta = quantApp(myapps);
+	  				
+	  				//recebendo o elemento com base no id
+	  				elemento = aplicativos[x];
+					
+					addOrd(myapps, insta, elemento);
+					   
 					return;						
 				}
 			}			
