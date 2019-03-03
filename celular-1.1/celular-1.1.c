@@ -533,14 +533,135 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 	}
 }
 
+//função para remover apps
+void funRemo(App myapps[], int quant, int pagina, App rum[]) {
+	int id = 0;
+	int x;
+	int y;
+	int z;
+	int quant_rum = quantApp(rum);
+	
+	//so remove se tiver apps intalados
+	if(quant > 0) {
+		while(1) {
+			if(pagina == 15) {
+				system("cls");
+				telaMeusappED();
+				imprimirED(myapps, quant + 2);
+			}else {
+				system("cls");
+				telaMeusappED();
+				imprimirEDpro(myapps, quant, pagina);
+			}	
+	
+			//Recebendo operação selecionada
+			gotoxy(2,20);
+			printf("Id:");
+			scanf("%d", & id);
+			gotoxy(0, 50);
+			
+			//procurando o indice referete a esse id
+			for(x = 0; x < quant; x++) {
+				if(myapps[x].id == id) {
+					//removendo app instalado
+					strcpy(myapps[x].nome, "");
+					myapps[x].id = 0;
+					myapps[x].id = 0;
+					
+					//reordenando o vetor
+					for(y = x; y < quant; y++) {
+						myapps[y] = myapps[y + 1];
+					}
+					
+					if(quant_rum != 0) {
+						for(y = 0; y < quant_rum; y++) {
+							if(rum[x].id == id) {
+								//removendo app instalado
+								strcpy(rum[y].nome, "");
+								rum[y].id = 0;
+								rum[y].id = 0;
+								
+								//reordenando o vetor
+								for(z = y; z < quant; z++) {
+									rum[z] = myapps[z + 1];
+								}						
+							}
+						}
+					}
+					return;
+				}
+			}			
+			
+			//caso o id não seja encontrado
+			while(1){
+				if(pagina == 15) {
+					telaMeusappED();
+					imprimirED(myapps, quant + 2);
+				}else {
+					telaMeusappED();
+					imprimirEDpro(myapps, quant, pagina);
+				}
+							
+				gotoxy(2,20);
+				printf("Id nao encontrado - Id:");
+				id = 0;
+				scanf("%d", & id);
+				gotoxy(0, 50);
+	
+				//procurando o indice referete a esse id
+				for(x = 0; x < quant; x++) {
+					if(myapps[x].id == id) {
+						//removendo app instalado
+						strcpy(myapps[x].nome, "");
+						myapps[x].id = 0;
+						myapps[x].id = 0;
+						
+						//reordenando o vetor
+						for(y = x; y < quant; y++) {
+							myapps[y] = myapps[y + 1];
+						}
+						
+						if(quant_rum != 0) {
+							for(y = 0; y < quant_rum; y++) {
+								if(rum[x].id == id) {
+									//removendo app instalado
+									strcpy(rum[y].nome, "");
+									rum[y].id = 0;
+									rum[y].id = 0;
+									
+									//reordenando o vetor
+									for(z = y; z < quant; z++) {
+										rum[z] = myapps[z + 1];
+									}						
+								}
+							}
+						}
+						return;
+					}
+				}							
+						
+			}		
+		}
+	}else {
+		gotoxy(2,20);
+		printf("Nenhum app instalado!");
+		gotoxy(2, 28);
+		system("PAUSE");
+		return;	
+	}
+}				
+
 //função para 2(MeusappsEd) opção do meunu
-void funMeusapps(App myapps[], int quant, App rum[]) {
+void funMeusappsED(App myapps[], int quant, App rum[]) {
 	char operacao;
 	int pausa;
 	int pagina = 15;
 	
 	//imprimindo interface
 	while(1) {
+		//contando a quantidade de apps caso um seja removido
+		quant = quantApp(myapps);
+		
 		if(pagina == 15) {
 			//imprimindo os 14 apps iniciais
 			telaMeusappED();
@@ -594,7 +715,8 @@ void funMeusapps(App myapps[], int quant, App rum[]) {
      			funRumED(myapps, quant, rum, pagina);
             break;
         	case 'w':
-        		
+        		quant = quantApp(myapps);
+        		funRemo(myapps, quant, pagina, rum);
         	break;	
         	default:
         		gotoxy(10, 20);
@@ -728,6 +850,10 @@ int main() {
 	//chamando a interface inicial
 	while(1) {
 		telaIni(MeusAppsED_Ini);
+	
+		//opção de saida
+		gotoxy(2, 28);
+		printf("Para sair precione ';'");
 		
 		//Recebendo operação selecionada
 		gotoxy(2,20);
@@ -742,13 +868,14 @@ int main() {
   			break;
 		  	case 'w':
 		  		quant_apps = quantApp(MeusAppsED);
-                funMeusapps(MeusAppsED, quant_apps, AppRumED);
+                funMeusappsED(MeusAppsED, quant_apps, AppRumED);
 			break;
 			case 'e':
 				
 			break;
 			case ';':
-				gotoxy(60,60);
+				system("cls");
+				gotoxy(0,0);
 				return 0;
 			break;	  
   			default:
