@@ -33,7 +33,7 @@ int quantApp(App aplicativos[]) {
 	return quantidade;
 }
 
-//Função para checar o indice onde pode ser adiciondo
+//função para checar o indice onde pode ser adiciondo
 int checargemInd(App aplicativos[],int tam, App adicionar) {
 	int x;
 	
@@ -45,7 +45,7 @@ int checargemInd(App aplicativos[],int tam, App adicionar) {
 	return x;
 }
 
-//Função para adicionar ordenar o elemento
+//função para adicionar ordenar o elemento
 void addOrd(App aplicativos[], int tam, App adicionar) {
 	int x;
 	int pos = checargemInd(aplicativos, T, adicionar);//encontrando onde devo adcionar
@@ -57,7 +57,7 @@ void addOrd(App aplicativos[], int tam, App adicionar) {
 	aplicativos[pos] = adicionar;
 }
 
-//Função para ler o arquivo
+//função para ler o arquivo
 void lerArq(App StoreED[]) {
 	int x = 0;
 	App elemento;
@@ -344,7 +344,7 @@ void telaInsta() {
 	printf("w -Sair\n\n\n");
 }
 
-//Função para imprimir app
+//função para imprimir app
 void imprimirED(App aplicativos[], int quant) {
 	int x;
 	
@@ -366,7 +366,7 @@ void imprimirED(App aplicativos[], int quant) {
 	}	
 }
 
-//Imprimindo proximas paginas
+//fmprimindo proximas paginas
 void imprimirEDpro(App aplicativos[], int quant, int inicio) {
 	int x;
 	int y = 3;
@@ -390,7 +390,7 @@ void imprimirEDpro(App aplicativos[], int quant, int inicio) {
 	}	
 }
 
-//Função para intalação de apps
+//função para intalação de apps
 void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 	int id = 0;
 	int x;
