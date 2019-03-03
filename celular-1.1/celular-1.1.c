@@ -534,8 +534,10 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 }
 
 //função para remover apps
-void funRemo(App myapps[], int quant, int pagina, App rum[]) {
+void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][Y]) {
 	int id = 0;
+	int q;
+	int w;
 	int x;
 	int y;
 	int z;
@@ -573,6 +575,7 @@ void funRemo(App myapps[], int quant, int pagina, App rum[]) {
 						myapps[y] = myapps[y + 1];
 					}
 					
+					//removendo apps que estão rodando
 					if(quant_rum != 0) {
 						for(y = 0; y < quant_rum; y++) {
 							if(rum[x].id == id) {
@@ -583,9 +586,54 @@ void funRemo(App myapps[], int quant, int pagina, App rum[]) {
 								
 								//reordenando o vetor
 								for(z = y; z < quant; z++) {
-									rum[z] = myapps[z + 1];
+									rum[z] = rum[z + 1];
 								}						
 							}
+						}
+					}
+					
+					//removendo o app se ele estiver na tela inicial
+					for(w = 0; w < X; w++) {
+						for(z = 0; z < Y; z++){
+							if(MeusApp_Ini[w][z].tam == 0) {
+								   quant_rum = w;
+								   q = z;	
+							}
+						} 
+					}
+					
+					if((quant_rum > 0) && (q > 0)) {
+						for(w = 0; w < X; w++) {
+							for(y = 0; y < Y; y++) {
+								if(MeusApp_Ini[w][y].id == id) {
+									if(w == 1 && y == 2) {
+										strcpy(MeusApp_Ini[y][w].nome, "");
+										MeusApp_Ini[w][y].id = 0;
+										MeusApp_Ini[w][y].id = 0;
+										return;										 	
+									} 
+									
+									//removendo app instalado na tela inicial
+									strcpy(MeusApp_Ini[y][w].nome, "");
+									MeusApp_Ini[w][y].id = 0;
+									MeusApp_Ini[w][y].id = 0;
+									
+									//reordenando o matriz
+									for(z = y; z < 2; z++) {
+										MeusApp_Ini[w][z] = MeusApp_Ini[w][z + 1];	
+									} 
+
+									if((w == 0 && y == 2) || (w == 0 && z == 2)) {
+										MeusApp_Ini[0][2] = MeusApp_Ini[1][0];
+									
+										for(z = 0; z < 3; z++) {
+											MeusApp_Ini[1][z] = MeusApp_Ini[1][z + 1];
+										}									
+									}
+										
+									return;
+								}
+							}						
 						}
 					}
 					return;
@@ -621,6 +669,8 @@ void funRemo(App myapps[], int quant, int pagina, App rum[]) {
 							myapps[y] = myapps[y + 1];
 						}
 						
+						quant_rum = quantApp(rum);
+						//removendo app se ele também estiver rodando
 						if(quant_rum != 0) {
 							for(y = 0; y < quant_rum; y++) {
 								if(rum[x].id == id) {
@@ -631,11 +681,56 @@ void funRemo(App myapps[], int quant, int pagina, App rum[]) {
 									
 									//reordenando o vetor
 									for(z = y; z < quant; z++) {
-										rum[z] = myapps[z + 1];
+										rum[z] = rum[z + 1];
 									}						
 								}
 							}
 						}
+						
+						//removendo o app se ele estiver na tela inicial
+						for(w = 0; w < X; w++) {
+							for(z = 0; z < Y; z++){
+								if(MeusApp_Ini[w][z].tam == 0) {
+									   quant_rum = w;
+									   q = z;	
+								}
+							} 
+						}						
+
+						if((quant_rum > 0) && (q > 0)) {
+							for(w = 0; w < X; w++) {
+								for(y = 0; y < Y; y++) {
+									if(MeusApp_Ini[w][y].id == id) {
+										if(w == 1 && y == 2) {
+											strcpy(MeusApp_Ini[y][w].nome, "");
+											MeusApp_Ini[w][y].id = 0;
+											MeusApp_Ini[w][y].id = 0;
+											return;										 	
+										} 
+										
+										//removendo app instalado na tela inicial
+										strcpy(MeusApp_Ini[y][w].nome, "");
+										MeusApp_Ini[w][y].id = 0;
+										MeusApp_Ini[w][y].id = 0;
+										
+										//reordenando o matriz
+										for(z = y; z < 2; z++) {
+											MeusApp_Ini[w][z] = MeusApp_Ini[w][z + 1];	
+										} 
+	
+										if((w == 0 && y == 2) || (w == 0 && z == 2)) {
+											MeusApp_Ini[0][2] = MeusApp_Ini[1][0];
+										
+											for(z = 0; z < 3; z++) {
+												MeusApp_Ini[1][z] = MeusApp_Ini[1][z + 1];
+											}									
+										}
+											
+										return;
+									}
+								}						
+							}
+						}						
 						return;
 					}
 				}							
@@ -652,7 +747,7 @@ void funRemo(App myapps[], int quant, int pagina, App rum[]) {
 }				
 
 //função para 2(MeusappsEd) opção do meunu
-void funMeusappsED(App myapps[], int quant, App rum[]) {
+void funMeusappsED(App myapps[], int quant, App rum[], App MeusApp_Ini[X][Y]) {
 	char operacao;
 	int pausa;
 	int pagina = 15;
@@ -716,7 +811,7 @@ void funMeusappsED(App myapps[], int quant, App rum[]) {
             break;
         	case 'w':
         		quant = quantApp(myapps);
-        		funRemo(myapps, quant, pagina, rum);
+        		funRemo(myapps, quant, pagina, rum, MeusApp_Ini);
         	break;	
         	default:
         		gotoxy(10, 20);
@@ -868,7 +963,7 @@ int main() {
   			break;
 		  	case 'w':
 		  		quant_apps = quantApp(MeusAppsED);
-                funMeusappsED(MeusAppsED, quant_apps, AppRumED);
+                funMeusappsED(MeusAppsED, quant_apps, AppRumED, MeusAppsED_Ini);
 			break;
 			case 'e':
 				
