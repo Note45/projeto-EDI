@@ -127,7 +127,7 @@ void telaIni(App aplicativos[X][Y]) {
 		printf("%c", 219);
 	}
 	
-		//divisoria da matriz(vertical)
+	//divisoria da matriz(vertical)
 	for(x = 2; x < 20; x++) {
 		gotoxy(15, x);
 		printf("%c", 219);
@@ -160,6 +160,72 @@ void telaIni(App aplicativos[X][Y]) {
 	gotoxy(31, 23);
 	printf("e-AppRumED\n\n\n");
 
+}
+
+//interface da 2(MeusAppsED) opção do menu
+void telaMeusappED() {
+	int x;
+	
+	system("cls");
+	
+	//topo
+	for(x = 0; x < 41; x++) {
+		gotoxy(0, 0);
+		printf("%c", 219);
+	}
+	
+	//esquerda e direita
+	for(x = 1; x < 25; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+		gotoxy(42, x);
+		printf("%c\n", 219);
+	}
+
+	//parte de baixo
+	for(x = 0; x < 42; x++) {
+		gotoxy(0, x);
+		printf("%c",219);
+	}
+	
+	//legenda para mudar de pagina
+	gotoxy(3, 18);
+	printf(", - anterior");
+	
+	gotoxy(30, 18);
+	printf(". - proximo");
+	
+	//espaçamentos superiores
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 21);
+		printf("%c", 220);
+	}
+	
+	for(x = 2; x < 42; x++) {
+	gotoxy(x, 19);
+	printf("%c", 220);
+	}
+	
+	//divisorias
+	for(x = 22; x < 25; x++) {
+		gotoxy(13, x);
+		printf("%c", 219);
+	}
+	
+	for(x = 22; x < 25; x++) {
+		gotoxy(29, x);
+		printf("%c", 219);
+	}
+		
+	//comandos da tela
+	gotoxy(5, 23);
+	printf("q-Rum\n\n\n");
+	
+	gotoxy(16, 23);
+	printf("w-Remover\n\n\n");
+	
+	gotoxy(32, 23);
+	printf("e-Sair\n\n\n");
 }
 
 //interface da 1(vstore) opção do menu
@@ -395,7 +461,9 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 	}
 }
 
-//Função para a 1 opção(StoreED) do menu
+//função para 2(MeusappsEd) opção do meunu
+
+//função para a 1 opção(StoreED) do menu
 void funStoreED(App aplicativos[], int quant, App meusappsed[]) {	
 	char operacao;
 	int pausa;
@@ -528,7 +596,7 @@ int main() {
 				funStoreED(StoreED, quant_apps, MeusAppsED);
   			break;
 		  	case 'w':
-		 
+				  
 			break;
 			case 'e':
 				
