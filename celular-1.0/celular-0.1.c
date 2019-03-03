@@ -442,18 +442,14 @@ void funInsta(app aplicativos[], int quant, app myapps[]) {
 }
 
 //opção 2(myapps) do menu
-void funMyapps(app myapps[], int quant, app rum[]) {
+void funMyapps(App myapps[], int quant, App rum[]) {
 	int operacao;
 	int pausa;
+	int pagina = 15;
 	
 	//imprimindo interface
 	while(1) {
-		//caso algum app seja removido do vetor
-		quant = quantApp(myapps);
-		ordenaInver(myapps, quant);
-		ordena(myapps, quant);
 		
-		telaMyapps(myapps, quant);
 		
 		//Recebendo operação selecionada
 		gotoxy(2, 18);

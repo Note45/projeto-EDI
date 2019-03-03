@@ -461,7 +461,153 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 	}
 }
 
+//função para rodar apps
+void funRumED(App myapps[], int quant, App rum[], int pagina) {
+	int id = 0;
+	int x;
+	int rodando = 0;//recebe quanto apps estão instalados
+	App elemento;//recebe o elemento a ser ordenado
+	
+	while(1) {
+		if(pagina == 15) {
+			system("cls");
+			telaMeusappED();
+			imprimirED(myapps, quant + 2);
+		}else {
+			system("cls");
+			telaMeusappED();
+			imprimirEDpro(myapps, quant, pagina);
+		}	
+
+		//Recebendo operação selecionada
+		gotoxy(2,20);
+		printf("Id:");
+		scanf("%d", & id);
+		gotoxy(0, 50);
+		
+		//procurando o indice referete a esse id
+		for(x = 0; x < quant; x++) {
+			if(myapps[x].id == id) {
+				//recebendo a quantidade de apps istalados
+  				rodando = quantApp(rum);
+  				
+  				//recebendo o elemento com base no id
+  				elemento = myapps[x];
+				
+				addOrd(rum, rodando, elemento);
+				   
+				return;	
+			}
+		}			
+		
+		//caso o id não seja encontrado
+		while(1){
+			if(pagina == 15) {
+				telaMeusappED();
+				imprimirED(myapps, quant + 2);
+			}else {
+				telaMeusappED();
+				imprimirEDpro(myapps, quant, pagina);
+			}
+						
+			gotoxy(2,20);
+			printf("Id nao encontrado - Id:");
+			id = 0;
+			scanf("%d", & id);
+			gotoxy(0, 50);
+				
+			for(x = 0; x < quant; x++) {
+				if(myapps[x].id == id) {
+					//recebendo a quantidade de apps istalados
+	  				rodando = quantApp(rum);
+	  				
+	  				//recebendo o elemento com base no id
+	  				elemento = myapps[x];
+					
+					addOrd(rum, rodando, elemento);
+					   
+					return;						
+				}
+			}			
+		}		
+	}
+}
+
 //função para 2(MeusappsEd) opção do meunu
+void funMeusapps(App myapps[], int quant, App rum[]) {
+	char operacao;
+	int pausa;
+	int pagina = 15;
+	
+	//imprimindo interface
+	while(1) {
+		if(pagina == 15) {
+			//imprimindo os 14 apps iniciais
+			telaMeusappED();
+			imprimirED(myapps, quant + 2);
+		}
+				
+		//Recebendo operação selecionada
+		gotoxy(2, 20);
+		printf("Action:");
+		scanf(" %c", & operacao);
+		gotoxy(0, 50);
+		
+		switch(operacao) {
+			case ',':
+				if(pagina != 15) {
+					pagina--;
+					telaMeusappED();
+					imprimirEDpro(myapps, quant + 2, pagina);
+				}else {
+	        		gotoxy(12, 20);
+	  				printf("- Pagina Inicial\n");
+	  				pausa = 0;
+	  				while(pausa < 9) {
+						  printf("\n");
+						  pausa++;
+				   }			
+					system("PAUSE");					  	
+				}			
+			break;
+			case '.':
+				if(operacao == '.') {
+					pagina++;
+					telaMeusappED();
+					imprimirEDpro(myapps, quant + 2, pagina);
+				}else {
+		       		gotoxy(12, 20);
+		  				printf("- Pagina Final\n");
+		  				pausa = 0;
+		  				while(pausa < 9) {
+							  printf("\n");
+							  pausa++;
+						}				
+						system("PAUSE");  
+				}								
+			break;		  		
+			case 'e':
+				return;
+ 			break;
+ 			case 'q':
+ 				quant = quantApp(myapps);
+     			funRumED(myapps, quant, rum, pagina);
+            break;
+        	case 'w':
+        		
+        	break;	
+        	default:
+        		gotoxy(10, 20);
+  				printf("-Operacao nao encontrada\n");
+  				pausa = 0;
+  				while(pausa < 9) {
+					  printf("\n");
+					  pausa++;
+				  }
+				system("PAUSE");	
+		}	
+	}
+}
 
 //função para a 1 opção(StoreED) do menu
 void funStoreED(App aplicativos[], int quant, App meusappsed[]) {	
@@ -492,7 +638,7 @@ void funStoreED(App aplicativos[], int quant, App meusappsed[]) {
             break;
         	case ',':
 				if(pagina != 15) {
-					pagina--;;
+					pagina--;
 					telaStoreED();
 					imprimirEDpro(aplicativos, quant, pagina);
 				}else {
@@ -579,8 +725,6 @@ int main() {
 	//chamando a leitura do arquivo
 	lerArq(StoreED);
 	
-	quant_apps = quantApp(StoreED);
-		
 	//chamando a interface inicial
 	while(1) {
 		telaIni(MeusAppsED_Ini);
@@ -592,11 +736,13 @@ int main() {
 		gotoxy(0, 50);
 		
 		switch(operacao) {
-			case 'q':				
+			case 'q':
+				quant_apps = quantApp(StoreED);				
 				funStoreED(StoreED, quant_apps, MeusAppsED);
   			break;
 		  	case 'w':
-				  
+		  		quant_apps = quantApp(MeusAppsED);
+                funMeusapps(MeusAppsED, quant_apps, AppRumED);
 			break;
 			case 'e':
 				
