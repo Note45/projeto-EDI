@@ -449,9 +449,12 @@ void imprimirEDpro(App aplicativos[], int quant, int inicio) {
 }
 
 //função para intalação de apps
-void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
+void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps_Ini[X][Y]) {
 	int id = 0;
+	int q = -1;
 	int x;
+	int y;
+	int z;
 	int insta = 0;//recebe quanto apps estão instalados
 	App elemento;//recebe o elemento a ser ordenado
 	
@@ -465,7 +468,20 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 			telaInsta();
 			imprimirEDpro(aplicativos, quant, pagina);
 		}	
-
+		
+		//recebendo quantos apps estão instalados na tela inicial
+		for(y = 0;y < X; y++) {
+			for(z = 0; z < Y; z++) {
+				if(Myapps_Ini[y][z].tam == 0) {
+					q = y;
+					break;
+				} 	  		
+			}
+			if(q > -1) {
+				break;
+			}
+		} 
+		
 		//Recebendo operação selecionada
 		gotoxy(2,20);
 		printf("Id:");
@@ -482,7 +498,11 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
   				elemento = aplicativos[x];
 				
 				addOrd(myapps, insta, elemento);
-				   
+				
+				//adicionando app ao vetor da tela inicial se ouver espaço
+				if((z <= Y - 1) && (q <= X - 1)) {
+					   Myapps_Ini[q][z] = elemento;	
+				}   
 				return;	
 			}
 		}			
@@ -511,7 +531,11 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 	  				elemento = aplicativos[x];
 					
 					addOrd(myapps, insta, elemento);
-					   
+
+					//adicionando app ao vetor da tela inicial se ouver espaço
+					if((z <= Y - 1) && (q <= X - 1)) {
+						   Myapps_Ini[q][z] = elemento;	
+					}  										   
 					return;						
 				}
 			}			
@@ -804,7 +828,7 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 	}
 }
 
-//função para parar um app
+//função para parar um app que esteja eecutando
 void stopED(App rum[], int quant, int pagina) {
 	int id = 0;
 	int x;
@@ -878,7 +902,7 @@ void stopED(App rum[], int quant, int pagina) {
 	}	
 }
 
-//função para 3( AppRumED) opçao do menu
+//função para 3(AppRumED) opçao do menu
 void funAppRumED(App rum[], int quant) {	
 	char operacao;
 	int pausa;
@@ -1035,7 +1059,7 @@ void funMeusappsED(App myapps[], int quant, App rum[], App MeusApp_Ini[X][Y]) {
 }
 
 //função para a 1 opção(StoreED) do menu
-void funStoreED(App aplicativos[], int quant, App meusappsed[]) {	
+void funStoreED(App aplicativos[], int quant, App meusappsed[], App Myapps_Ini[X][Y]) {	
 	char operacao;
 	int pausa;
 	int pagina = 15;
@@ -1059,7 +1083,7 @@ void funStoreED(App aplicativos[], int quant, App meusappsed[]) {
 				return;
  			break;
  			case 'q':
-     			funInsta(aplicativos, quant, meusappsed, pagina);
+     			funInsta(aplicativos, quant, meusappsed, pagina, Myapps_Ini);
             break;
         	case ',':
 				if(pagina != 15) {
@@ -1167,7 +1191,7 @@ int main() {
 		switch(operacao) {
 			case 'q':
 				quant_apps = quantApp(StoreED);				
-				funStoreED(StoreED, quant_apps, MeusAppsED);
+				funStoreED(StoreED, quant_apps, MeusAppsED, MeusAppsED_Ini);
   			break;
 		  	case 'w':
 		  		quant_apps = quantApp(MeusAppsED);
