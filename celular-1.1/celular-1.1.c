@@ -803,6 +803,81 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 		return;	
 	}
 }
+
+//função para parar um app
+void stopED(App rum[], int quant, int pagina) {
+	int id = 0;
+	int x;
+	int y;
+
+	while(1) {
+		if(pagina == 15) {
+			system("cls");
+			telaAppRum();
+			imprimirED(rum, quant + 2);
+		}else {
+			system("cls");
+			telaAppRum();
+			imprimirEDpro(rum, quant + 2, pagina);
+		}	
+
+		//Recebendo operação selecionada
+		gotoxy(2,20);
+		printf("Id:");
+		scanf("%d", & id);
+		gotoxy(0, 50);
+		
+		//procurando o indice referete a esse id
+		for(x = 0; x < quant; x++) {
+			if(rum[x].id == id) {
+				//removendo app instalado
+				strcpy(rum[x].nome, "");
+				rum[x].id = 0;
+				rum[x].id = 0;
+				
+				//reordenando o vetor
+				for(y = x; y < quant; y++) {
+					rum[y] = rum[y + 1];
+				}
+				return;
+			}
+		}
+				  		
+		//caso o id não seja encontrado
+		while(1){
+			if(pagina == 15) {
+				telaMeusappED();
+				imprimirED(rum, quant + 2);
+			}else {
+				telaMeusappED();
+				imprimirEDpro(rum, quant + 2, pagina);
+			}
+						
+			gotoxy(2,20);
+			printf("Id nao encontrado - Id:");
+			id = 0;
+			scanf("%d", & id);
+			gotoxy(0, 50);
+				
+			//procurando o indice referete a esse id
+			for(x = 0; x < quant; x++) {
+				if(rum[x].id == id) {
+					//removendo app instalado
+					strcpy(rum[x].nome, "");
+					rum[x].id = 0;
+					rum[x].id = 0;
+					
+					//reordenando o vetor
+					for(y = x; y < quant; y++) {
+						rum[y] = rum[y + 1];
+					}
+					return;
+				}
+			}			
+		}		
+	}	
+}
+
 //função para 3( AppRumED) opçao do menu
 void funAppRumED(App rum[], int quant) {	
 	char operacao;
@@ -811,6 +886,9 @@ void funAppRumED(App rum[], int quant) {
 	
 	//imprimindo interface vstore
 	while(1) {
+		//recebendo novo quant caso algum app seja removido
+		quant = quantApp(rum);
+		
 		if(pagina == 15) {
 			//imprimindo os 14 apps iniciais
 			telaAppRum();
@@ -828,7 +906,7 @@ void funAppRumED(App rum[], int quant) {
 				return;
  			break;
  			case 'q':
-     			
+     			stopED(rum, quant, pagina);
             break;
         	case ',':
 				if(pagina != 15) {
