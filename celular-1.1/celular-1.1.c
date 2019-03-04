@@ -280,10 +280,68 @@ void telaStoreED() {
 		
 	//comandos da tela
 	gotoxy(5, 23);
-	printf("q -Instalar\n\n\n");
+	printf("q-Instalar\n\n\n");
 	
 	gotoxy(28, 23);
-	printf("w -Sair\n\n\n");
+	printf("w-Sair\n\n\n");
+}
+
+//tela da função AppRumED
+void telaAppRum() {
+	int x;
+	
+	system("cls");
+	
+	//topo
+	for(x = 0; x < 41; x++) {
+		gotoxy(0, 0);
+		printf("%c", 219);
+	}
+	
+	//esquerda e direita
+	for(x = 1; x < 25; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+		gotoxy(42, x);
+		printf("%c\n", 219);
+	}
+
+	//parte de baixo
+	for(x = 0; x < 42; x++) {
+		gotoxy(0, x);
+		printf("%c",219);
+	}
+	
+	//legenda para mudar de pagina
+	gotoxy(3, 18);
+	printf(", - anterior");
+	
+	gotoxy(30, 18);
+	printf(". - proximo");
+	
+	//espaçamentos superiores
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 21);
+		printf("%c", 220);
+	}
+	
+	for(x = 2; x < 42; x++) {
+	gotoxy(x, 19);
+	printf("%c", 220);
+	}
+	
+	//divisorias
+	for(x = 22; x < 25; x++) {
+		gotoxy(20, x);
+		printf("%c", 219);
+	}
+		
+	//comandos da tela
+	gotoxy(5, 23);
+	printf("q-Parar\n\n\n");
+	
+	gotoxy(28, 23);
+	printf("w-Sair\n\n\n");
 }
 
 //tela da função Insta
@@ -338,10 +396,10 @@ void telaInsta() {
 		
 	//comandos da tela
 	gotoxy(5, 23);
-	printf("q -Instalar\n\n\n");
+	printf("q-Instalar\n\n\n");
 	
 	gotoxy(28, 23);
-	printf("w -Sair\n\n\n");
+	printf("w-Sair\n\n\n");
 }
 
 //função para imprimir app
@@ -744,7 +802,79 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 		system("PAUSE");
 		return;	
 	}
-}				
+}
+//função para 3( AppRumED) opçao do menu
+void funAppRumED(App rum[], int quant) {	
+	char operacao;
+	int pausa;
+	int pagina = 15;
+	
+	//imprimindo interface vstore
+	while(1) {
+		if(pagina == 15) {
+			//imprimindo os 14 apps iniciais
+			telaAppRum();
+			imprimirED(rum, quant + 2);
+		}
+		
+		//Recebendo operação selecionada
+		gotoxy(2,20);
+		printf("Operacao:");
+		scanf(" %c", & operacao);
+		gotoxy(0, 50);
+		
+		switch(operacao) {
+			case 'w':
+				return;
+ 			break;
+ 			case 'q':
+     			
+            break;
+        	case ',':
+				if(pagina != 15) {
+					pagina--;
+					telaAppRum();
+					imprimirEDpro(rum, quant + 2, pagina);
+				}else {
+	        		gotoxy(12, 20);
+	  				printf(" - Pagina Inicial\n");
+	  				pausa = 0;
+	  				while(pausa < 9) {
+						  printf("\n");
+						  pausa++;
+				   }			
+					system("PAUSE");					  	
+				}        		
+        	break;
+			case '.':
+				if(operacao == '.') {
+					pagina++;
+					telaAppRum();
+					imprimirEDpro(rum, quant + 2, pagina);
+				}else {
+		       		gotoxy(12, 20);
+		  				printf(" - Pagina Final\n");
+		  				pausa = 0;
+		  				while(pausa < 9) {
+							  printf("\n");
+							  pausa++;
+						}				
+						system("PAUSE");  
+				}				
+			break;	
+        	default:
+        		gotoxy(12, 20);
+  				printf(" - Operacao nao encontrada\n");
+  				pausa = 0;
+  				while(pausa < 9) {
+					  printf("\n");
+					  pausa++;
+				}
+				system("PAUSE");	
+		}
+	}	
+}
+				
 
 //função para 2(MeusappsEd) opção do meunu
 void funMeusappsED(App myapps[], int quant, App rum[], App MeusApp_Ini[X][Y]) {
@@ -966,7 +1096,8 @@ int main() {
                 funMeusappsED(MeusAppsED, quant_apps, AppRumED, MeusAppsED_Ini);
 			break;
 			case 'e':
-				
+				quant_apps = quantApp(AppRumED);
+				funAppRumED(AppRumED, quant_apps);
 			break;
 			case ';':
 				system("cls");
