@@ -1078,7 +1078,7 @@ int main() {
 	
 		//opção de saida
 		gotoxy(2, 28);
-		printf("Para sair precione ';'");
+		printf("Para sair pressione ';'");
 		
 		//Recebendo operação selecionada
 		gotoxy(2,20);
