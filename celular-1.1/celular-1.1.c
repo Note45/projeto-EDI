@@ -86,7 +86,7 @@ void lerArq(App StoreED[]) {
 }
 
 //imprimindo a interface inicial
-void telaIni(App aplicativos[X][Y]) {
+void telaIni() {
 	int x;
 	
 	system("cls");
@@ -402,6 +402,49 @@ void telaInsta() {
 	printf("w-Sair\n\n\n");
 }
 
+//função para imprimir apps na tela inicial
+void appsTelaIni(App MyappsIni[X][Y]) {
+	int x;
+	int y;
+	int coluna = -1;
+	int linha = -1;
+	
+	//verificando quantos apps estão instalados
+	for(x = 0; x < X; x++){
+		for(y = 0; y < Y; y++) {
+			if(MyappsIni[x][y].tam != 0) {
+				linha = x;
+				coluna = y;
+				break;
+			}
+		}
+					
+		if(linha != -1 && coluna != -1) {
+			break;
+		}
+	}
+	
+	//imprimindo apps na tela incial
+	if(linha != -1 && coluna != -1) {
+		for(x = 0; x <= linha; x++){
+			for(y = 0; y <= coluna; y++) {
+				gotoxy(2, 2);
+				printf("Nome:");
+				gotoxy(2, 3);
+				puts(MyappsIni[x][y].nome);
+				gotoxy(2, 4);
+				printf("Tamanho:\n");
+				printf("%d", MyappsIni[x][y].tam);
+				gotoxy(2, 5);
+				printf("Id:\n");
+				printf("%d", MyappsIni[x][y].id);
+		    }		
+		}
+	}
+	
+	
+}	
+
 //função para imprimir app
 void imprimirED(App aplicativos[], int quant) {
 	int x;
@@ -414,7 +457,7 @@ void imprimirED(App aplicativos[], int quant) {
 	gotoxy(29, 2);
 	printf("Id:");
 		
-	for(x = 2; x < quant; x++) {
+	for(x = 2; x <= quant; x++) {
 		gotoxy(2, x + 1);
 		printf("%s", aplicativos[x - 2].nome);
 		gotoxy(18, x + 1);
@@ -434,10 +477,10 @@ void imprimirEDpro(App aplicativos[], int quant, int inicio) {
 	printf("Nome:");
 	gotoxy(18, 2);
 	printf("Tamanho:");
-	gotoxy(29, 2);
+	gotoxy(29, 2); 
 	printf("Id:");
 		
-	for(x = inicio; x < quant; x++) {
+	for(x = inicio - 1; x < quant; x++) {
 		gotoxy(2, y);
 		printf("%s", aplicativos[x].nome);
 		gotoxy(18, y);
@@ -554,7 +597,7 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 		if(pagina == 15) {
 			system("cls");
 			telaMeusappED();
-			imprimirED(myapps, quant + 2);
+			imprimirED(myapps, quant + 1);
 		}else {
 			system("cls");
 			telaMeusappED();
@@ -586,7 +629,7 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 		while(1){
 			if(pagina == 15) {
 				telaMeusappED();
-				imprimirED(myapps, quant + 2);
+				imprimirED(myapps, quant + 1);
 			}else {
 				telaMeusappED();
 				imprimirEDpro(myapps, quant, pagina);
@@ -631,7 +674,7 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 			if(pagina == 15) {
 				system("cls");
 				telaMeusappED();
-				imprimirED(myapps, quant + 2);
+				imprimirED(myapps, quant + 1);
 			}else {
 				system("cls");
 				telaMeusappED();
@@ -838,11 +881,11 @@ void stopED(App rum[], int quant, int pagina) {
 		if(pagina == 15) {
 			system("cls");
 			telaAppRum();
-			imprimirED(rum, quant + 2);
+			imprimirED(rum, quant + 1);
 		}else {
 			system("cls");
 			telaAppRum();
-			imprimirEDpro(rum, quant + 2, pagina);
+			imprimirEDpro(rum, quant + 1, pagina);
 		}	
 
 		//Recebendo operação selecionada
@@ -871,10 +914,10 @@ void stopED(App rum[], int quant, int pagina) {
 		while(1){
 			if(pagina == 15) {
 				telaMeusappED();
-				imprimirED(rum, quant + 2);
+				imprimirED(rum, quant + 1);
 			}else {
 				telaMeusappED();
-				imprimirEDpro(rum, quant + 2, pagina);
+				imprimirEDpro(rum, quant + 1, pagina);
 			}
 						
 			gotoxy(2,20);
@@ -916,7 +959,7 @@ void funAppRumED(App rum[], int quant) {
 		if(pagina == 15) {
 			//imprimindo os 14 apps iniciais
 			telaAppRum();
-			imprimirED(rum, quant + 2);
+			imprimirED(rum, quant + 1);
 		}
 		
 		//Recebendo operação selecionada
@@ -936,7 +979,7 @@ void funAppRumED(App rum[], int quant) {
 				if(pagina != 15) {
 					pagina--;
 					telaAppRum();
-					imprimirEDpro(rum, quant + 2, pagina);
+					imprimirEDpro(rum, quant + 1, pagina);
 				}else {
 	        		gotoxy(12, 20);
 	  				printf(" - Pagina Inicial\n");
@@ -952,7 +995,7 @@ void funAppRumED(App rum[], int quant) {
 				if(operacao == '.') {
 					pagina++;
 					telaAppRum();
-					imprimirEDpro(rum, quant + 2, pagina);
+					imprimirEDpro(rum, quant + 1, pagina);
 				}else {
 		       		gotoxy(12, 20);
 		  				printf(" - Pagina Final\n");
@@ -992,7 +1035,7 @@ void funMeusappsED(App myapps[], int quant, App rum[], App MeusApp_Ini[X][Y]) {
 		if(pagina == 15) {
 			//imprimindo os 14 apps iniciais
 			telaMeusappED();
-			imprimirED(myapps, quant + 2);
+			imprimirED(myapps, quant + 1);
 		}
 				
 		//Recebendo operação selecionada
@@ -1006,7 +1049,7 @@ void funMeusappsED(App myapps[], int quant, App rum[], App MeusApp_Ini[X][Y]) {
 				if(pagina != 15) {
 					pagina--;
 					telaMeusappED();
-					imprimirEDpro(myapps, quant + 2, pagina);
+					imprimirEDpro(myapps, quant + 1, pagina);
 				}else {
 	        		gotoxy(12, 20);
 	  				printf("- Pagina Inicial\n");
@@ -1022,7 +1065,7 @@ void funMeusappsED(App myapps[], int quant, App rum[], App MeusApp_Ini[X][Y]) {
 				if(operacao == '.') {
 					pagina++;
 					telaMeusappED();
-					imprimirEDpro(myapps, quant + 2, pagina);
+					imprimirEDpro(myapps, quant + 1, pagina);
 				}else {
 		       		gotoxy(12, 20);
 		  				printf("- Pagina Final\n");
@@ -1176,7 +1219,8 @@ int main() {
 	
 	//chamando a interface inicial
 	while(1) {
-		telaIni(MeusAppsED_Ini);
+		telaIni();
+		appsTelaIni(MeusAppsED_Ini);
 	
 		//opção de saida
 		gotoxy(2, 28);
