@@ -86,11 +86,27 @@ void lerArq(App StoreED[]) {
 }
 
 //imprimindo a interface inicial
-void telaIni() {
+void telaIni(App MyappsIni[X][Y]) {
 	int x;
+	int pos = -1;
+	int pos1 = -1;
 	
 	system("cls");
 	
+	//verificando quantos apps estão instalados
+	for(x = 0; x < Y; x++){
+		if(MyappsIni[0][x].tam != 0) {
+			pos = x;
+		}
+	}
+	
+	
+	for(x = 0; x < Y; x++){
+		if(MyappsIni[1][x].tam != 0) {
+			pos1 = x;
+		}
+    }			
+
 	//topo
 	for(x = 0; x < 41; x++) {
 		gotoxy(0, 0);
@@ -127,6 +143,177 @@ void telaIni() {
 		printf("%c", 219);
 	}
 	
+	//imprimindo jogo da linha 0
+	if(pos != -1) {
+		if(pos == 0) {
+			gotoxy(2, 3);
+			printf("Nome:");	
+			gotoxy(3, 4);
+			printf("%s", MyappsIni[0][0].nome);
+			gotoxy(2, 5);
+			printf("Tamanho:");
+			gotoxy(3, 6);
+			printf("%d MB", MyappsIni[0][0].tam);
+			gotoxy(2, 7);
+			printf("Id:");
+			gotoxy(3, 8);
+			printf("%d", MyappsIni[0][0].id);
+		}
+		if(pos == 1) {
+			gotoxy(2, 3);
+			printf("Nome:");	
+			gotoxy(3, 4);
+			printf("%s", MyappsIni[0][0].nome);
+			gotoxy(2, 5);
+			printf("Tamanho:");
+			gotoxy(3, 6);
+			printf("%d MB", MyappsIni[0][0].tam);
+			gotoxy(2, 7);
+			printf("Id:");
+			gotoxy(3, 8);
+			printf("%d", MyappsIni[0][0].id);
+
+			gotoxy(16, 3);
+			printf("Nome:");	
+			gotoxy(17, 4);
+			printf("%s", MyappsIni[0][1].nome);
+			gotoxy(16, 5);
+			printf("Tamanho:");
+			gotoxy(17, 6);
+			printf("%d MB", MyappsIni[0][1].tam);
+			gotoxy(16, 7);
+			printf("Id:");
+			gotoxy(17, 8);
+			printf("%d", MyappsIni[0][1].id);											
+		}
+		if(pos == 2) {
+			gotoxy(2, 3);
+			printf("Nome:");	
+			gotoxy(3, 4);
+			printf("%s", MyappsIni[0][0].nome);
+			gotoxy(2, 5);
+			printf("Tamanho:");
+			gotoxy(3, 6);
+			printf("%d MB", MyappsIni[0][0].tam);
+			gotoxy(2, 7);
+			printf("Id:");
+			gotoxy(3, 8);
+			printf("%d", MyappsIni[0][0].id);
+
+			gotoxy(16, 3);
+			printf("Nome:");	
+			gotoxy(17, 4);
+			printf("%s", MyappsIni[0][1].nome);
+			gotoxy(16, 5);
+			printf("Tamanho:");
+			gotoxy(17, 6);
+			printf("%d MB", MyappsIni[0][1].tam);
+			gotoxy(16, 7);
+			printf("Id:");
+			gotoxy(17, 8);
+			printf("%d", MyappsIni[0][1].id);	
+
+			gotoxy(30, 3);
+			printf("Nome:");	
+			gotoxy(31, 4);
+			printf("%s", MyappsIni[0][2].nome);
+			gotoxy(30, 5);
+			printf("Tamanho:");
+			gotoxy(31, 6);
+			printf("%d MB", MyappsIni[0][2].tam);
+			gotoxy(30, 7);
+			printf("Id:");
+			gotoxy(31, 8);
+			printf("%d", MyappsIni[0][2].id);	
+			
+		}											
+	}
+	
+	//imprimindo da linha 1
+	if(pos1 != -1) {
+		if(pos1 == 0) {
+			gotoxy(2, 12);
+			printf("Nome:");	
+			gotoxy(3, 13);
+			printf("%s", MyappsIni[1][0].nome);
+			gotoxy(2, 14);
+			printf("Tamanho:");
+			gotoxy(3, 15);
+			printf("%d MB", MyappsIni[1][0].tam);
+			gotoxy(2, 16);
+			printf("Id:");
+			gotoxy(3, 17);
+			printf("%d", MyappsIni[1][0].id);
+		}
+		if(pos1 == 1) {
+			gotoxy(2, 12);
+			printf("Nome:");	
+			gotoxy(3, 13);
+			printf("%s", MyappsIni[1][0].nome);
+			gotoxy(2, 14);
+			printf("Tamanho:");
+			gotoxy(3, 15);
+			printf("%d MB", MyappsIni[1][0].tam);
+			gotoxy(2, 16);
+			printf("Id:");
+			gotoxy(3, 17);
+			printf("%d", MyappsIni[1][0].id);
+		
+			gotoxy(16, 12);
+	  		printf("Nome:");	
+			gotoxy(17, 13);
+			printf("%s", MyappsIni[1][1].nome);
+			gotoxy(16, 14);
+			printf("Tamanho:");
+			gotoxy(17, 15);
+			printf("%d MB", MyappsIni[1][1].tam);
+			gotoxy(16, 16);
+			printf("Id:");
+			gotoxy(17, 17);
+			printf("%d", MyappsIni[1][1].id);											
+		}
+		if(pos1 == 2) {
+			gotoxy(2, 12);
+			printf("Nome:");	
+			gotoxy(3, 13);
+			printf("%s", MyappsIni[1][0].nome);
+			gotoxy(2, 14);
+			printf("Tamanho:");
+			gotoxy(3, 15);
+			printf("%d MB", MyappsIni[1][0].tam);
+			gotoxy(2, 16);
+			printf("Id:");
+			gotoxy(3, 17);
+			printf("%d", MyappsIni[1][0].id);
+		
+			gotoxy(16, 12);
+	  		printf("Nome:");	
+			gotoxy(17, 13);
+			printf("%s", MyappsIni[1][1].nome);
+			gotoxy(16, 14);
+			printf("Tamanho:");
+			gotoxy(17, 15);
+			printf("%d MB", MyappsIni[1][1].tam);
+			gotoxy(16, 16);
+			printf("Id:");
+			gotoxy(17, 17);
+			printf("%d", MyappsIni[1][1].id);	
+		
+			gotoxy(30, 12);
+			printf("Nome:");	
+			gotoxy(31, 13);
+			printf("%s", MyappsIni[1][2].nome);
+			gotoxy(30, 14);
+			printf("Tamanho:");
+			gotoxy(31, 15);
+			printf("%d MB", MyappsIni[1][2].tam);
+			gotoxy(30, 16);
+			printf("Id:");
+			gotoxy(31, 17);
+			printf("%d", MyappsIni[1][2].id);			
+		}
+	}							
+	
 	//divisoria da matriz(vertical)
 	for(x = 2; x < 20; x++) {
 		gotoxy(15, x);
@@ -136,7 +323,7 @@ void telaIni() {
 	for(x = 2; x < 20; x++) {
 	   	gotoxy(29, x);
 		printf("%c", 219);
-	}	
+	}			
 	
 	//divisoria da matriz (horizontal)
 	for(x = 2; x < 42; x++) {
@@ -401,49 +588,6 @@ void telaInsta() {
 	gotoxy(28, 23);
 	printf("w-Sair\n\n\n");
 }
-
-//função para imprimir apps na tela inicial
-void appsTelaIni(App MyappsIni[X][Y]) {
-	int x;
-	int y;
-	int coluna = -1;
-	int linha = -1;
-	
-	//verificando quantos apps estão instalados
-	for(x = 0; x < X; x++){
-		for(y = 0; y < Y; y++) {
-			if(MyappsIni[x][y].tam != 0) {
-				linha = x;
-				coluna = y;
-				break;
-			}
-		}
-					
-		if(linha != -1 && coluna != -1) {
-			break;
-		}
-	}
-	
-	//imprimindo apps na tela incial
-	if(linha != -1 && coluna != -1) {
-		for(x = 0; x <= linha; x++){
-			for(y = 0; y <= coluna; y++) {
-				gotoxy(2, 2);
-				printf("Nome:");
-				gotoxy(2, 3);
-				puts(MyappsIni[x][y].nome);
-				gotoxy(2, 4);
-				printf("Tamanho:\n");
-				printf("%d", MyappsIni[x][y].tam);
-				gotoxy(2, 5);
-				printf("Id:\n");
-				printf("%d", MyappsIni[x][y].id);
-		    }		
-		}
-	}
-	
-	
-}	
 
 //função para imprimir app
 void imprimirED(App aplicativos[], int quant) {
@@ -1219,8 +1363,7 @@ int main() {
 	
 	//chamando a interface inicial
 	while(1) {
-		telaIni();
-		appsTelaIni(MeusAppsED_Ini);
+		telaIni(MeusAppsED_Ini);
 	
 		//opção de saida
 		gotoxy(2, 28);
