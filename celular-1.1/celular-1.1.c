@@ -143,7 +143,7 @@ void telaIni(App MyappsIni[X][Y]) {
 		printf("%c", 219);
 	}
 	
-	//imprimindo jogo da linha 0
+	//imprimindo apps da linha 0 da matriz da tela inicial
 	if(pos != -1) {
 		if(pos == 0) {
 			gotoxy(2, 3);
@@ -229,7 +229,7 @@ void telaIni(App MyappsIni[X][Y]) {
 		}											
 	}
 	
-	//imprimindo da linha 1
+	////imprimindo apps da linha 1 da matriz da tela inicial
 	if(pos1 != -1) {
 		if(pos1 == 0) {
 			gotoxy(2, 12);
