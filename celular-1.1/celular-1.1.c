@@ -675,15 +675,26 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps
 		scanf("%d", & id);
 		gotoxy(0, 50);
 		
+		//vendo se o app ja foi instalado
+		for(x = 0; x < quant; x++) {
+			if(myapps[x].id == id){
+				gotoxy(5, 20);
+				printf("-Aplicativo ja instalado");
+				gotoxy(2, 28);
+				system("PAUSE");
+				return;
+			}			
+		}
+		
 		//procurando o indice referete a esse id
 		for(x = 0; x < quant; x++) {
-			if(aplicativos[x].id == id) {
+			if(aplicativos[x].id == id) {			
 				//recebendo a quantidade de apps istalados
-  				insta = quantApp(myapps);
-  				
-  				//recebendo o elemento com base no id
-  				elemento = aplicativos[x];
-				
+				insta = quantApp(myapps);
+	  				
+	  			//recebendo o elemento com base no id
+	  			elemento = aplicativos[x];
+					
 				addOrd(myapps, insta, elemento);
 				
 				//adicionando app ao vetor da tela inicial se ouver espaço
@@ -708,6 +719,17 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps
 			printf("Id nao encontrado - Id:");
 			scanf("%d", & id);
 			gotoxy(0, 50);
+			
+			//vendo se o app ja foi instalado
+			for(x = 0; x < quant; x++) {
+				if(myapps[x].id == id){
+					gotoxy(5, 20);
+					printf("-Aplicativo ja instalado");
+					gotoxy(2, 28);
+					system("PAUSE");
+					return;
+				}			
+			}			
 				
 			for(x = 0; x < quant; x++) {
 				if(aplicativos[x].id == id) {
