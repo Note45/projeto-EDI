@@ -145,7 +145,7 @@ void telaIni(App MyappsIni[X][Y]) {
 	
 	//imprimindo apps da linha 0 da matriz da tela inicial
 	if(pos != -1) {
-		if(pos == 0) {
+		if(pos == 0 && MyappsIni[0][0].tam != 0) {
 			gotoxy(2, 3);
 			printf("Nome:");	
 			gotoxy(3, 4);
@@ -159,7 +159,8 @@ void telaIni(App MyappsIni[X][Y]) {
 			gotoxy(3, 8);
 			printf("%d", MyappsIni[0][0].id);
 		}
-		if(pos == 1) {
+		
+		if(pos == 1 && MyappsIni[0][0].tam != 0) {
 			gotoxy(2, 3);
 			printf("Nome:");	
 			gotoxy(3, 4);
@@ -172,7 +173,9 @@ void telaIni(App MyappsIni[X][Y]) {
 			printf("Id:");
 			gotoxy(3, 8);
 			printf("%d", MyappsIni[0][0].id);
-
+		}	
+		
+		if( pos == 1 && MyappsIni[0][1].tam != 0) {
 			gotoxy(16, 3);
 			printf("Nome:");	
 			gotoxy(17, 4);
@@ -184,9 +187,10 @@ void telaIni(App MyappsIni[X][Y]) {
 			gotoxy(16, 7);
 			printf("Id:");
 			gotoxy(17, 8);
-			printf("%d", MyappsIni[0][1].id);											
-		}
-		if(pos == 2) {
+			printf("%d", MyappsIni[0][1].id);
+		}											
+		
+		if(pos == 2 && MyappsIni[0][0].tam != 0) {
 			gotoxy(2, 3);
 			printf("Nome:");	
 			gotoxy(3, 4);
@@ -199,7 +203,9 @@ void telaIni(App MyappsIni[X][Y]) {
 			printf("Id:");
 			gotoxy(3, 8);
 			printf("%d", MyappsIni[0][0].id);
-
+		}
+		
+		if(pos == 2 && MyappsIni[0][1].tam != 0) {
 			gotoxy(16, 3);
 			printf("Nome:");	
 			gotoxy(17, 4);
@@ -212,7 +218,9 @@ void telaIni(App MyappsIni[X][Y]) {
 			printf("Id:");
 			gotoxy(17, 8);
 			printf("%d", MyappsIni[0][1].id);	
-
+		}
+		
+		if(pos == 2 && MyappsIni[0][2].tam != 0) {
 			gotoxy(30, 3);
 			printf("Nome:");	
 			gotoxy(31, 4);
@@ -224,14 +232,13 @@ void telaIni(App MyappsIni[X][Y]) {
 			gotoxy(30, 7);
 			printf("Id:");
 			gotoxy(31, 8);
-			printf("%d", MyappsIni[0][2].id);	
-			
+			printf("%d", MyappsIni[0][2].id);			
 		}											
 	}
 	
 	////imprimindo apps da linha 1 da matriz da tela inicial
 	if(pos1 != -1) {
-		if(pos1 == 0) {
+		if(pos1 == 0 && MyappsIni[1][0].tam != 0) {
 			gotoxy(2, 12);
 			printf("Nome:");	
 			gotoxy(3, 13);
@@ -245,7 +252,8 @@ void telaIni(App MyappsIni[X][Y]) {
 			gotoxy(3, 17);
 			printf("%d", MyappsIni[1][0].id);
 		}
-		if(pos1 == 1) {
+		
+		if(pos1 == 1 && MyappsIni[1][0].tam != 0) {
 			gotoxy(2, 12);
 			printf("Nome:");	
 			gotoxy(3, 13);
@@ -258,9 +266,11 @@ void telaIni(App MyappsIni[X][Y]) {
 			printf("Id:");
 			gotoxy(3, 17);
 			printf("%d", MyappsIni[1][0].id);
+		}	
 		
+		if( pos1 == 1 && MyappsIni[1][1].tam != 0) {
 			gotoxy(16, 12);
-	  		printf("Nome:");	
+			printf("Nome:");	
 			gotoxy(17, 13);
 			printf("%s", MyappsIni[1][1].nome);
 			gotoxy(16, 14);
@@ -270,9 +280,10 @@ void telaIni(App MyappsIni[X][Y]) {
 			gotoxy(16, 16);
 			printf("Id:");
 			gotoxy(17, 17);
-			printf("%d", MyappsIni[1][1].id);											
-		}
-		if(pos1 == 2) {
+			printf("%d", MyappsIni[1][1].id);
+		}											
+		
+		if(pos1 == 2 && MyappsIni[1][0].tam != 0) {
 			gotoxy(2, 12);
 			printf("Nome:");	
 			gotoxy(3, 13);
@@ -285,9 +296,11 @@ void telaIni(App MyappsIni[X][Y]) {
 			printf("Id:");
 			gotoxy(3, 17);
 			printf("%d", MyappsIni[1][0].id);
+		}
 		
+		if(pos1 == 2 && MyappsIni[1][1].tam != 0) {
 			gotoxy(16, 12);
-	  		printf("Nome:");	
+			printf("Nome:");	
 			gotoxy(17, 13);
 			printf("%s", MyappsIni[1][1].nome);
 			gotoxy(16, 14);
@@ -298,7 +311,9 @@ void telaIni(App MyappsIni[X][Y]) {
 			printf("Id:");
 			gotoxy(17, 17);
 			printf("%d", MyappsIni[1][1].id);	
+		}
 		
+		if(pos1 == 2 && MyappsIni[1][2].tam != 0) {
 			gotoxy(30, 12);
 			printf("Nome:");	
 			gotoxy(31, 13);
@@ -312,7 +327,8 @@ void telaIni(App MyappsIni[X][Y]) {
 			gotoxy(31, 17);
 			printf("%d", MyappsIni[1][2].id);			
 		}
-	}							
+	}
+							
 	
 	//divisoria da matriz(vertical)
 	for(x = 2; x < 20; x++) {
@@ -849,11 +865,10 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 //função para remover apps
 void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][Y]) {
 	int id = 0;
-	int q;
-	int w;
 	int x;
 	int y;
 	int z;
+	int a;
 	int quant_rum = quantApp(rum);
 	
 	//so remove se tiver apps intalados
@@ -906,47 +921,18 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 					}
 					
 					//removendo o app se ele estiver na tela inicial
-					for(w = 0; w < X; w++) {
-						for(z = 0; z < Y; z++){
-							if(MeusApp_Ini[w][z].tam == 0) {
-								   quant_rum = w;
-								   q = z;	
-							}
-						} 
-					}
-					
-					if((quant_rum > 0) && (q > 0)) {
-						for(w = 0; w < X; w++) {
-							for(y = 0; y < Y; y++) {
-								if(MeusApp_Ini[w][y].id == id) {
-									if(w == 1 && y == 2) {
-										strcpy(MeusApp_Ini[y][w].nome, "");
-										MeusApp_Ini[w][y].id = 0;
-										MeusApp_Ini[w][y].id = 0;
-										return;										 	
-									} 
-									
-									//removendo app instalado na tela inicial
-									strcpy(MeusApp_Ini[y][w].nome, "");
-									MeusApp_Ini[w][y].id = 0;
-									MeusApp_Ini[w][y].id = 0;
-									
-									//reordenando o matriz
-									for(z = y; z < 2; z++) {
-										MeusApp_Ini[w][z] = MeusApp_Ini[w][z + 1];	
-									} 
-
-									if((w == 0 && y == 2) || (w == 0 && z == 2)) {
-										MeusApp_Ini[0][2] = MeusApp_Ini[1][0];
-									
-										for(z = 0; z < 3; z++) {
-											MeusApp_Ini[1][z] = MeusApp_Ini[1][z + 1];
-										}									
-									}
-										
-									return;
+					for(y = 0; y < X; y++) {
+						for(a = 0; a < Y; a++) {
+							if(MeusApp_Ini[y][a].id == id) {
+								strcpy(MeusApp_Ini[y][a].nome, "");
+								MeusApp_Ini[y][a].tam = 0;
+								MeusApp_Ini[y][a].id = 0;
+								
+								if(quant - 1 >= 6) {
+									MeusApp_Ini[y][a] = myapps[x + 1];
 								}
-							}						
+								break;
+							}
 						}
 					}
 					return;
@@ -1001,49 +987,20 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 						}
 						
 						//removendo o app se ele estiver na tela inicial
-						for(w = 0; w < X; w++) {
-							for(z = 0; z < Y; z++){
-								if(MeusApp_Ini[w][z].tam == 0) {
-									   quant_rum = w;
-									   q = z;	
-								}
-							} 
-						}						
-
-						if((quant_rum > 0) && (q > 0)) {
-							for(w = 0; w < X; w++) {
-								for(y = 0; y < Y; y++) {
-									if(MeusApp_Ini[w][y].id == id) {
-										if(w == 1 && y == 2) {
-											strcpy(MeusApp_Ini[y][w].nome, "");
-											MeusApp_Ini[w][y].id = 0;
-											MeusApp_Ini[w][y].id = 0;
-											return;										 	
-										} 
-										
-										//removendo app instalado na tela inicial
-										strcpy(MeusApp_Ini[y][w].nome, "");
-										MeusApp_Ini[w][y].id = 0;
-										MeusApp_Ini[w][y].id = 0;
-										
-										//reordenando o matriz
-										for(z = y; z < 2; z++) {
-											MeusApp_Ini[w][z] = MeusApp_Ini[w][z + 1];	
-										} 
-	
-										if((w == 0 && y == 2) || (w == 0 && z == 2)) {
-											MeusApp_Ini[0][2] = MeusApp_Ini[1][0];
-										
-											for(z = 0; z < 3; z++) {
-												MeusApp_Ini[1][z] = MeusApp_Ini[1][z + 1];
-											}									
-										}
-											
-										return;
+						for(y = 0; y < X; y++) {
+							for(a = 0; a < Y; a++) {
+								if(MeusApp_Ini[y][a].id == id) {
+									strcpy(MeusApp_Ini[y][a].nome, "");
+									MeusApp_Ini[y][a].tam = 0;
+									MeusApp_Ini[y][a].id = 0;
+									
+									if(quant - 1 >= 6) {
+										MeusApp_Ini[y][a] = myapps[x + 1];
 									}
-								}						
+									break;
+								}
 							}
-						}						
+						}												
 						return;
 					}
 				}							
