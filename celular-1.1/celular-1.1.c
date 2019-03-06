@@ -679,7 +679,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps
 		for(x = 0; x < quant; x++) {
 			if(myapps[x].id == id){
 				gotoxy(5, 20);
-				printf("-Aplicativo ja instalado");
+				printf("- Aplicativo ja esta instalado");
 				gotoxy(2, 28);
 				system("PAUSE");
 				return;
@@ -724,7 +724,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps
 			for(x = 0; x < quant; x++) {
 				if(myapps[x].id == id){
 					gotoxy(5, 20);
-					printf("-Aplicativo ja instalado");
+					printf("- Aplicativo ja esta instalado");
 					gotoxy(2, 28);
 					system("PAUSE");
 					return;
@@ -776,6 +776,17 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 		scanf("%d", & id);
 		gotoxy(0, 50);
 		
+		//vendo se o app ja está rodando
+		for(x = 0; x < quant; x++) {
+			if(rum[x].id == id){
+				gotoxy(5, 20);
+				printf("- Aplicativo ja esta rodando");
+				gotoxy(2, 28);
+				system("PAUSE");
+				return;
+			}			
+		}	
+			
 		//procurando o indice referete a esse id
 		for(x = 0; x < quant; x++) {
 			if(myapps[x].id == id) {
@@ -806,6 +817,17 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 			id = 0;
 			scanf("%d", & id);
 			gotoxy(0, 50);
+			
+			//vendo se o app ja está rodando
+			for(x = 0; x < quant; x++) {
+				if(rum[x].id == id){
+					gotoxy(5, 20);
+					printf("- Aplicativo ja esta rodando");
+					gotoxy(2, 28);
+					system("PAUSE");
+					return;
+				}			
+			}			
 				
 			for(x = 0; x < quant; x++) {
 				if(myapps[x].id == id) {
