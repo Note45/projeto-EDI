@@ -1368,7 +1368,7 @@ int main() {
 	
 		//opção de saida
 		gotoxy(2, 28);
-		printf("Para sair pressione ';'");
+		printf("Para desligar o MobileED pressione ';'");
 		
 		//Recebendo operação selecionada
 		gotoxy(2,20);
