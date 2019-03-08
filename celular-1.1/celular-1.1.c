@@ -799,7 +799,7 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 				printf("-Aplicativo rodando/nao encontrado");
 				gotoxy(2, 28);
 				system("PAUSE");
-				break;
+				return;
 			}			
 		}	
 			
