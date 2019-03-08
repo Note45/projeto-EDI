@@ -867,7 +867,7 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 	int id = 0;
 	int x;
 	int y;
-	int z;
+	int z = 0;
 	int a;
 	int quant_rum = quantApp(rum);
 	
@@ -889,6 +889,23 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 			printf("Id:");
 			scanf("%d", & id);
 			gotoxy(0, 50);
+			
+			//vendo se o id é valido
+			for(x = 0; x < quant; x++) {
+				if(rum[x].id == id){
+					z = -2;
+				}else {
+					z = 0;
+				}			
+			}
+			
+			if(z == -2) {
+				gotoxy(5, 20);
+				printf("- Aplicativo nao encontrado");
+				gotoxy(2, 28);
+				system("PAUSE");
+				return;
+			}			
 			
 			//procurando o indice referete a esse id
 			for(x = 0; x < quant; x++) {
@@ -955,6 +972,23 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 				scanf("%d", & id);
 				gotoxy(0, 50);
 	
+				//vendo se o id é valido
+				for(x = 0; x < quant; x++) {
+					if(rum[x].id == id){
+						z = -2;
+					}else {
+						z = 0;
+					}			
+				}
+				
+				if(z == -2) {
+					gotoxy(5, 20);
+					printf("- Aplicativo nao encontrado");
+					gotoxy(2, 28);
+					system("PAUSE");
+					return;
+				}	
+							
 				//procurando o indice referete a esse id
 				for(x = 0; x < quant; x++) {
 					if(myapps[x].id == id) {
