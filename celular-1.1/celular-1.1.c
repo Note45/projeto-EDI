@@ -651,6 +651,28 @@ void imprimirEDpro(App aplicativos[], int quant, int inicio) {
 	}	
 }
 
+//função para orgazinar a matriz apos algum app ser removido
+void organizaMat(App MeusappsIni[X][Y]) {
+	int x;
+	int y;
+	App elemento;
+	
+	for(x = 0; x < X; x++) {
+		for(y = 0; y < Y; y++) {
+			if(y == 2 && x < X - 1) {
+				elemento = MeusappsIni[x + 1][0];
+				MeusappsIni[x + 1][0] = MeusappsIni[x][y];
+				MeusappsIni[x][y] = elemento;
+			}
+			if(MeusappsIni[x][y].tam == 0 && MeusappsIni[x][y + 1].tam != 0 && y + 1 < Y) {
+				   elemento = MeusappsIni[x][y];
+				   MeusappsIni[x][y] = MeusappsIni[x][y + 1];
+				   MeusappsIni[x][y + 1] = elemento;	
+			}
+		}
+	}
+}
+
 //função para intalação de apps
 void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps_Ini[X][Y]) {
 	int id = 0;
@@ -931,6 +953,9 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 								if(quant - 1 >= 6) {
 									MeusApp_Ini[y][a] = myapps[x + 1];
 								}
+								
+								organizaMat(MeusApp_Ini);
+								
 								return;
 							}
 						}
@@ -996,6 +1021,9 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 									if(quant - 1 >= 6) {
 										MeusApp_Ini[y][a] = myapps[x + 1];
 									}
+									
+									organizaMat(MeusApp_Ini);
+									
 									return;
 								}
 							}
