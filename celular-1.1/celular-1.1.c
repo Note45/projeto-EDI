@@ -657,7 +657,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps
 	int q = -1;
 	int x;
 	int y;
-	int z;
+	int z = 0;
 	int insta = 0;//recebe quanto apps estão instalados
 	App elemento;//recebe o elemento a ser ordenado
 	
@@ -695,7 +695,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps
 		for(x = 0; x < quant; x++) {
 			if(myapps[x].id == id){
 				gotoxy(5, 20);
-				printf("- Aplicativo instalado/nao encontrado");
+				printf("-Aplicativo instalado/nao encontrado");
 				gotoxy(2, 28);
 				system("PAUSE");
 				return;
@@ -740,7 +740,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps
 			for(x = 0; x < quant; x++) {
 				if(myapps[x].id == id){
 					gotoxy(5, 20);
-					printf("- Aplicativo instalado/nao encontrado");
+					printf("-Aplicativo instalado/nao encontrado");
 					gotoxy(2, 28);
 					system("PAUSE");
 					return;
@@ -796,10 +796,10 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 		for(x = 0; x < quant; x++) {
 			if(rum[x].id == id){
 				gotoxy(5, 20);
-				printf("- Aplicativo rodando/nao encontrado");
+				printf("-Aplicativo rodando/nao encontrado");
 				gotoxy(2, 28);
 				system("PAUSE");
-				return;
+				break;
 			}			
 		}	
 			
@@ -838,13 +838,13 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 			for(x = 0; x < quant; x++) {
 				if(rum[x].id == id){
 					gotoxy(5, 20);
-					printf("- - Aplicativo rodando/nao encontrado");
+					printf("-Aplicativo rodando/nao encontrado");
 					gotoxy(2, 28);
 					system("PAUSE");
 					return;
 				}			
 			}			
-				
+				  	
 			for(x = 0; x < quant; x++) {
 				if(myapps[x].id == id) {
 					//recebendo a quantidade de apps istalados
@@ -888,25 +888,8 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 			gotoxy(2,20);
 			printf("Id:");
 			scanf("%d", & id);
-			gotoxy(0, 50);
-			
-			//vendo se o id é valido
-			for(x = 0; x < quant; x++) {
-				if(rum[x].id == id){
-					z = -2;
-				}else {
-					z = 0;
-				}			
-			}
-			
-			if(z == -2) {
-				gotoxy(5, 20);
-				printf("- Aplicativo nao encontrado");
-				gotoxy(2, 28);
-				system("PAUSE");
-				return;
-			}			
-			
+			gotoxy(0, 50);	
+
 			//procurando o indice referete a esse id
 			for(x = 0; x < quant; x++) {
 				if(myapps[x].id == id) {
@@ -923,7 +906,7 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 					//removendo apps que estão rodando
 					if(quant_rum != 0) {
 						for(y = 0; y < quant_rum; y++) {
-							if(rum[x].id == id) {
+							if(rum[y].id == id) {
 								//removendo app instalado
 								strcpy(rum[y].nome, "");
 								rum[y].id = 0;
@@ -948,7 +931,7 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 								if(quant - 1 >= 6) {
 									MeusApp_Ini[y][a] = myapps[x + 1];
 								}
-								break;
+								return;
 							}
 						}
 					}
@@ -960,7 +943,7 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 			while(1){
 				if(pagina == 15) {
 					telaMeusappED();
-					imprimirED(myapps, quant + 2);
+					imprimirED(myapps, quant + 1);
 				}else {
 					telaMeusappED();
 					imprimirEDpro(myapps, quant, pagina);
@@ -968,27 +951,9 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 							
 				gotoxy(2,20);
 				printf("Id nao encontrado - Id:");
-				id = 0;
 				scanf("%d", & id);
 				gotoxy(0, 50);
-	
-				//vendo se o id é valido
-				for(x = 0; x < quant; x++) {
-					if(rum[x].id == id){
-						z = -2;
-					}else {
-						z = 0;
-					}			
-				}
 				
-				if(z == -2) {
-					gotoxy(5, 20);
-					printf("- Aplicativo nao encontrado");
-					gotoxy(2, 28);
-					system("PAUSE");
-					return;
-				}	
-							
 				//procurando o indice referete a esse id
 				for(x = 0; x < quant; x++) {
 					if(myapps[x].id == id) {
@@ -1006,7 +971,7 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 						//removendo app se ele também estiver rodando
 						if(quant_rum != 0) {
 							for(y = 0; y < quant_rum; y++) {
-								if(rum[x].id == id) {
+								if(rum[y].id == id) {
 									//removendo app instalado
 									strcpy(rum[y].nome, "");
 									rum[y].id = 0;
@@ -1031,7 +996,7 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 									if(quant - 1 >= 6) {
 										MeusApp_Ini[y][a] = myapps[x + 1];
 									}
-									break;
+									return;
 								}
 							}
 						}												
@@ -1041,7 +1006,7 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[X][
 						
 			}		
 		}
-	}else {
+	}else{
 		gotoxy(2,20);
 		printf("Nenhum app instalado!");
 		gotoxy(2, 28);
