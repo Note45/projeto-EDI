@@ -695,7 +695,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps
 		for(x = 0; x < quant; x++) {
 			if(myapps[x].id == id){
 				gotoxy(5, 20);
-				printf("- Aplicativo ja esta instalado");
+				printf("- Aplicativo instalado/nao encontrado");
 				gotoxy(2, 28);
 				system("PAUSE");
 				return;
@@ -740,7 +740,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps
 			for(x = 0; x < quant; x++) {
 				if(myapps[x].id == id){
 					gotoxy(5, 20);
-					printf("- Aplicativo ja esta instalado");
+					printf("- Aplicativo instalado/nao encontrado");
 					gotoxy(2, 28);
 					system("PAUSE");
 					return;
@@ -796,7 +796,7 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 		for(x = 0; x < quant; x++) {
 			if(rum[x].id == id){
 				gotoxy(5, 20);
-				printf("- Aplicativo ja esta rodando");
+				printf("- Aplicativo rodando/nao encontrado");
 				gotoxy(2, 28);
 				system("PAUSE");
 				return;
@@ -838,7 +838,7 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 			for(x = 0; x < quant; x++) {
 				if(rum[x].id == id){
 					gotoxy(5, 20);
-					printf("- Aplicativo ja esta rodando");
+					printf("- - Aplicativo rodando/nao encontrado");
 					gotoxy(2, 28);
 					system("PAUSE");
 					return;
