@@ -43,34 +43,50 @@ void iniciaV(App vet[]) {
  	vet[0].IA = 1;
  	vet[0].IL = 30;
 }
-
-//função para checar o indice onde pode ser adiciondo
-int checargemInd(App aplicativos[],int tam, App adicionar) {
-	int x;
+//função para buscar o indice onde vai ser adicionado o elemento
+int busca(int vet[], int elemento) {
+	int x = 1;
 	
-	for(x = 0; x < tam; x++) {
-		if(adicionar.tam < aplicativos[x].tam || aplicativos[x].tam == 0) {
-			return x;
-		}
-	} 
-	return x;
-}
-
-//função para adicionar ordenar o elemento
-void addOrd(App aplicativos[], int tam, App adicionar) {
-	int x;
-	int pos = checargemInd(aplicativos, T, adicionar);//encontrando onde devo adcionar
-
-	//ordenando para no final adicionar	
-	for(x = tam; x > pos; x--) {
-		aplicativos[x] = aplicativos[x - 1];
-	} 	
-	aplicativos[pos] = adicionar;
+	//lista vazia
+	if(vet[0].IL == -1 && vet[0].FL  == -1) {
+		return 1;
+	}
+	
+	if(vet[0].IL != -1 && vet[0].FL != -1) {
+		//se a lista estiver cheia
+		if((vet[0].IL == vet[0].IA) && (vet[0].FL == vet[0].FA)) {
+			return -1;
+		}else {
+			for(x = 0; x <= vet[0].FL; x++) {
+				if(elemento < vet[x + 1].tam) {
+					break;
+				}
+			}
+			
+			//se for para inserir no final
+			if((x - 1) == vet[0].FL) {
+				return x;
+			} 
+			
+			//se for para inicio
+			if( (x + 1) == vet[0].FL){
+				return x + 1;
+			}
+			
+			//se for para inserir no meio
+			if((x - 1 != vet[0].FL) && (x + 1 != vet[0].IL)){
+				return x + 1;
+			}			
+		}	
+	}
+	
+	return -100;	
 }
 
 //função para ler o arquivo
 void lerArq(App StoreED[]) {
 	int x = 0;
+	int indice;
 	App elemento;
 	FILE *arquivo;
 	
@@ -88,8 +104,25 @@ void lerArq(App StoreED[]) {
 			fscanf(arquivo, "%d\n", & elemento.tam);
 			fscanf(arquivo, "%d\n", & elemento.id);
 			
-			x++;
-			addOrd(StoreED, x, elemento);
+			//buscando onde vou adiconar o elemento
+			indice = busca(StoreED, elemento.tam);
+			
+			if(indice == -100) {
+				gotoxy(0, 60);
+				printf("Erro ao buscar o indice para inserir no StoreED!\n");
+				exit(1);
+			}
+			
+			if(indice == -1) {
+				return;
+			}
+			
+			//checando onde adicionar na lista
+			if(StoreED[0].IL == -1 && StoreED[0].FL == -1) {//lista estiver vazia
+				StoreED[0].IL = 15;
+				Store[0].FL = 15;
+				StoreED[15] = elemento;
+			}
 	}
 	
 	//fechando arquivo
@@ -217,8 +250,8 @@ void telaMeusappED() {
 	}
 	
 	for(x = 2; x < 42; x++) {
-	gotoxy(x, 19);
-	printf("%c", 220);
+		gotoxy(x, 19);
+		printf("%c", 220);
 	}
 	
 	//divisorias
@@ -399,8 +432,8 @@ void telaInsta() {
 	}
 	
 	for(x = 2; x < 42; x++) {
-	gotoxy(x, 19);
-	printf("%c", 220);
+		gotoxy(x, 19);
+		printf("%c", 220);
 	}
 	
 	//divisorias
@@ -467,10 +500,7 @@ void imprimirEDpro(App aplicativos[], int quant, int inicio) {
 //função para intalação de apps
 void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps_Ini[]) {
 	int id = 0;
-	int q = -1;
 	int x;
-	int y;
-	int z = 0;
 	int insta = 0;//recebe quanto apps estão instalados
 	App elemento;//recebe o elemento a ser ordenado
 	
@@ -506,21 +536,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps
 		}
 		
 		//procurando o indice referete a esse id
-		for(x = 0; x < quant; x++) {
-			if(aplicativos[x].id == id) {			
-				//recebendo a quantidade de apps istalados
-				insta = quantApp(myapps);
-	  				
-	  			//recebendo o elemento com base no id
-	  			elemento = aplicativos[x];
-					
-				addOrd(myapps, insta, elemento);
-				
-				//adicionando app ao vetor da tela inicial se ouver espaço
-  
-				return;	
-			}
-		}			
+			
 		
 		//caso o id não seja encontrado
 		while(1){
@@ -548,21 +564,9 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina, App Myapps
 				}			
 			}			
 				
-			for(x = 0; x < quant; x++) {
-				if(aplicativos[x].id == id) {
-					//recebendo a quantidade de apps istalados
-	  				insta = quantApp(myapps);
-	  				
-	  				//recebendo o elemento com base no id
-	  				elemento = aplicativos[x];
-					
-					addOrd(myapps, insta, elemento);
 
-					//adicionando app ao vetor da tela inicial se ouver espaço
-  										   
-					return;						
-				}
-			}			
+			//procurando id para instalar
+						 			
 		}		
 	}
 }
@@ -603,19 +607,7 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 		}	
 			
 		//procurando o indice referete a esse id
-		for(x = 0; x < quant; x++) {
-			if(myapps[x].id == id) {
-				//recebendo a quantidade de apps istalados
-  				rodando = quantApp(rum);
-  				
-  				//recebendo o elemento com base no id
-  				elemento = myapps[x];
-				
-				addOrd(rum, rodando, elemento);
-				   
-				return;	
-			}
-		}			
+			
 		
 		//caso o id não seja encontrado
 		while(1){
@@ -644,19 +636,8 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 				}			
 			}			
 				  	
-			for(x = 0; x < quant; x++) {
-				if(myapps[x].id == id) {
-					//recebendo a quantidade de apps istalados
-	  				rodando = quantApp(rum);
-	  				
-	  				//recebendo o elemento com base no id
-	  				elemento = myapps[x];
-					
-					addOrd(rum, rodando, elemento);
-					   
-					return;						
-				}
-			}			
+			//procurando id para colocar para rodar
+						
 		}		
 	}
 }
@@ -667,7 +648,6 @@ void funRemo(App myapps[], int quant, int pagina, App rum[], App MeusApp_Ini[]) 
 	int x;
 	int y;
 	int z = 0;
-	int a;
 	int quant_rum = quantApp(rum);
 	
 	//so remove se tiver apps intalados
@@ -1108,7 +1088,7 @@ int main() {
 	//zerando MeusAppsEd
 	iniciaV(MeusAppsED_Ini);
 	
-	//zerando AppRumEd
+	//zerando AppRumEds
 	iniciaV(MeusAppsED);
 
 	//chamando a leitura do arquivo
