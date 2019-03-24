@@ -48,7 +48,7 @@ int buscaI(App vet[], App elemento, int lista) {
 		return -5;		
 	}else {
 		if(elemento.tam <= vet[ControleL[lista].IL].tam) {//se for no começo da lista
-			return ControleL[lista].IL;
+			return ControleL[lista].IL - 1;
 		}
 		if(elemento.tam >= vet[ControleL[lista].FL].tam) {//se for no final
 			return ControleL[lista].FL + 1;
@@ -160,12 +160,12 @@ void inserirL(App StoreED[], int indice, int lista, App elemento) {
 			return;
 		}	
 			
-		if(ControleL[lista].IL == indice) {//adicionando no inicio da lista
+		if(ControleL[lista].IL > indice) {//adicionando no inicio da lista
 			if(ControleL[lista].IL != 1) {
 				ControleL[lista].IL--;
 				StoreED[ControleL[lista].IL] = elemento;
 			}else {
-				ControleL[lista].FL ++;
+				ControleL[lista].FL++;
 					
 				for(x = ControleL[lista].FL; x >= 0; x--) {
 					StoreED[x] = StoreED[x - 1];	
@@ -181,6 +181,14 @@ void inserirL(App StoreED[], int indice, int lista, App elemento) {
 			ControleL[lista].FL++;
 			StoreED[indice] = elemento;
 			return;			
+		}else if((ControleL[lista].IL != ControleL[lista].IA) && (ControleL[lista].FL == ControleL[lista].FA)) {
+			ControleL[lista].IL--;
+			
+			for(x = ControleL[lista].IL; x < indice; x++) {
+				StoreED[x] = StoreED[x + 1];
+			}
+			StoreED[indice - 1] = elemento;
+			return;
 		}			
 			
 		//adicionando no meio da lista
