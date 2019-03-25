@@ -64,6 +64,68 @@ int buscaI(App vet[], App elemento, int lista) {
 	return -5;	
 }
 
+//função para verificar quantos aplicativos estão cadastrados em um vetor
+int quantApp(App aplicativos[], int lista) {
+	int x;
+	int quantidade = 0;
+	
+	for(x = ControleL[lista].IL; x < T; x++) {
+		if(aplicativos[x].tam != 0) {
+			quantidade++;
+		}
+	}
+
+	return quantidade;
+}
+
+//funções para imrpimir os apps
+void imprimirED(App aplicativos[], int quant, int lista) {
+	int x;
+	int y = 2;
+	
+	//complementando a interface para StoreEd
+	gotoxy(2, 2);
+	printf("Nome:");
+	gotoxy(15, 2);
+	printf("Tamanho:");
+	gotoxy(29, 2);
+	printf("Id:");
+		
+	for(x = ControleL[lista].IL; x <= quant; x++) {
+		gotoxy(2, y + 1);
+		printf("%s", aplicativos[x].nome);
+		gotoxy(18, y + 1);
+		printf("%d MB",aplicativos[x].tam);
+		gotoxy(32, y + 1);
+		printf("%d", aplicativos[x].id);
+		y++;
+	}	
+}
+
+
+void imprimirEDpro(App aplicativos[], int quant, int inicio) {
+	int x;
+	int y = 3;
+	
+	//complementando a interface para StoreEd
+	gotoxy(2, 2);
+	printf("Nome:");
+	gotoxy(18, 2);
+	printf("Tamanho:");
+	gotoxy(29, 2); 
+	printf("Id:");
+		
+	for(x = inicio - 1; x < quant; x++) {
+		gotoxy(2, y);
+		printf("%s", aplicativos[x].nome);
+		gotoxy(18, y);
+		printf("%d MB",aplicativos[x].tam);
+		gotoxy(32, y);
+		printf("%d", aplicativos[x].id);
+		y++;
+	}	
+}
+
 //área de funções relacionadas a telas
 void telaIni() {
 	int x;
@@ -143,6 +205,242 @@ void telaIni() {
 	gotoxy(31, 23);
 	printf("e-AppRumED\n\n\n");
 
+}
+
+void telaStoreED() {
+	int x;
+	
+	system("cls");
+	
+	//topo
+	for(x = 0; x < 41; x++) {
+		gotoxy(0, 0);
+		printf("%c", 219);
+	}
+	
+	//esquerda e direita
+	for(x = 1; x < 25; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+		gotoxy(42, x);
+		printf("%c\n", 219);
+	}
+
+	//parte de baixo
+	for(x = 0; x < 42; x++) {
+		gotoxy(0, x);
+		printf("%c",219);
+	}
+	
+	//legenda para mudar de pagina
+	gotoxy(3, 18);
+	printf(", - anterior");
+	
+	gotoxy(30, 18);
+	printf(". - proximo");
+	
+	//espaçamentos superiores
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 21);
+		printf("%c", 220);
+	}
+	
+	for(x = 2; x < 42; x++) {
+	gotoxy(x, 19);
+	printf("%c", 220);
+	}
+	
+	//divisorias
+	for(x = 22; x < 25; x++) {
+		gotoxy(20, x);
+		printf("%c", 219);
+	}
+		
+	//comandos da tela
+	gotoxy(5, 23);
+	printf("q-Instalar\n\n\n");
+	
+	gotoxy(28, 23);
+	printf("w-Sair\n\n\n");
+}
+
+void telaAppRum() {
+	int x;
+	
+	system("cls");
+	
+	//topo
+	for(x = 0; x < 41; x++) {
+		gotoxy(0, 0);
+		printf("%c", 219);
+	}
+	
+	//esquerda e direita
+	for(x = 1; x < 25; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+		gotoxy(42, x);
+		printf("%c\n", 219);
+	}
+
+	//parte de baixo
+	for(x = 0; x < 42; x++) {
+		gotoxy(0, x);
+		printf("%c",219);
+	}
+	
+	//legenda para mudar de pagina
+	gotoxy(3, 18);
+	printf(", - anterior");
+	
+	gotoxy(30, 18);
+	printf(". - proximo");
+	
+	//espaçamentos superiores
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 21);
+		printf("%c", 220);
+	}
+	
+	for(x = 2; x < 42; x++) {
+	gotoxy(x, 19);
+	printf("%c", 220);
+	}
+	
+	//divisorias
+	for(x = 22; x < 25; x++) {
+		gotoxy(20, x);
+		printf("%c", 219);
+	}
+		
+	//comandos da tela
+	gotoxy(5, 23);
+	printf("q-Parar\n\n\n");
+	
+	gotoxy(28, 23);
+	printf("w-Sair\n\n\n");
+}
+
+void telaInsta() {
+	int x;
+	
+	system("cls");
+	
+	//topo
+	for(x = 0; x < 41; x++) {
+		gotoxy(0, 0);
+		printf("%c", 219);
+	}
+	
+	//esquerda e direita
+	for(x = 1; x < 25; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+		gotoxy(42, x);
+		printf("%c\n", 219);
+	}
+
+	//parte de baixo
+	for(x = 0; x < 42; x++) {
+		gotoxy(0, x);
+		printf("%c",219);
+	}
+	
+	//legenda para mudar de pagina
+	gotoxy(3, 18);
+	printf(", - anterior");
+	
+	gotoxy(30, 18);
+	printf(". - proximo");
+	
+	//espaçamentos superiores
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 21);
+		printf("%c", 220);
+	}
+	
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 19);
+		printf("%c", 220);
+	}
+	
+	//divisorias
+	for(x = 22; x < 25; x++) {
+		gotoxy(20, x);
+		printf("%c", 219);
+	}
+		
+	//comandos da tela
+	gotoxy(5, 23);
+	printf("q-Instalar\n\n\n");
+	
+	gotoxy(28, 23);
+	printf("w-Sair\n\n\n");
+}
+
+void telaMeusappED() {
+	int x;
+	
+	system("cls");
+	
+	//topo
+	for(x = 0; x < 41; x++) {
+		gotoxy(0, 0);
+		printf("%c", 219);
+	}
+	
+	//esquerda e direita
+	for(x = 1; x < 25; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+		gotoxy(42, x);
+		printf("%c\n", 219);
+	}
+
+	//parte de baixo
+	for(x = 0; x < 42; x++) {
+		gotoxy(0, x);
+		printf("%c",219);
+	}
+	
+	//legenda para mudar de pagina
+	gotoxy(3, 18);
+	printf(", - anterior");
+	
+	gotoxy(30, 18);
+	printf(". - proximo");
+	
+	//espaçamentos superiores
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 21);
+		printf("%c", 220);
+	}
+	
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 19);
+		printf("%c", 220);
+	}
+	
+	//divisorias
+	for(x = 22; x < 25; x++) {
+		gotoxy(13, x);
+		printf("%c", 219);
+	}
+	
+	for(x = 22; x < 25; x++) {
+		gotoxy(29, x);
+		printf("%c", 219);
+	}
+		
+	//comandos da tela
+	gotoxy(5, 23);
+	printf("q-Rum\n\n\n");
+	
+	gotoxy(16, 23);
+	printf("w-Remover\n\n\n");
+	
+	gotoxy(32, 23);
+	printf("e-Sair\n\n\n");
 }
 
 //função para inserir um elemento
@@ -241,9 +539,82 @@ void lerArq(App StoreED[]) {
 	fclose(arquivo);
 }
 
+//funções do menu inicial
+void funStoreED(App aplicativos[], App meusappsed[]) {	
+	char operacao;
+	int pausa;
+	int pagina = 15;
+	int quant = quantApp(aplicativos, 0);
+	
+	//imprimindo interface vstore
+	while(1) {
+		if(pagina == 15) {
+			//imprimindo os 14 apps iniciais
+			telaStoreED();
+			imprimirED(aplicativos, quant, 0);
+		}
+		
+		//Recebendo operação selecionada
+		gotoxy(2,20);
+		printf("Operacao:");
+		scanf(" %c", & operacao);
+		gotoxy(0, 50);
+		
+		switch(operacao) {
+			case 'w':
+				return;
+ 			break;
+ 			case 'q':
+     			
+            break;
+        	case ',':
+				if(pagina != 15) {
+					pagina--;
+					telaStoreED();
+					imprimirEDpro(aplicativos, quant, pagina);
+				}else {
+	        		gotoxy(12, 20);
+	  				printf(" - Pagina Inicial\n");
+	  				pausa = 0;
+	  				while(pausa < 9) {
+						  printf("\n");
+						  pausa++;
+				   }			
+					system("PAUSE");					  	
+				}        		
+        	break;
+			case '.':
+				if(operacao == '.') {
+					pagina++;
+					telaStoreED();
+					imprimirEDpro(aplicativos, quant, pagina);
+				}else {
+		       		gotoxy(12, 20);
+		  				printf(" - Pagina Final\n");
+		  				pausa = 0;
+		  				while(pausa < 9) {
+							  printf("\n");
+							  pausa++;
+						}				
+						system("PAUSE");  
+				}				
+			break;	
+        	default:
+        		gotoxy(12, 20);
+  				printf(" - Operacao nao encontrada\n");
+  				pausa = 0;
+  				while(pausa < 9) {
+					  printf("\n");
+					  pausa++;
+				}
+				system("PAUSE");	
+		}
+	}	
+}
+
 int main() {
 	App StoreED[T];
-	//App MeusAppsED[T];
+	App MeusAppsED[T];
 	//App AppRumED[T];
 	char operacao;
 	int pausa;
@@ -270,8 +641,8 @@ int main() {
 		gotoxy(0, 50);
 			
 		switch(operacao) {
-			case 'q':
-	
+			case 'q'://StoreED
+				funStoreED(StoreED, MeusAppsED);
 	  		break;
 		  	case 'w':
 	
