@@ -91,7 +91,7 @@ void imprimirED(App aplicativos[], int quant, int lista) {
 	gotoxy(29, 2);
 	printf("Id:");
 		
-	for(x = ControleL[lista].IL; x <= quant; x++) {
+	for(x = ControleL[lista].IL; y <= 16; x++) {
 		gotoxy(2, y + 1);
 		printf("%s", aplicativos[x].nome);
 		gotoxy(18, y + 1);
@@ -103,9 +103,14 @@ void imprimirED(App aplicativos[], int quant, int lista) {
 }
 
 
-void imprimirEDpro(App aplicativos[], int quant, int inicio) {
+void imprimirEDpro(App aplicativos[], int quant, int lista) {
 	int x;
 	int y = 3;
+	int a;
+	int z = 0;
+	
+	//quantidade de impressões
+	a = quant - 15;
 	
 	//complementando a interface para StoreEd
 	gotoxy(2, 2);
@@ -115,7 +120,7 @@ void imprimirEDpro(App aplicativos[], int quant, int inicio) {
 	gotoxy(29, 2); 
 	printf("Id:");
 		
-	for(x = inicio - 1; x < quant; x++) {
+	for(x = ControleL[lista].IL + 15; z < a; x++) {
 		gotoxy(2, y);
 		printf("%s", aplicativos[x].nome);
 		gotoxy(18, y);
@@ -123,6 +128,7 @@ void imprimirEDpro(App aplicativos[], int quant, int inicio) {
 		gotoxy(32, y);
 		printf("%d", aplicativos[x].id);
 		y++;
+		z++;
 	}	
 }
 
@@ -571,7 +577,7 @@ void funStoreED(App aplicativos[], App meusappsed[]) {
 				if(pagina != 15) {
 					pagina--;
 					telaStoreED();
-					imprimirEDpro(aplicativos, quant, pagina);
+					imprimirEDpro(aplicativos, quant, 0);
 				}else {
 	        		gotoxy(12, 20);
 	  				printf(" - Pagina Inicial\n");
@@ -587,7 +593,7 @@ void funStoreED(App aplicativos[], App meusappsed[]) {
 				if(operacao == '.') {
 					pagina++;
 					telaStoreED();
-					imprimirEDpro(aplicativos, quant, pagina);
+					imprimirEDpro(aplicativos, quant, 0);
 				}else {
 		       		gotoxy(12, 20);
 		  				printf(" - Pagina Final\n");
