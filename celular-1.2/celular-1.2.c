@@ -550,7 +550,6 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 	int id = 0;
 	int x;
 	int local = -1;//recebe quanto onde vou intalar o aplicativo
-	App elemento;//recebe o elemento a ser ordenado
 	
 	while(1) {
 		if(pagina == 15) {
