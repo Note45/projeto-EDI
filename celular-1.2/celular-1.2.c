@@ -28,14 +28,18 @@ void gotoxy(int x, int y){
 }
 
 //função para iniciar a lista do vetor
-void iniciaL() {
+void iniciaL(App vet[]) {
  	int x; 
+ 	int y;
  	
  	for(x = 0; x < 3 ; x++) {
 		ControleL[x].IL = -1;	 
 	    ControleL[x].FL = -1;
 		ControleL[x].IA = 1;
 		ControleL[x].FA = 30;			
+	}
+	for(y = 0; y < T; y++) {
+		vet[y].tam = -1;
 	}
 }
 
@@ -69,8 +73,8 @@ int quantApp(App aplicativos[], int lista) {
 	int x;
 	int quantidade = 0;
 	
-	for(x = ControleL[lista].IL; x < T; x++) {
-		if(aplicativos[x].tam != 0) {
+	for(x = ControleL[lista].IL; x <= ControleL[lista].FL; x++) {
+		if(aplicativos[x].tam != -1) {
 			quantidade++;
 		}
 	}
@@ -90,15 +94,29 @@ void imprimirED(App aplicativos[], int quant, int lista) {
 	printf("Tamanho:");
 	gotoxy(29, 2);
 	printf("Id:");
-		
-	for(x = ControleL[lista].IL; y <= 16; x++) {
-		gotoxy(2, y + 1);
-		printf("%s", aplicativos[x].nome);
-		gotoxy(18, y + 1);
-		printf("%d MB",aplicativos[x].tam);
-		gotoxy(32, y + 1);
-		printf("%d", aplicativos[x].id);
-		y++;
+	
+	if(quant == 0) {
+		return;
+	}else if(lista != 0) {
+	    for(x = ControleL[lista].IL; (y - 1) <= quant && y <= 16; x++) {
+			gotoxy(2, y + 1);
+			printf("%s", aplicativos[x].nome);
+			gotoxy(18, y + 1);
+			printf("%d MB",aplicativos[x].tam);
+			gotoxy(32, y + 1);
+			printf("%d", aplicativos[x].id);
+			y++;
+        }		
+	}else {		
+		for(x = ControleL[lista].IL; y <= 16; x++) {
+			gotoxy(2, y + 1);
+			printf("%s", aplicativos[x].nome);
+			gotoxy(18, y + 1);
+			printf("%d MB",aplicativos[x].tam);
+			gotoxy(32, y + 1);
+			printf("%d", aplicativos[x].id);
+			y++;
+		}
 	}	
 }
 
@@ -649,6 +667,95 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
             }		
 	    }
 	}
+}
+
+//função para rodar apps
+void funRumED(App myapps[], int quant, App rum[], int pagina) {
+	int id = 0;
+	int x;
+	int rodando = 0;//recebe quanto apps estão instalados
+
+	while(1) {
+		if(pagina == 15) {
+			system("cls");
+			telaMeusappED();
+			imprimirED(myapps, quant, 1);
+		}else {
+			system("cls");
+			telaMeusappED();
+			imprimirEDpro(myapps, quant, 1);
+		}	
+
+		//Recebendo operação selecionada
+		gotoxy(2,20);
+		printf("Id:");
+		scanf("%d", & id);
+		gotoxy(0, 50);
+		
+		//vendo se o app ja está rodando
+		for(x = 0; x < quant; x++) {
+			if(rum[x].id == id){
+				gotoxy(5, 20);
+				printf("-Aplicativo rodando/nao encontrado");
+				gotoxy(2, 28);
+				system("PAUSE");
+				return;
+			}			
+		}	
+			
+		//procurando o indice referete a esse id
+		for(x = 0; x < quant; x++) {
+			if(myapps[x].id == id) {
+				//recebendo a quantidade de apps istalados
+  				rodando = quantApp(rum, 2);
+  				
+  				//recebendo o elemento com base no id
+				
+				   
+				return;	
+			}
+		}			
+		
+		//caso o id não seja encontrado
+		while(1){
+			if(pagina == 15) {
+				telaMeusappED();
+				imprimirED(myapps, quant, 1);
+			}else {
+				telaMeusappED();
+				imprimirEDpro(myapps, quant, 1);
+			}
+						
+			gotoxy(2,20);
+			printf("Id nao encontrado - Id:");
+			id = 0;
+			scanf("%d", & id);
+			gotoxy(0, 50);
+			
+			//vendo se o app ja está rodando
+			for(x = 0; x < quant; x++) {
+				if(rum[x].id == id){
+					gotoxy(5, 20);
+					printf("-Aplicativo rodando/nao encontrado");
+					gotoxy(2, 28);
+					system("PAUSE");
+					return;
+				}			
+			}			
+				  	
+			for(x = 0; x < quant; x++) {
+				if(myapps[x].id == id) {
+					//recebendo a quantidade de apps istalados
+	  				rodando = quantApp(rum, 2);
+	  				
+	  				//recebendo o elemento com base no id
+
+					   
+					return;						
+				}
+			}			
+		}		
+	}
 }	
 
 //funções do menu inicial
@@ -724,17 +831,98 @@ void funStoreED(App aplicativos[], App meusappsed[]) {
 	}	
 }
 
+//função para 2(MeusappsEd) opção do meunu
+void funMeusappsED(App myapps[], App rum[]) {
+	char operacao;
+	int pausa;
+	int pagina = 15;
+	int quant = quantApp(myapps, 1);
+	
+	//imprimindo interface
+	while(1) {
+		//contando a quantidade de apps caso um seja removido
+		quant = quantApp(myapps, 1);
+		
+		if(pagina == 15) {
+			//imprimindo os 14 apps iniciais
+			telaMeusappED();
+			imprimirED(myapps, quant, 1);
+		}
+				
+		//Recebendo operação selecionada
+		gotoxy(2, 20);
+		printf("Action:");
+		scanf(" %c", & operacao);
+		gotoxy(0, 50);
+		
+		switch(operacao) {
+			case ',':
+				if(pagina != 15) {
+					pagina--;
+					telaMeusappED();
+					imprimirEDpro(myapps, quant, 1);
+				}else {
+	        		gotoxy(12, 20);
+	  				printf("- Pagina Inicial\n");
+	  				pausa = 0;
+	  				while(pausa < 9) {
+						  printf("\n");
+						  pausa++;
+				   }			
+					system("PAUSE");					  	
+				}			
+			break;
+			case '.':
+				if(operacao == '.') {
+					pagina++;
+					telaMeusappED();
+					imprimirEDpro(myapps, quant, 1);
+				}else {
+		       		gotoxy(12, 20);
+		  				printf("- Pagina Final\n");
+		  				pausa = 0;
+		  				while(pausa < 9) {
+							  printf("\n");
+							  pausa++;
+						}				
+						system("PAUSE");  
+				}								
+			break;		  		
+			case 'e':
+				return;
+ 			break;
+ 			case 'q':
+ 				quant = quantApp(myapps, 1);
+     			
+            break;
+        	case 'w':
+        		quant = quantApp(myapps, 1);
+        		
+        	break;	
+        	default:
+        		gotoxy(10, 20);
+  				printf("-Operacao nao encontrada\n");
+  				pausa = 0;
+  				while(pausa < 9) {
+					  printf("\n");
+					  pausa++;
+				  }
+				system("PAUSE");	
+		}	
+	}
+}
+
 int main() {
 	App StoreED[T];
 	App MeusAppsED[T];
-	//App AppRumED[T];
+	App AppRumED[T];
 	char operacao;
 	int pausa;
 	
 	//iniciando as listas
-	iniciaL(ControleL);		
-	iniciaL(ControleL);
-	iniciaL(ControleL);	
+	iniciaL(StoreED);		
+	iniciaL(MeusAppsED);
+	iniciaL(AppRumED);	
 	
 	//chamando a leitura do arquivo
 	lerArq(StoreED);
@@ -757,7 +945,7 @@ int main() {
 				funStoreED(StoreED, MeusAppsED);
 	  		break;
 		  	case 'w':
-	
+   	  		   funMeusappsED(MeusAppsED, AppRumED);
 			break;
 			case 'e':
 	
