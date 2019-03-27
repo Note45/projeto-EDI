@@ -73,9 +73,13 @@ int quantApp(App aplicativos[], int lista) {
 	int x;
 	int quantidade = 0;
 	
-	for(x = ControleL[lista].IL; x <= ControleL[lista].FL; x++) {
-		if(aplicativos[x].tam != -1) {
-			quantidade++;
+	if(ControleL[lista].IL == -1 && ControleL[lista].FL == -1) {
+		return quantidade;
+	}else {
+		for(x = ControleL[lista].IL; x <= ControleL[lista].FL; x++) {
+			if(aplicativos[x].tam != -1) {
+				quantidade++;
+			}
 		}
 	}
 
@@ -966,7 +970,7 @@ void funStoreED(App aplicativos[], App meusappsed[]) {
 	//imprimindo interface vstore
 	while(1) {
 		if(pagina == 15) {
-			//imprimindo os 14 apps iniciais
+			//imprimindo os 16 apps iniciais
 			telaStoreED();
 			imprimirED(aplicativos, quant, 0);
 		}
@@ -1042,7 +1046,7 @@ void funMeusappsED(App myapps[], App rum[]) {
 		quant = quantApp(myapps, 1);
 		
 		if(pagina == 15) {
-			//imprimindo os 14 apps iniciais
+			//imprimindo os 16 apps iniciais
 			telaMeusappED();
 			imprimirED(myapps, quant, 1);
 		}
@@ -1109,6 +1113,82 @@ void funMeusappsED(App myapps[], App rum[]) {
 	}
 }
 
+//função para 3(AppRumED) opçao do menu
+void funAppRumED(App rum[]) {	
+	char operacao;
+	int pausa;
+	int pagina = 15;
+	int quant = quantApp(rum, 2);
+	
+	//imprimindo interface rum
+	while(1) {
+		//recebendo novo quant caso algum app seja removido
+		quant = quantApp(rum, 2);
+		
+		if(pagina == 15) {
+			//imprimindo os 16 apps iniciais
+			telaAppRum();
+			imprimirED(rum, quant, 2);
+		}
+		
+		//Recebendo operação selecionada
+		gotoxy(2,20);
+		printf("Operacao:");
+		scanf(" %c", & operacao);
+		gotoxy(0, 50);
+		
+		switch(operacao) {
+			case 'w':
+				return;
+ 			break;
+ 			case 'q':
+     			
+            break;
+        	case ',':
+				if(pagina != 15) {
+					pagina--;
+					telaAppRum();
+					imprimirEDpro(rum, quant, 2);
+				}else {
+	        		gotoxy(12, 20);
+	  				printf(" - Pagina Inicial\n");
+	  				pausa = 0;
+	  				while(pausa < 9) {
+						  printf("\n");
+						  pausa++;
+				   }			
+					system("PAUSE");					  	
+				}        		
+        	break;
+			case '.':
+				if(operacao == '.') {
+					pagina++;
+					telaAppRum();
+					imprimirEDpro(rum, quant, 2);
+				}else {
+		       		gotoxy(12, 20);
+		  				printf(" - Pagina Final\n");
+		  				pausa = 0;
+		  				while(pausa < 9) {
+							  printf("\n");
+							  pausa++;
+						}				
+						system("PAUSE");  
+				}				
+			break;	
+        	default:
+        		gotoxy(12, 20);
+  				printf(" - Operacao nao encontrada\n");
+  				pausa = 0;
+  				while(pausa < 9) {
+					  printf("\n");
+					  pausa++;
+				}
+				system("PAUSE");	
+		}
+	}	
+}
+
 int main() {
 	App StoreED[T];
 	App MeusAppsED[T];
@@ -1145,7 +1225,7 @@ int main() {
    	  		   funMeusappsED(MeusAppsED, AppRumED);
 			break;
 			case 'e'://AppRumED
-	
+				funAppRumED(AppRumED);
 			break;
 			case ';':
 				system("cls");
