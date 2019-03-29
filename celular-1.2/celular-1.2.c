@@ -657,7 +657,7 @@ void funRemo(App myapps[], int pagina, App rum[]) {
 				remoL(myapps, 1, id);
 				
 				//checando se ele está rodando e parando
-				if(ControleL[2].IL != -1 && ControleL[2].FL == -1) {
+				if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
 					for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
 						if(rum[x].id == id) {
 							x = -10;
@@ -702,7 +702,7 @@ void funRemo(App myapps[], int pagina, App rum[]) {
 						remoL(myapps, 1, id);
 						
 						//checando se ele está rodando e parando
-						if(ControleL[2].IL != -1 && ControleL[2].FL == -1) {
+						if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
 							for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
 								if(rum[x].id == id) {
 									x = -10;
@@ -725,6 +725,112 @@ void funRemo(App myapps[], int pagina, App rum[]) {
 	}else{
 		gotoxy(2,20);
 		printf("Nenhum app instalado!");
+		gotoxy(2, 28);
+		system("PAUSE");
+		return;	
+	}
+}
+
+//função da opção de remover um app
+void funStop( int pagina, App rum[]) {
+	int id = -1;
+	int x;
+	int quant;
+	
+	//so remove se tiver apps intalados
+	if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
+		while(1) {
+			if(pagina == 15) {
+				system("cls");
+				telaAppRum();
+				quant = quantApp(rum, 2);
+				imprimirED(rum, quant, 2);
+			}else {
+				system("cls");
+				telaAppRum();
+				quant = quantApp(rum, 2);
+				imprimirEDpro(rum, quant, 2);
+			}	
+	
+			//Recebendo o id
+			gotoxy(2,20);
+			printf("Id:");
+			scanf("%d", & id);
+			gotoxy(0, 50);	
+			
+			//checando se é um indice valido
+			for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
+				if(rum[x].id == id) {
+					x = -10;
+					break;
+				}
+			}			
+			
+			if(x == -10) {//checando se ele está rodando e parando
+				if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
+					for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
+						if(rum[x].id == id) {
+							x = -10;
+							break;
+						}
+					}
+					if(x == -10) {
+						remoL(rum, 2, id);
+						return;	
+					}else {
+						return;
+					}
+				}else {
+					return;
+				}			
+			}else {	
+			   	//caso o id não seja encontrado
+				while(1){
+					if(pagina == 15) {
+						telaAppRum();
+						imprimirED(rum, quant, 2);
+					}else {
+						telaAppRum();
+						imprimirEDpro(rum, quant, 2);
+					}
+									
+					gotoxy(2,20);
+					printf("Id nao encontrado - Id:");
+					scanf("%d", & id);
+					gotoxy(0, 50);
+
+					//checando se é um indice valido
+					for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
+						if(rum[x].id == id) {
+							x = -10;
+							break;
+						}
+					}			
+					
+					if(x == -10) {//checando se ele está rodando e parando
+						if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
+							for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
+								if(rum[x].id == id) {
+									x = -10;
+									break;
+								}
+							}
+							if(x == -10) {
+								remoL(rum, 2, id);
+								return;	
+							}else {
+								return;
+							}
+						}else {
+							return;
+						}											
+					}
+				}	
+			}	
+		}
+	}else{
+		gotoxy(2,20);
+		printf("Nenhum app rodando!");
 		gotoxy(2, 28);
 		system("PAUSE");
 		return;	
@@ -1142,7 +1248,7 @@ void funAppRumED(App rum[]) {
 				return;
  			break;
  			case 'q':
-     			
+     			funStop(pagina, rum);
             break;
         	case ',':
 				if(pagina != 15) {
