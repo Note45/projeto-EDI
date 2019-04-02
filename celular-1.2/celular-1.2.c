@@ -860,8 +860,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 		scanf("%d", & id);
 		gotoxy(0, 50);
 		
-		//vendo se o app ja foi instalado
-		if(ControleL[1].IL != ControleL[1].IA && ControleL[1].FL != ControleL[1].FA) {
+		if((ControleL[1].IL != ControleL[1].IA) || (ControleL[1].FL != ControleL[1].FA)) {
 			//vendo se o app ja foi instalado
 			if(ControleL[1].IL != -1 && ControleL[1].FL != -1) {
 				for(x = ControleL[1].IL; x < quant; x++) {
@@ -910,7 +909,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 				gotoxy(0, 50);
 				
 				//vendo se o app ja foi instalado
-				if(ControleL[1].IL != ControleL[1].IA && ControleL[1].FL != ControleL[1].FA) {
+				if((ControleL[1].IL != ControleL[1].IA) || (ControleL[1].FL != ControleL[1].FA)) {
 					//vendo se o app ja foi instalado
 					if(ControleL[1].IL != -1 && ControleL[1].FL != -1) {
 						for(x = ControleL[1].IL; x < quant; x++) {
