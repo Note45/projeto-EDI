@@ -68,7 +68,7 @@ int buscaI(App vet[], App elemento, int lista) {
 	return -5;	
 }
 
-//função para verificar quantos aplicativos estão cadastrados em um vetor
+//função para verificar quantos aplicativos estão cadastrados em uma lista
 int quantApp(App aplicativos[], int lista) {
 	int x;
 	int quantidade = 0;
@@ -86,12 +86,12 @@ int quantApp(App aplicativos[], int lista) {
 	return quantidade;
 }
 
-//funções para imrpimir os apps
+//funções para iimprimir os apps
 void imprimirED(App aplicativos[], int quant, int lista) {
 	int x;
 	int y = 2;
 	
-	//complementando a interface para StoreEd
+	//complementando a interface
 	gotoxy(2, 2);
 	printf("Nome:");
 	gotoxy(15, 2);
@@ -134,7 +134,7 @@ void imprimirEDpro(App aplicativos[], int quant, int lista) {
 	//quantidade de impressões
 	a = quant - 15;
 	
-	//complementando a interface para StoreEd
+	//complementando a interface
 	gotoxy(2, 2);
 	printf("Nome:");
 	gotoxy(18, 2);
@@ -821,13 +821,13 @@ void funRemo(App myapps[], int pagina, App rum[]) {
 	}
 }
 
-//função da opção de remover um app
+//função da opção parar a execução de um app
 void funStop( int pagina, App rum[]) {
 	int id = -1;
 	int x;
 	int quant;
 	
-	//so remove se tiver apps intalados
+	//so remove se tiver apps rodando
 	if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
 		while(1) {
 			if(pagina == 15) {
@@ -1063,7 +1063,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 void funRumED(App myapps[], int quant, App rum[], int pagina) {
 	int id = 0;
 	int x;
-	int local = 0;//recebe quanto apps estão instalados
+	int local = 0;//recebe quanto apps estão rodando
 	
 	if(ControleL[1].IL != -1 && ControleL[1].FL != -1) {
 		while(1) {
@@ -1077,7 +1077,7 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 				imprimirEDpro(myapps, quant, 1);
 			}	
 	
-			//Recebendo operação selecionada
+			//Recebendo id do app
 			gotoxy(2,20);
 			printf("Id:");
 			scanf("%d", & id);
@@ -1111,7 +1111,7 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 			}	
 							
 			if(ControleL[2].IL != ControleL[2].IA || ControleL[2].FL != ControleL[2].FA) {
-				//encontrando qual app eu vou intalar
+				//encontrando qual app eu rodar
 				for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
 					if(myapps[x].id == id) {
 						break;
@@ -1174,7 +1174,7 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 					}																		
 					//vendo se o app ja esta rodando
 					if(ControleL[2].IL != ControleL[2].IA || ControleL[2].FL != ControleL[2].FA) {					
-						//encontrando qual app eu vou intalar
+						//encontrando qual app vou rodar
 						for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
 							if(myapps[x].id == id) {
 								break;
@@ -1206,7 +1206,7 @@ void funStoreED(App aplicativos[], App meusappsed[]) {
 	int pagina = 15;
 	int quant = quantApp(aplicativos, 0);
 	
-	//imprimindo interface vstore
+	//imprimindo interface StoreED
 	while(1) {
 		if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
