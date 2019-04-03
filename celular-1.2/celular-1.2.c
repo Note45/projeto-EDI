@@ -968,7 +968,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 			}
 			
 			//vendo se o app ja foi instalado
-			for(x = ControleL[1].IL; x < quant; x++) {
+			for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
 				if(myapps[x].id == id){
 					gotoxy(5, 20);
 					printf("-Aplicativo instalado/nao encontrado");
@@ -1030,7 +1030,7 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 				
 				//vendo se o app ja foi instalado				
 				if((ControleL[1].IL != ControleL[1].IA) || (ControleL[1].FL != ControleL[1].FA)) {
-					for(x = ControleL[1].IL; x < quant; x++) {
+					for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
 						if(myapps[x].id == id){
 							gotoxy(5, 20);
 							printf("-Aplicativo instalado/nao encontrado");
