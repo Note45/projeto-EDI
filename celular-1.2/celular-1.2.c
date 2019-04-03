@@ -862,17 +862,15 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 		
 		if((ControleL[1].IL != ControleL[1].IA) || (ControleL[1].FL != ControleL[1].FA)) {
 			//vendo se o app ja foi instalado
-			if(ControleL[1].IL != -1 && ControleL[1].FL != -1) {
-				for(x = ControleL[1].IL; x < quant; x++) {
-					if(myapps[x].id == id){
-						gotoxy(5, 20);
-						printf("-Aplicativo instalado/nao encontrado");
-						gotoxy(2, 28);
-						system("PAUSE");
-						return;
-					}			
-				}
-			}
+			for(x = ControleL[1].IL; x < quant; x++) {
+				if(myapps[x].id == id){
+					gotoxy(5, 20);
+					printf("-Aplicativo instalado/nao encontrado");
+					gotoxy(2, 28);
+					system("PAUSE");
+					return;
+				}			
+			}	
 			
 			//encontrando qual app eu vou intalar
 			for(x = ControleL[0].IL; x <= ControleL[0].FL; x++) {
@@ -910,17 +908,14 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 				
 				//vendo se o app ja foi instalado
 				if((ControleL[1].IL != ControleL[1].IA) || (ControleL[1].FL != ControleL[1].FA)) {
-					//vendo se o app ja foi instalado
-					if(ControleL[1].IL != -1 && ControleL[1].FL != -1) {
-						for(x = ControleL[1].IL; x < quant; x++) {
-							if(myapps[x].id == id){
-								gotoxy(5, 20);
-								printf("-Aplicativo instalado/nao encontrado");
-								gotoxy(2, 28);
-								system("PAUSE");
-								return;
-							}			
-						}
+					for(x = ControleL[1].IL; x < quant; x++) {
+						if(myapps[x].id == id){
+							gotoxy(5, 20);
+							printf("-Aplicativo instalado/nao encontrado");
+						   	gotoxy(2, 28);
+							system("PAUSE");
+							return;
+						}			
 					}
 					
 					//encontrando qual app eu vou intalar
@@ -978,17 +973,15 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 			}	
 				
 			//vendo se o app ja esta rodando
-			if(ControleL[2].IL != ControleL[2].IA && ControleL[2].FL != ControleL[2].FA) {
-				if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
-					for(x = ControleL[2].IL; x < quant; x++) {
-						if(rum[x].id == id){
-							gotoxy(5, 20);
-							printf("-Aplicativo instalado/nao encontrado");
-							gotoxy(2, 28);
-							system("PAUSE");
-							return;
-						}			
-					}
+			if(ControleL[2].IL != ControleL[2].IA || ControleL[2].FL != ControleL[2].FA) {
+				for(x = ControleL[2].IL; x < quant; x++) {
+					if(rum[x].id == id){
+						gotoxy(5, 20);
+						printf("-Aplicativo instalado/nao encontrado");
+						gotoxy(2, 28);
+						system("PAUSE");
+						return;
+					}			
 				}
 				
 				//encontrando qual app eu vou intalar
@@ -1027,17 +1020,15 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 					gotoxy(0, 50);
 								
 					//vendo se o app ja esta rodando
-					if(ControleL[2].IL != ControleL[2].IA && ControleL[2].FL != ControleL[2].FA) {
-						if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
-							for(x = ControleL[2].IL; x < quant; x++) {
-								if(rum[x].id == id){
-									gotoxy(5, 20);
-									printf("-Aplicativo instalado/nao encontrado");
-									gotoxy(2, 28);
-									system("PAUSE");
-									return;
-								}			
-							}
+					if(ControleL[2].IL != ControleL[2].IA || ControleL[2].FL != ControleL[2].FA) {
+						for(x = ControleL[2].IL; x < quant; x++) {
+							if(rum[x].id == id){
+								gotoxy(5, 20);
+								printf("-Aplicativo instalado/nao encontrado");
+								gotoxy(2, 28);
+								system("PAUSE");
+								return;
+							}			
 						}
 						
 						//encontrando qual app eu vou intalar
