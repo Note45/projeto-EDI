@@ -155,14 +155,12 @@ void imprimirEDpro(App aplicativos[], int quant, int lista) {
 }
 
 //área de funções relacionadas a telas
-void telaIni() {
+void telaIni(App vet[]) {
 	int x;
+	int quant = quantApp(vet, 1);
 	
 	system("cls");
 	
-	//verificando quantos apps estão instalados
-			
-
 	//topo
 	for(x = 0; x < 41; x++) {
 		gotoxy(0, 0);
@@ -198,8 +196,101 @@ void telaIni() {
 		gotoxy(29, x);
 		printf("%c", 219);
 	}
-	//imprimir os elementos do vetor						
 	
+	//imprimindo apps iniciais
+	if(ControleL[1].IL != -1 && ControleL[1].FL != -1) {
+		if(quant == 1 || quant > 1) {
+			gotoxy(2, 3);
+			printf("Nome:");	
+			gotoxy(3, 4);
+			printf("%s", vet[ControleL[1].IL].nome);
+			gotoxy(2, 5);
+			printf("Tamanho:");
+			gotoxy(3, 6);
+			printf("%d MB", vet[ControleL[1].IL].tam);
+			gotoxy(2, 7);
+			printf("Id:");
+			gotoxy(3, 8);
+			printf("%d", vet[ControleL[1].IL].id);
+		}
+					
+		if( quant == 2 || quant > 2) {
+			gotoxy(16, 3);
+			printf("Nome:");	
+			gotoxy(17, 4);
+			printf("%s", vet[ControleL[1].IL + 1].nome);
+			gotoxy(16, 5);
+			printf("Tamanho:");
+			gotoxy(17, 6);
+			printf("%d MB", vet[ControleL[1].IL + 1].tam);
+			gotoxy(16, 7);
+			printf("Id:");
+			gotoxy(17, 8);
+			printf("%d", vet[ControleL[1].IL + 1].id);
+		}											
+			
+		if(quant == 3 || quant > 3) {
+			gotoxy(30, 3);
+			printf("Nome:");	
+			gotoxy(31, 4);
+			printf("%s", vet[ControleL[1].IL + 2].nome);
+			gotoxy(30, 5);
+			printf("Tamanho:");
+			gotoxy(31, 6);
+			printf("%d MB", vet[ControleL[1].IL + 2].tam);
+			gotoxy(30, 7);
+			printf("Id:");
+			gotoxy(31, 8);
+			printf("%d", vet[ControleL[1].IL + 2].id);			
+		}											
+		
+		if(quant == 4 || quant > 4) {
+			gotoxy(2, 12);
+			printf("Nome:");	
+			gotoxy(3, 13);
+			printf("%s", vet[ControleL[1].IL + 3].nome);
+			gotoxy(2, 14);
+			printf("Tamanho:");
+			gotoxy(3, 15);
+			printf("%d MB", vet[ControleL[1].IL + 3].tam);
+			gotoxy(2, 16);
+			printf("Id:");
+			gotoxy(3, 17);
+			printf("%d", vet[ControleL[1].IL + 3].id);
+		}
+	
+				
+		if(quant == 5 || quant > 5) {
+			gotoxy(16, 12);
+			printf("Nome:");	
+			gotoxy(17, 13);
+			printf("%s", vet[ControleL[1].IL + 4].nome);
+			gotoxy(16, 14);
+			printf("Tamanho:");
+			gotoxy(17, 15);
+			printf("%d MB", vet[ControleL[1].IL + 4].tam);
+			gotoxy(16, 16);
+			printf("Id:");
+			gotoxy(17, 17);
+			printf("%d", vet[ControleL[1].IL + 4].id);
+		}											
+			
+		if(quant == 5 || quant > 5) {
+			gotoxy(30, 12);
+			printf("Nome:");	
+			gotoxy(31, 13);
+			printf("%s", vet[ControleL[1].IL + 5].nome);
+			gotoxy(30, 14);
+			printf("Tamanho:");
+			gotoxy(31, 15);
+			printf("%d MB", vet[ControleL[1].IL + 5].tam);
+		   	gotoxy(30, 16);
+			printf("Id:");
+			gotoxy(31, 17);
+			printf("%d", vet[ControleL[1].IL + 5].id);			
+		}
+    }		
+							
 	//divisoria da matriz(vertical)
 	for(x = 2; x < 20; x++) {
 		gotoxy(15, x);
@@ -232,7 +323,6 @@ void telaIni() {
 	
 	gotoxy(31, 23);
 	printf("e-AppRumED\n\n\n");
-
 }
 
 void telaStoreED() {
@@ -861,6 +951,22 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 		gotoxy(0, 50);
 		
 		if((ControleL[1].IL != ControleL[1].IA) || (ControleL[1].FL != ControleL[1].FA)) {
+			//verificando se e um id valido
+			for(x = ControleL[0].IL; x <= ControleL[0].FL; x++) {
+	   			if(aplicativos[x].id == id) {
+					x = -100;
+					break;
+				}
+			}
+			
+			if(x != -100) {
+				gotoxy(5, 20);
+				printf("-Aplicativo instalado/nao encontrado");
+				gotoxy(2, 28);
+				system("PAUSE");
+				return;				
+			}
+			
 			//vendo se o app ja foi instalado
 			for(x = ControleL[1].IL; x < quant; x++) {
 				if(myapps[x].id == id){
@@ -906,7 +1012,23 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 				scanf("%d", & id);
 				gotoxy(0, 50);
 				
-				//vendo se o app ja foi instalado
+				//verificando se e um id valido
+				for(x = ControleL[0].IL; x <= ControleL[0].FL; x++) {
+		   			if(aplicativos[x].id == id) {
+						x = -100;
+						break;
+					}
+				}
+				
+				if(x != -100) {
+					gotoxy(5, 20);
+					printf("-Aplicativo instalado/nao encontrado");
+					gotoxy(2, 28);
+					system("PAUSE");
+					return;				
+				}
+				
+				//vendo se o app ja foi instalado				
 				if((ControleL[1].IL != ControleL[1].IA) || (ControleL[1].FL != ControleL[1].FA)) {
 					for(x = ControleL[1].IL; x < quant; x++) {
 						if(myapps[x].id == id){
@@ -961,8 +1083,24 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 			scanf("%d", & id);
 			gotoxy(0, 50);
 			
+			//verificando se e um id valido
+			for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
+		   		if(myapps[x].id == id) {
+					x = -100;
+					break;
+				}
+			}
+				
+			if(x != -100) {
+				gotoxy(5, 20);
+				printf("-Aplicativo instalado/nao encontrado");
+				gotoxy(2, 28);
+				system("PAUSE");
+				return;				
+			}						
+		
 			//vendo se o app ja está rodando
-			for(x = 0; x < quant; x++) {
+			for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
 				if(rum[x].id == id){
 					gotoxy(5, 20);
 					printf("-Aplicativo rodando/nao encontrado");
@@ -971,19 +1109,8 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 					return;
 				}			
 			}	
-				
-			//vendo se o app ja esta rodando
+							
 			if(ControleL[2].IL != ControleL[2].IA || ControleL[2].FL != ControleL[2].FA) {
-				for(x = ControleL[2].IL; x < quant; x++) {
-					if(rum[x].id == id){
-						gotoxy(5, 20);
-						printf("-Aplicativo instalado/nao encontrado");
-						gotoxy(2, 28);
-						system("PAUSE");
-						return;
-					}			
-				}
-				
 				//encontrando qual app eu vou intalar
 				for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
 					if(myapps[x].id == id) {
@@ -1018,19 +1145,35 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 					id = 0;
 					scanf("%d", & id);
 					gotoxy(0, 50);
-								
-					//vendo se o app ja esta rodando
-					if(ControleL[2].IL != ControleL[2].IA || ControleL[2].FL != ControleL[2].FA) {
-						for(x = ControleL[2].IL; x < quant; x++) {
-							if(rum[x].id == id){
-								gotoxy(5, 20);
-								printf("-Aplicativo instalado/nao encontrado");
-								gotoxy(2, 28);
-								system("PAUSE");
-								return;
-							}			
+
+					//verificando se e um id valido
+					for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
+				   		if(myapps[x].id == id) {
+							x = -100;
+							break;
 						}
+					}
 						
+					if(x != -100) {
+						gotoxy(5, 20);
+						printf("-Aplicativo instalado/nao encontrado");
+						gotoxy(2, 28);
+						system("PAUSE");
+						return;				
+					}
+					
+					//vendo se o app ja está rodando
+					for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
+						if(rum[x].id == id){
+							gotoxy(5, 20);
+							printf("-Aplicativo rodando/nao encontrado");
+							gotoxy(2, 28);
+							system("PAUSE");
+							return;
+						}			
+					}																		
+					//vendo se o app ja esta rodando
+					if(ControleL[2].IL != ControleL[2].IA || ControleL[2].FL != ControleL[2].FA) {					
 						//encontrando qual app eu vou intalar
 						for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
 							if(myapps[x].id == id) {
@@ -1301,7 +1444,7 @@ int main() {
 	lerArq(StoreED);
 
 	while(1) {
-		telaIni();
+		telaIni(MeusAppsED);
 		
 		//opção de saida
 		gotoxy(2, 28);
