@@ -1,5 +1,6 @@
 #include <stdio.h>
-#define MAX 20
+#include <stdlib.h>
+#define MAX 6
 
 typedef struct {
     int info;
@@ -7,6 +8,7 @@ typedef struct {
 } no;
 
 typedef struct {
+	int IL;
     no vet[MAX];
 } LLSE;
 
@@ -15,10 +17,12 @@ int disp;
 void inicializar(LLSE * lista) {
     int i;
     disp = 1;
+    
     for(i = 0; i < 5; i++) {
         lista->vet[i].prox = i + 1;
         lista->vet[i].info = -10;
     }
+    lista->IL = 1;
     lista->vet[0].prox = -5;
     lista->vet[5].prox = -1;
     lista->vet[5].info = -10;
@@ -104,33 +108,35 @@ void remover(LLSE * lista, int local, int pos) {
 
 void imprimirL(LLSE lista) {
 	int x;
-
-	printf("\nControle:\n");
-	printf("0 - Info: %d", x, lista.vet[0].info);
-	printf("\t\tProx: %d\n\n", lista.vet[0].prox);
+	
+	printf("\t Disponivel:%d\n\n", disp);
 	
 	//imprimindo a lista
-	for(x = 1; x <= 5; x++) {
+	for(x = lista.IL; x > -1; x = lista.vet[x].prox) {
 		printf("%d - Info: %d", x, lista.vet[x].info);
 		printf("\t\tProx: %d\n", lista.vet[x].prox);
 	}
-	printf("\n\t Disponivel:%d\n", disp);
 }
 
-int buscar(LLSE lista, int elemento) {
+int buscar(LLSE lista, int elemento,int cont) {
 	int x;
+	int y = 0;
 
 	if(disp == 1) {
 		return 1;
 	}
 	
-	for(x = 1; lista.vet[x].prox >= -5; x ++) {
-		if(elemento >= lista.vet[x].info) {
-			return x;
+	for(x = lista.IL; y <= cont; x = lista.vet[x].prox) {
+		if(elemento <= lista.vet[x].info && x == lista.IL) {
+			return 1;
+		}else if(elemento >= lista.vet[x].info && lista.vet[x].prox == -5) {
+			return 3;
+		}else if(elemento <= lista.vet[x].info && x == lista.IL && lista.vet[x].prox == -5){
+			return 2;
 		}
+		
+		y++;
 	}
-	
-	return x;
 }
 
 int main () {
@@ -138,6 +144,8 @@ int main () {
 	int opera;
 	int elemento;
 	int pos  = -1;
+	int cont;
+	int x;
 	
 	//inicializando a lista
 	inicializar(&lista);
@@ -156,15 +164,22 @@ int main () {
 				printf("\nDigite o elemento para inserir:");
 				scanf(" %d", & elemento);
 				
+				cont = 0; 				
+				for(x = lista.IL; lista.vet[x].info > -10; x = lista.vet[x].prox) {
+					if(lista.vet[x].info != -10) {
+						cont++;
+					}
+				}
+				
 				//procurando onde vou adicionar
-				pos = buscar(lista, elemento);
+				pos = buscar(lista, elemento, cont);
 				
 				//inserindo o elemento
 				if(pos == 1) {
 					inserir(&lista, 1, pos, elemento);
-				}else if(pos != 1 && pos != disp) {
+				}else if((pos != 1) && (pos != cont)) {
 					inserir(&lista, 2, pos, elemento);
-				}else {
+				}else if(disp != -1){
 					inserir(&lista, 3, pos, elemento);
 				}	
             break;
