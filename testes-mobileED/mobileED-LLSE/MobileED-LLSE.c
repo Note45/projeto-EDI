@@ -15,7 +15,7 @@ typedef struct {
 int disp;
 
 //Devolve onde eu vou inserir no vetor
-int alocaNo(LLSE * lista) {
+int alocaNo(LLSE *lista) {
     int d;
     if(disp == -1) {
         return -3;//se a lista estiver cheia
@@ -29,12 +29,12 @@ int alocaNo(LLSE * lista) {
 void inicializar(LLSE *lista) {
     int i;
     disp = 1;
-    for(i = 0; i < 5; i++) {
+    for(i = 0; i < MAX; i++) {
         lista->vet[i].prox = i + 1;
         lista->vet[i].info = -2;
     }
-    lista->vet[5].prox = -1;
-    lista->vet[5].info = -2;
+    lista->vet[MAX - 1].prox = -1;
+    lista->vet[MAX - 1].info = -2;
     lista->IL = 0;
 }
 
