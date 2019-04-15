@@ -14,7 +14,13 @@ typedef struct {
 
 int disp;
 
-//Devolve onde eu vou inserir no vetor
+//liberando indice do vetor
+void liberaNo(LLSE * lista, int ind) {
+    lista->vet[ind].prox = disp;
+    disp = ind;
+}
+
+//devolve onde eu vou inserir no vetor
 int alocaNo(LLSE *lista) {
     int d;
     if(disp == -1) {
@@ -60,7 +66,7 @@ void inserir(LLSE *lista, int elemento) {
 	int ant;
 	int pro;
 	
-	indice = alocaNo(&(*lista));
+	indice = alocaNo(lista);
 	
 	//se alista estiver cheia
 	if(indice == -3) {
@@ -117,6 +123,60 @@ void inserir(LLSE *lista, int elemento) {
 	}
 }
 
+void remover(LLSE *lista, int elemento) {
+	int x;
+	int liberar;
+	int posi;
+	int ant;
+	int pro;
+	
+	//se a lista estiver vazia
+	if(lista->vet[lista->IL].info == -2) {
+		printf("Lista Vazia!\n");
+		system("PAUSE");
+	}
+	
+	//buscando qual no vou remover
+	for(x = lista->IL; x < MAX; x = lista->vet[x].prox) {
+		if(x == -1) {//parar quando chegar ao ultimo elemento da lista
+			break;
+		}
+		
+		if(elemento == lista->vet[x].info && x == lista->IL) {//remover no inicio
+			posi = 1;
+			break;
+		}
+		
+		if(elemento == lista->vet[x].info && lista->vet[x].prox == -1) {//remover no final
+			posi = 2;
+			liberar = x;
+			break; 
+		}
+		
+		if(elemento == lista->vet[x].info) {
+			posi = 3;
+			pro = lista->vet[x].prox; //para onde o elemento vai apontar
+			liberar = x;
+			break;
+		}
+		
+		ant = x;//recebendo o anterior ao atual
+	}
+	
+	//removendo elemento
+	if(posi == 1) {//remover no inicio
+		liberar = lista->IL;//antigo inicio da lista
+		lista->IL = lista->vet[liberar].prox;//novo inicio
+		liberaNo(lista, liberar);//liberar antigo inicio
+	}else if(posi == 3){//remover no meio
+		lista->vet[ant].prox = pro;//anteririo ou liberado vai apontar para o proximo ao liberado
+		liberaNo(lista, liberar); //liberar o No
+	}else if(posi == 2){//remover no fim
+		lista->vet[ant].prox = -1;//anterior vira o final
+		liberaNo(lista, liberar);//liberando antigo final
+	}
+}
+
 int main() {
 	LLSE lista;
 	int elemento;
@@ -137,6 +197,11 @@ int main() {
 				printf("\n");
 			break;
 			case 2:
+				printf("\nDigite o elemento: ");
+				scanf("%d", & elemento);
+				
+				remover(&lista, elemento);
+				printf("\n");
 			break;
 			case 3:
 				imprimir(lista);
