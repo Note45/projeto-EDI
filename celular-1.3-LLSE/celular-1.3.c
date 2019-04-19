@@ -525,17 +525,7 @@ void telaMeusappED() {
 	
 	gotoxy(32, 23);
 	printf("e-Sair\n\n\n");
-}
-
-//função para inserir um elemento
-void inserirL(App StoreED[], int indice, int lista, App elemento) {
-					
-}
-
-//função para remover um app
-void remoL(App vet[], int lista, int indice) {
-
-}			   	
+}		   	
 
 //função para ler o arquivo
 void lerArq(LLSE *storeED) {
