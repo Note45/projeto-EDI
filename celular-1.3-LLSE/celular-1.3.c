@@ -3,9 +3,9 @@
 #include <string.h>
 #include <windows.h>
 
-#define T 31 //define o tanto de apps maximo
+#define T 30 //define o tanto de apps maximo
 #define N 15 //define o tamanho do nome dos apps
-#define I 6	 //definindo o tamanho do vetor para os apps da tela inicial
+#define L 3  //quantidade de listas no programa
 
 typedef struct {
 	char nome[N];
@@ -14,76 +14,37 @@ typedef struct {
 }App;
 
 typedef struct {
-	int IL;
-	int FL;
-	int IA;
-	int FA;
-}Cont;
+    App info;
+    int prox;
+}no;
 
-Cont ControleL[3];//Variavel de controle das listas
+typedef struct {
+	int IL;
+    no vet[T];
+}LLSE;
+
+int disp[L];//controla quem esta disponivel nas listas
 
 //importando da função gotoxy
 void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
 
-//função para iniciar a lista do vetor
-void iniciaL(App vet[]) {
- 	int x; 
- 	int y;
- 	
- 	for(x = 0; x < 3 ; x++) {
-		ControleL[x].IL = -1;	 
-	    ControleL[x].FL = -1;
-		ControleL[x].IA = 1;
-		ControleL[x].FA = 30;			
-	}
-	for(y = 0; y < T; y++) {
-		vet[y].tam = -1;
-	}
-}
-
-//função para buscar o indice onde vai ser adicionado o elemento
-int buscaI(App vet[], App elemento, int lista) {
-	int x = 1;	
-	
-	//se a lista estiver vazia
-	if(ControleL[lista].IL == -1 && ControleL[lista].FL == -1) {
-		return -5;		
-	}else {
-		if(elemento.tam <= vet[ControleL[lista].IL].tam) {//se for no começo da lista
-			return ControleL[lista].IL - 1;
-		}
-		if(elemento.tam >= vet[ControleL[lista].FL].tam) {//se for no final
-			return ControleL[lista].FL + 1;
-		}else { // se for no meio
-			for(x = ControleL[lista].IL; x <= ControleL[lista].FL; x++) {
-				if(elemento.tam < vet[x].tam) {
-					return x;
-				}
-			}
-		}
-	}
-	
-	return -5;	
-}
-
-//função para verificar quantos aplicativos estão cadastrados em uma lista
-int quantApp(App aplicativos[], int lista) {
-	int x;
-	int quantidade = 0;
-	
-	if(ControleL[lista].IL == -1 && ControleL[lista].FL == -1) {
-		return quantidade;
-	}else {
-		for(x = ControleL[lista].IL; x <= ControleL[lista].FL; x++) {
-			if(aplicativos[x].tam != -1) {
-				quantidade++;
-			}
-		}
-	}
-
-	return quantidade;
+//iniciando listas
+void inicia(LLSE *lista, int local) {
+    int i;
+    disp[local] = 1;
+    
+	for(i = 0; i < T; i++) {
+        lista->vet[i].prox = i + 1;
+        lista->vet[i].info.tam = -2;
+        lista->vet[i].info.id = -2;
+    }
+    
+    lista->vet[T - 1].prox = -1;
+    lista->vet[T - 1].info.tam = -2;
+    lista->vet[T - 1].info.id = -2;
+    lista->IL = 0;
 }
 
 //funções para iimprimir os apps
@@ -99,6 +60,7 @@ void imprimirED(App aplicativos[], int quant, int lista) {
 	gotoxy(29, 2);
 	printf("Id:");
 	
+	/*
 	if(quant == 0) {
 		return;
 	}else if(lista != 0) {
@@ -122,6 +84,7 @@ void imprimirED(App aplicativos[], int quant, int lista) {
 			y++;
 		}
 	}	
+	*/
 }
 
 
@@ -142,6 +105,7 @@ void imprimirEDpro(App aplicativos[], int quant, int lista) {
 	gotoxy(29, 2); 
 	printf("Id:");
 		
+	/*	
 	for(x = ControleL[lista].IL + 15; z < a; x++) {
 		gotoxy(2, y);
 		printf("%s", aplicativos[x].nome);
@@ -151,13 +115,14 @@ void imprimirEDpro(App aplicativos[], int quant, int lista) {
 		printf("%d", aplicativos[x].id);
 		y++;
 		z++;
-	}	
+	}
+	*/	
 }
 
 //área de funções relacionadas a telas
-void telaIni(App vet[]) {
+void telaIni() {
 	int x;
-	int quant = quantApp(vet, 1);
+	int quant;
 	
 	system("cls");
 	
@@ -197,7 +162,7 @@ void telaIni(App vet[]) {
 		printf("%c", 219);
 	}
 	
-	//imprimindo apps iniciais
+	/*imprimindo apps iniciais
 	if(ControleL[1].IL != -1 && ControleL[1].FL != -1) {
 		if(quant == 1 || quant > 1) {
 			gotoxy(2, 3);
@@ -289,7 +254,8 @@ void telaIni(App vet[]) {
 			gotoxy(31, 17);
 			printf("%d", vet[ControleL[1].IL + 5].id);			
 		}
-    }		
+    }
+	*/		
 							
 	//divisoria da matriz(vertical)
 	for(x = 2; x < 20; x++) {
@@ -563,122 +529,16 @@ void telaMeusappED() {
 
 //função para inserir um elemento
 void inserirL(App StoreED[], int indice, int lista, App elemento) {
-	int x;		
-		
-	//caso a lista já esteja cheia
-	if((ControleL[lista].IL == ControleL[lista].IA) && (ControleL[lista].FL == ControleL[lista].FA)) {
-		return;
-	}else {
-		if(ControleL[lista].IL == -1 && ControleL[lista].FL == -1) {//lista estiver vazia
-			ControleL[lista].IL = 15;
-			ControleL[lista].FL = 15;
-			StoreED[15] = elemento;
-			return;
-		}	
-			
-		if(ControleL[lista].IL > indice) {//adicionando no inicio da lista
-			if(ControleL[lista].IL != 1) {
-				ControleL[lista].IL--;
-				StoreED[ControleL[lista].IL] = elemento;
-			}else {
-				ControleL[lista].FL++;
 					
-				for(x = ControleL[lista].FL; x >= 0; x--) {
-					StoreED[x] = StoreED[x - 1];	
-				}
-						
-				StoreED[ControleL[lista].IL] = elemento;						
-			}
-			return;
-		}
-		
-		//adicionando no final	
-		if((indice == (ControleL[lista].FL + 1)) && (ControleL[lista].FL != ControleL[lista].FA)) {//adicionando no final
-			ControleL[lista].FL++;
-			StoreED[indice] = elemento;
-			return;			
-		}else if((ControleL[lista].IL != ControleL[lista].IA) && (ControleL[lista].FL == ControleL[lista].FA)) {
-			ControleL[lista].IL--;
-			
-			for(x = ControleL[lista].IL; x < indice; x++) {
-				StoreED[x] = StoreED[x + 1];
-			}
-			StoreED[indice - 1] = elemento;
-			return;
-		}			
-			
-		//adicionando no meio da lista
-		if((indice - ControleL[lista].IL) < (ControleL[lista].IL - indice) && ControleL[lista].IL != ControleL[lista].IA) {
-			ControleL[lista].IL--;
-			for(x = ControleL[lista].IL; x < indice; x++) {
-				StoreED[x] = StoreED[x + 1];
-			}
-			StoreED[indice] = elemento;
-			return;
-		}else {
-		   	ControleL[lista].FL++;
-				
-			for(x = ControleL[lista].FL; x > indice; x--) {
-			   	StoreED[x] = StoreED[x - 1];
-			}
-			StoreED[indice] = elemento;
-			return;
-		}  
-    }					
 }
 
 //função para remover um app
 void remoL(App vet[], int lista, int indice) {
-	int x; 
-	
-	//lista vazia
-	if(ControleL[lista].IL == -1 && ControleL[lista].FL == -1) {
-		return;
-	}else {
-		//se a lista só tiver um elemento
-		if(ControleL[lista].IL == ControleL[lista].FL) {
-			ControleL[lista].IL = -1;
-			ControleL[lista].FL = -1;
-			return;
-		}
-		
-		//procurando indice do elemento
-		for(x = ControleL[lista].IL; x <= ControleL[lista].FL; x++) {
-			if(vet[x].id == indice) {
-				indice = x;
-				break;
-			}
-		}		
-		
-		if(ControleL[lista].IL == indice) {//removendo do inicio da lista
-			ControleL[lista].IL++;
-			return;
-		}else if(ControleL[lista].FL == indice) {//removendo do final da listas
-			ControleL[lista].FL--;
-			return;
-		}else {
-			//removendo do meio da lista
-			if((indice - ControleL[lista].IL) < (ControleL[lista].IL - indice)) {// perto do inicio
-				ControleL[lista].IL++;
-				
-				for(x = indice; x >= ControleL[lista].IL; x--) {
-					vet[x] = vet[x - 1];
-				}
-				return;
-			}else {//perto do final
-			   	ControleL[lista].FL--;
-					
-				for(x = indice; x <= ControleL[lista].FL; x++) {
-				   	vet[x] = vet[x + 1];
-				}
-				return;
-			} 			
-		}
-	}  	
+
 }			   	
 
 //função para ler o arquivo
-void lerArq(App StoreED[]) {
+void lerArq(LLSE *storeED) {
 	int indice;
 	App elemento;
 	FILE *arquivo;
@@ -697,11 +557,8 @@ void lerArq(App StoreED[]) {
 		fscanf(arquivo, "%d\n", & elemento.tam);
 		fscanf(arquivo, "%d\n", & elemento.id);
 		
-		//buscando onde vou adiconar o elemento
-		indice = buscaI(StoreED, elemento, 0);
-		
 		//inserindo elemento
-		inserirL(StoreED, indice, 0, elemento);		
+			
 	}
 	//fechando arquivo
 	fclose(arquivo);
@@ -714,18 +571,14 @@ void funRemo(App myapps[], int pagina, App rum[]) {
 	int quant;
 	
 	//so remove se tiver apps intalados
-	if(ControleL[1].IL != -1 && ControleL[1].FL != -1) {
+	if(0) {
 		while(1) {
 			if(pagina == 15) {
 				system("cls");
 				telaMeusappED();
-				quant = quantApp(myapps, 1);
-				imprimirED(myapps, quant, 1);
 			}else {
 				system("cls");
 				telaMeusappED();
-				quant = quantApp(myapps, 1);
-				imprimirEDpro(myapps, quant, 1);
 			}	
 	
 			//Recebendo o id
@@ -735,82 +588,6 @@ void funRemo(App myapps[], int pagina, App rum[]) {
 			gotoxy(0, 50);	
 			
 			//checando se é um indice valido
-			for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
-				if(myapps[x].id == id) {
-					x = -10;
-					break;
-				}
-			}			
-			
-			if(x == -10) {
-				//Removendo indice do myapps
-				remoL(myapps, 1, id);
-				
-				//checando se ele está rodando e parando
-				if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
-					for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
-						if(rum[x].id == id) {
-							x = -10;
-							break;
-						}
-					}
-					if(x == -10) {
-						remoL(rum, 2, id);
-						return;	
-					}else {
-						return;
-					}
-				}else {
-					return;
-				}			
-			}else {	
-			   	//caso o id não seja encontrado
-				while(1){
-					if(pagina == 15) {
-						telaMeusappED();
-						imprimirED(myapps, quant, 1);
-					}else {
-						telaMeusappED();
-						imprimirEDpro(myapps, quant, 1);
-					}
-									
-					gotoxy(2,20);
-					printf("Id nao encontrado - Id:");
-					scanf("%d", & id);
-					gotoxy(0, 50);
-
-					//checando se é um indice valido
-					for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
-						if(myapps[x].id == id) {
-							x = -10;
-							break;
-						}
-					}			
-					
-					if(x == -10) {
-						//Removendo indice do myapps
-						remoL(myapps, 1, id);
-						
-						//checando se ele está rodando e parando
-						if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
-							for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
-								if(rum[x].id == id) {
-									x = -10;
-									break;
-								}
-							}
-							if(x == -10) {
-								remoL(rum, 2, id);
-								return;	
-							}else {
-								return;
-							}
-						}else {
-							return;
-						}											
-					}
-				}	
-			}	
 		}
 	}else{
 		gotoxy(2,20);
@@ -828,18 +605,14 @@ void funStop( int pagina, App rum[]) {
 	int quant;
 	
 	//so remove se tiver apps rodando
-	if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
+	if(0) {
 		while(1) {
 			if(pagina == 15) {
 				system("cls");
 				telaAppRum();
-				quant = quantApp(rum, 2);
-				imprimirED(rum, quant, 2);
 			}else {
 				system("cls");
 				telaAppRum();
-				quant = quantApp(rum, 2);
-				imprimirEDpro(rum, quant, 2);
 			}	
 	
 			//Recebendo o id
@@ -849,74 +622,6 @@ void funStop( int pagina, App rum[]) {
 			gotoxy(0, 50);	
 			
 			//checando se é um indice valido
-			for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
-				if(rum[x].id == id) {
-					x = -10;
-					break;
-				}
-			}			
-			
-			if(x == -10) {//checando se ele está rodando e parando
-				if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
-					for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
-						if(rum[x].id == id) {
-							x = -10;
-							break;
-						}
-					}
-					if(x == -10) {
-						remoL(rum, 2, id);
-						return;	
-					}else {
-						return;
-					}
-				}else {
-					return;
-				}			
-			}else {	
-			   	//caso o id não seja encontrado
-				while(1){
-					if(pagina == 15) {
-						telaAppRum();
-						imprimirED(rum, quant, 2);
-					}else {
-						telaAppRum();
-						imprimirEDpro(rum, quant, 2);
-					}
-									
-					gotoxy(2,20);
-					printf("Id nao encontrado - Id:");
-					scanf("%d", & id);
-					gotoxy(0, 50);
-
-					//checando se é um indice valido
-					for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
-						if(rum[x].id == id) {
-							x = -10;
-							break;
-						}
-					}			
-					
-					if(x == -10) {//checando se ele está rodando e parando
-						if(ControleL[2].IL != -1 && ControleL[2].FL != -1) {
-							for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
-								if(rum[x].id == id) {
-									x = -10;
-									break;
-								}
-							}
-							if(x == -10) {
-								remoL(rum, 2, id);
-								return;	
-							}else {
-								return;
-							}
-						}else {
-							return;
-						}											
-					}
-				}	
-			}	
 		}
 	}else{
 		gotoxy(2,20);
@@ -944,118 +649,13 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 			imprimirEDpro(aplicativos, quant, 0);
 		}	
 		
-		//Recebendo operação selecionada
+		//Recebendo id selecionado
 		gotoxy(2,20);
 		printf("Id:");
 		scanf("%d", & id);
 		gotoxy(0, 50);
-		
-		if((ControleL[1].IL != ControleL[1].IA) || (ControleL[1].FL != ControleL[1].FA)) {
-			//verificando se e um id valido
-			for(x = ControleL[0].IL; x <= ControleL[0].FL; x++) {
-	   			if(aplicativos[x].id == id) {
-					x = -100;
-					break;
-				}
-			}
-			
-			if(x != -100) {
-				gotoxy(5, 20);
-				printf("-Aplicativo instalado/nao encontrado");
-				gotoxy(2, 28);
-				system("PAUSE");
-				return;				
-			}
-			
-			//vendo se o app ja foi instalado
-			for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
-				if(myapps[x].id == id){
-					gotoxy(5, 20);
-					printf("-Aplicativo instalado/nao encontrado");
-					gotoxy(2, 28);
-					system("PAUSE");
-					return;
-				}			
-			}	
-			
-			//encontrando qual app eu vou intalar
-			for(x = ControleL[0].IL; x <= ControleL[0].FL; x++) {
-				if(aplicativos[x].id == id) {
-					break;
-				}
-			}
-			
-			local = buscaI(myapps, aplicativos[x], 1);
-			
-			inserirL(myapps, local, 1, aplicativos[x]);	
-			
-			return;	
-		}else if(ControleL[1].IL == ControleL[1].IA  && ControleL[1].FL == ControleL[1].FA){
-			gotoxy(5, 20);
-			printf("-Memoria cheia!");
-			gotoxy(2, 28);
-			system("PAUSE");
-			return;				
-		}else {
-			//caso o id não seja encontrado
-			while(1){
-				if(pagina == 15) {
-					telaInsta();
-					imprimirED(aplicativos, quant, 0);
-				}else {
-					telaInsta();
-					imprimirEDpro(aplicativos, quant, 0);
-				}
-							
-				gotoxy(2,20);
-				printf("Id nao encontrado - Id:");
-				scanf("%d", & id);
-				gotoxy(0, 50);
 				
-				//verificando se e um id valido
-				for(x = ControleL[0].IL; x <= ControleL[0].FL; x++) {
-		   			if(aplicativos[x].id == id) {
-						x = -100;
-						break;
-					}
-				}
-				
-				if(x != -100) {
-					gotoxy(5, 20);
-					printf("-Aplicativo instalado/nao encontrado");
-					gotoxy(2, 28);
-					system("PAUSE");
-					return;				
-				}
-				
-				//vendo se o app ja foi instalado				
-				if((ControleL[1].IL != ControleL[1].IA) || (ControleL[1].FL != ControleL[1].FA)) {
-					for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
-						if(myapps[x].id == id){
-							gotoxy(5, 20);
-							printf("-Aplicativo instalado/nao encontrado");
-						   	gotoxy(2, 28);
-							system("PAUSE");
-							return;
-						}			
-					}
-					
-					//encontrando qual app eu vou intalar
-					for(x = ControleL[0].IL; x <= ControleL[0].FL; x++) {
-						if(aplicativos[x].id == id) {
-							break;
-						}
-					}
-					
-					local = buscaI(myapps, aplicativos[x], 1);
-					
-					inserirL(myapps, local, 1, aplicativos[x]);	
-					
-					return;					
-				}	
-						 			
-            }		
-	    }
+		//vendo se o app ja foi instalado
 	}
 }
 
@@ -1065,16 +665,16 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 	int x;
 	int local = 0;//recebe quanto apps estão rodando
 	
-	if(ControleL[1].IL != -1 && ControleL[1].FL != -1) {
+	if(0) {
 		while(1) {
 			if(pagina == 15) {
 				system("cls");
 				telaMeusappED();
-				imprimirED(myapps, quant, 1);
+				//imprimindo apps
 			}else {
 				system("cls");
 				telaMeusappED();
-				imprimirEDpro(myapps, quant, 1);
+				//impimindo apps
 			}	
 	
 			//Recebendo id do app
@@ -1083,112 +683,8 @@ void funRumED(App myapps[], int quant, App rum[], int pagina) {
 			scanf("%d", & id);
 			gotoxy(0, 50);
 			
-			//verificando se e um id valido
-			for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
-		   		if(myapps[x].id == id) {
-					x = -100;
-					break;
-				}
-			}
-				
-			if(x != -100) {
-				gotoxy(5, 20);
-				printf("-Aplicativo instalado/nao encontrado");
-				gotoxy(2, 28);
-				system("PAUSE");
-				return;				
-			}						
-		
-			//vendo se o app ja está rodando
-			for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
-				if(rum[x].id == id){
-					gotoxy(5, 20);
-					printf("-Aplicativo rodando/nao encontrado");
-					gotoxy(2, 28);
-					system("PAUSE");
-					return;
-				}			
-			}	
-							
-			if(ControleL[2].IL != ControleL[2].IA || ControleL[2].FL != ControleL[2].FA) {
-				//encontrando qual app eu rodar
-				for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
-					if(myapps[x].id == id) {
-						break;
-					}
-				}
-				
-				local = buscaI(rum, myapps[x], 2);
-				
-				inserirL(rum, local, 2, myapps[x]);	
-				
-				return;	
-			}else if(ControleL[2].IL == ControleL[2].IA  && ControleL[2].FL == ControleL[2].FA){
-				gotoxy(5, 20);
-				printf("-Memoria cheia!");
-				gotoxy(2, 28);
-				system("PAUSE");
-				return;	
-			}else {		
-			//caso o id não seja encontrado
-				while(1){
-					if(pagina == 15) {
-						telaMeusappED();
-						imprimirED(myapps, quant, 1);
-					}else {
-						telaMeusappED();
-						imprimirEDpro(myapps, quant, 1);
-					}
-								
-					gotoxy(2,20);
-					printf("Id nao encontrado - Id:");
-					id = 0;
-					scanf("%d", & id);
-					gotoxy(0, 50);
-
-					//verificando se e um id valido
-					for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
-				   		if(myapps[x].id == id) {
-							x = -100;
-							break;
-						}
-					}
+			//verificando se o id e valido
 						
-					if(x != -100) {
-						gotoxy(5, 20);
-						printf("-Aplicativo instalado/nao encontrado");
-						gotoxy(2, 28);
-						system("PAUSE");
-						return;				
-					}
-					
-					//vendo se o app ja está rodando
-					for(x = ControleL[2].IL; x <= ControleL[2].FL; x++) {
-						if(rum[x].id == id){
-							gotoxy(5, 20);
-							printf("-Aplicativo rodando/nao encontrado");
-							gotoxy(2, 28);
-							system("PAUSE");
-							return;
-						}			
-					}																		
-					//vendo se o app ja esta rodando
-					if(ControleL[2].IL != ControleL[2].IA || ControleL[2].FL != ControleL[2].FA) {					
-						//encontrando qual app vou rodar
-						for(x = ControleL[1].IL; x <= ControleL[1].FL; x++) {
-							if(myapps[x].id == id) {
-								break;
-							}
-						}
-						
-						local = buscaI(rum, myapps[x], 2);
-						
-						inserirL(rum, local, 2, myapps[x]);	
-						
-						return;	
-					}					  				
-				}
-			}		
 		}
 	}else {
 		gotoxy(2,20);
@@ -1204,14 +700,13 @@ void funStoreED(App aplicativos[], App meusappsed[]) {
 	char operacao;
 	int pausa;
 	int pagina = 15;
-	int quant = quantApp(aplicativos, 0);
+	int quant;
 	
 	//imprimindo interface StoreED
 	while(1) {
 		if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
 			telaStoreED();
-			imprimirED(aplicativos, quant, 0);
 		}
 		
 		//Recebendo operação selecionada
@@ -1225,13 +720,13 @@ void funStoreED(App aplicativos[], App meusappsed[]) {
 				return;
  			break;
  			case 'q':
-     			funInsta(aplicativos, quant, meusappsed, pagina);
+     			
             break;
         	case ',':
 				if(pagina != 15) {
 					pagina--;
 					telaStoreED();
-					imprimirEDpro(aplicativos, quant, 0);
+					//imprimir pagina anterior
 				}else {
 	        		gotoxy(12, 20);
 	  				printf(" - Pagina Inicial\n");
@@ -1247,7 +742,7 @@ void funStoreED(App aplicativos[], App meusappsed[]) {
 				if(operacao == '.') {
 					pagina++;
 					telaStoreED();
-					imprimirEDpro(aplicativos, quant, 0);
+				    //imprimir proxima pagina  
 				}else {
 		       		gotoxy(12, 20);
 		  				printf(" - Pagina Final\n");
@@ -1277,17 +772,15 @@ void funMeusappsED(App myapps[], App rum[]) {
 	char operacao;
 	int pausa;
 	int pagina = 15;
-	int quant = quantApp(myapps, 1);
+	int quant;
 	
 	//imprimindo interface
 	while(1) {
 		//contando a quantidade de apps caso um seja removido
-		quant = quantApp(myapps, 1);
 		
 		if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
 			telaMeusappED();
-			imprimirED(myapps, quant, 1);
 		}
 				
 		//Recebendo operação selecionada
@@ -1301,7 +794,7 @@ void funMeusappsED(App myapps[], App rum[]) {
 				if(pagina != 15) {
 					pagina--;
 					telaMeusappED();
-					imprimirEDpro(myapps, quant, 1);
+					//imprimir pagina anterior
 				}else {
 	        		gotoxy(12, 20);
 	  				printf("- Pagina Inicial\n");
@@ -1317,7 +810,7 @@ void funMeusappsED(App myapps[], App rum[]) {
 				if(operacao == '.') {
 					pagina++;
 					telaMeusappED();
-					imprimirEDpro(myapps, quant, 1);
+					//imprimir proxima pagina
 				}else {
 		       		gotoxy(12, 20);
 		  				printf("- Pagina Final\n");
@@ -1333,11 +826,10 @@ void funMeusappsED(App myapps[], App rum[]) {
 				return;
  			break;
  			case 'q':
- 				quant = quantApp(myapps, 1);
-     			funRumED(myapps, quant, rum, pagina);
+     			
             break;
         	case 'w':
-        		funRemo(myapps, pagina, rum);
+        		
         	break;	
         	default:
         		gotoxy(10, 20);
@@ -1357,17 +849,15 @@ void funAppRumED(App rum[]) {
 	char operacao;
 	int pausa;
 	int pagina = 15;
-	int quant = quantApp(rum, 2);
+	int quant;
 	
 	//imprimindo interface rum
 	while(1) {
 		//recebendo novo quant caso algum app seja removido
-		quant = quantApp(rum, 2);
 		
 		if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
-			telaAppRum();
-			imprimirED(rum, quant, 2);
+
 		}
 		
 		//Recebendo operação selecionada
@@ -1381,13 +871,13 @@ void funAppRumED(App rum[]) {
 				return;
  			break;
  			case 'q':
-     			funStop(pagina, rum);
+     			
             break;
         	case ',':
 				if(pagina != 15) {
 					pagina--;
 					telaAppRum();
-					imprimirEDpro(rum, quant, 2);
+					//imprimir pagina anterior
 				}else {
 	        		gotoxy(12, 20);
 	  				printf(" - Pagina Inicial\n");
@@ -1403,16 +893,16 @@ void funAppRumED(App rum[]) {
 				if(operacao == '.') {
 					pagina++;
 					telaAppRum();
-					imprimirEDpro(rum, quant, 2);
+					//imprimir proxima pagina
 				}else {
-		       		gotoxy(12, 20);
-		  				printf(" - Pagina Final\n");
-		  				pausa = 0;
-		  				while(pausa < 9) {
-							  printf("\n");
-							  pausa++;
-						}				
-						system("PAUSE");  
+	       			gotoxy(12, 20);
+	  				printf(" - Pagina Final\n");
+	  				pausa = 0;
+	  				while(pausa < 9) {
+						  printf("\n");
+						  pausa++;
+					}				
+					system("PAUSE");  
 				}				
 			break;	
         	default:
@@ -1429,22 +919,22 @@ void funAppRumED(App rum[]) {
 }
 
 int main() {
-	App StoreED[T];
-	App MeusAppsED[T];
-	App AppRumED[T];
+	LLSE storeED;
+	LLSE meusappsED;
+	LLSE apprumED;
 	char operacao;
 	int pausa;
 	
 	//iniciando as listas
-	iniciaL(StoreED);		
-	iniciaL(MeusAppsED);
-	iniciaL(AppRumED);	
+	inicia(&storeED, 0);
+	inicia(&meusappsED, 1);
+	inicia(&apprumED, 2);
 	
 	//chamando a leitura do arquivo
-	lerArq(StoreED);
+
 
 	while(1) {
-		telaIni(MeusAppsED);
+		telaIni();
 		
 		//opção de saida
 		gotoxy(2, 28);
@@ -1458,13 +948,13 @@ int main() {
 			
 		switch(operacao) {
 			case 'q'://StoreED
-				funStoreED(StoreED, MeusAppsED);
+				
 	  		break;
 		  	case 'w'://MeusAppsED
-   	  		   funMeusappsED(MeusAppsED, AppRumED);
+   	  		   
 			break;
 			case 'e'://AppRumED
-				funAppRumED(AppRumED);
+				
 			break;
 			case ';':
 				system("cls");
