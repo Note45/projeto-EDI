@@ -128,7 +128,7 @@ void inserirL(LLSE *lista, App elemento, int *disp) {
 }
 
 //funções para iimprimir os apps
-void imprimirED(App aplicativos[], int quant, int lista) {
+void imprimirED(LLSE lista) {
 	int x;
 	int y = 2;
 	
@@ -140,42 +140,25 @@ void imprimirED(App aplicativos[], int quant, int lista) {
 	gotoxy(29, 2);
 	printf("Id:");
 	
-	/*
-	if(quant == 0) {
-		return;
-	}else if(lista != 0) {
-	    for(x = ControleL[lista].IL; (y - 1) <= quant && y <= 16; x++) {
-			gotoxy(2, y + 1);
-			printf("%s", aplicativos[x].nome);
-			gotoxy(18, y + 1);
-			printf("%d MB",aplicativos[x].tam);
-			gotoxy(32, y + 1);
-			printf("%d", aplicativos[x].id);
-			y++;
-        }		
-	}else {		
-		for(x = ControleL[lista].IL; y <= 16; x++) {
-			gotoxy(2, y + 1);
-			printf("%s", aplicativos[x].nome);
-			gotoxy(18, y + 1);
-			printf("%d MB",aplicativos[x].tam);
-			gotoxy(32, y + 1);
-			printf("%d", aplicativos[x].id);
-			y++;
+    for(x = lista.IL; y < 17; x = lista.vet[x].prox) {
+    	if(x == -1) {
+			break;
 		}
-	}	
-	*/
+		
+		gotoxy(2, y + 1);
+		printf("%s", lista.vet[x].info.nome);
+		gotoxy(18, y + 1);
+		printf("%d MB",lista.vet[x].info.tam);
+		gotoxy(32, y + 1);
+		printf("%d", lista.vet[x].info.id);
+		y++;
+    }
 }
 
 
-void imprimirEDpro(App aplicativos[], int quant, int lista) {
+void imprimirEDpro(LLSE lista) {
 	int x;
-	int y = 3;
-	int a;
-	int z = 0;
-	
-	//quantidade de impressões
-	a = quant - 15;
+	int y = 0;
 	
 	//complementando a interface
 	gotoxy(2, 2);
@@ -184,19 +167,29 @@ void imprimirEDpro(App aplicativos[], int quant, int lista) {
 	printf("Tamanho:");
 	gotoxy(29, 2); 
 	printf("Id:");
-		
-	/*	
-	for(x = ControleL[lista].IL + 15; z < a; x++) {
-		gotoxy(2, y);
-		printf("%s", aplicativos[x].nome);
-		gotoxy(18, y);
-		printf("%d MB",aplicativos[x].tam);
-		gotoxy(32, y);
-		printf("%d", aplicativos[x].id);
+	
+	for(x = lista.IL; y < 15; x = lista.vet[x].prox) {
+		if(x == -1) {//recebendo qual o indice de numero 16	
+			break;
+		}
 		y++;
-		z++;
 	}
-	*/	
+	
+	y = 2;
+	 
+    for(x = x; y < 17; x = lista.vet[x].prox) {
+    	if(x == -1) {
+			break;
+		}
+		
+		gotoxy(2, y + 1);
+		printf("%s", lista.vet[x].info.nome);
+		gotoxy(18, y + 1);
+		printf("%d MB",lista.vet[x].info.tam);
+		gotoxy(32, y + 1);
+		printf("%d", lista.vet[x].info.id);
+		y++;
+    }	
 }
 
 //área de funções relacionadas a telas
@@ -668,40 +661,6 @@ void funRemo(App myapps[], int pagina, App rum[]) {
 	}
 }
 
-//função da opção parar a execução de um app
-void funStop( int pagina, App rum[]) {
-	int id = -1;
-	int x;
-	int quant;
-	
-	//so remove se tiver apps rodando
-	if(0) {
-		while(1) {
-			if(pagina == 15) {
-				system("cls");
-				telaAppRum();
-			}else {
-				system("cls");
-				telaAppRum();
-			}	
-	
-			//Recebendo o id
-			gotoxy(2,20);
-			printf("Id:");
-			scanf("%d", & id);
-			gotoxy(0, 50);	
-			
-			//checando se é um indice valido
-		}
-	}else{
-		gotoxy(2,20);
-		printf("Nenhum app rodando!");
-		gotoxy(2, 28);
-		system("PAUSE");
-		return;	
-	}
-}
-
 //função para intalação de apps
 void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 	int id = 0;
@@ -712,11 +671,9 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 		if(pagina == 15) {
 			system("cls");
 			telaInsta();
-			imprimirED(aplicativos, quant, 0);
 		}else {
 			system("cls");
 			telaInsta();
-			imprimirEDpro(aplicativos, quant, 0);
 		}	
 		
 		//Recebendo id selecionado
@@ -727,46 +684,10 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 				
 		//vendo se o app ja foi instalado
 	}
-}
-
-//função para rodar apps
-void funRumED(App myapps[], int quant, App rum[], int pagina) {
-	int id = 0;
-	int x;
-	int local = 0;//recebe quanto apps estão rodando
-	
-	if(0) {
-		while(1) {
-			if(pagina == 15) {
-				system("cls");
-				telaMeusappED();
-				//imprimindo apps
-			}else {
-				system("cls");
-				telaMeusappED();
-				//impimindo apps
-			}	
-	
-			//Recebendo id do app
-			gotoxy(2,20);
-			printf("Id:");
-			scanf("%d", & id);
-			gotoxy(0, 50);
-			
-			//verificando se o id e valido
-						
-		}
-	}else {
-		gotoxy(2,20);
-		printf("Nenhum app instalado!");
-		gotoxy(2, 28);
-		system("PAUSE");
-		return;			
-	}
 }	
 
 //funções do menu inicial
-void funStoreED(App aplicativos[], App meusappsed[]) {	
+void funStoreED(LLSE *storeED, LLSE *meusappsED, int disp[]) {	
 	char operacao;
 	int pausa;
 	int pagina = 15;
@@ -777,6 +698,7 @@ void funStoreED(App aplicativos[], App meusappsed[]) {
 		if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
 			telaStoreED();
+			imprimirED(*storeED);
 		}
 		
 		//Recebendo operação selecionada
@@ -796,7 +718,7 @@ void funStoreED(App aplicativos[], App meusappsed[]) {
 				if(pagina != 15) {
 					pagina--;
 					telaStoreED();
-					//imprimir pagina anterior
+					imprimirED(*storeED);
 				}else {
 	        		gotoxy(12, 20);
 	  				printf(" - Pagina Inicial\n");
@@ -812,7 +734,7 @@ void funStoreED(App aplicativos[], App meusappsed[]) {
 				if(operacao == '.') {
 					pagina++;
 					telaStoreED();
-				    //imprimir proxima pagina  
+				    imprimirEDpro(*storeED);
 				}else {
 		       		gotoxy(12, 20);
 		  				printf(" - Pagina Final\n");
@@ -1019,7 +941,7 @@ int main() {
 			
 		switch(operacao) {
 			case 'q'://StoreED
-				
+				funStoreED(&storeED, &meusappsED, disp);
 	  		break;
 		  	case 'w'://MeusAppsED
    	  		   
