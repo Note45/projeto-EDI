@@ -127,7 +127,7 @@ void inserirL(LLSE *lista, App elemento, int *disp) {
 	}
 }
 
-//funções para iimprimir os apps
+//funções para imprimir os apps
 void imprimirED(LLSE lista) {
 	int x;
 	int y = 2;
@@ -662,18 +662,33 @@ void funRemo(App myapps[], int pagina, App rum[]) {
 }
 
 //função para intalação de apps
-void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
-	int id = 0;
+void funInsta(LLSE storeED, LLSE *meusappsED, int *disp, int pagina) {
+	int id = -2;
 	int x;
-	int local = -1;//recebe quanto onde vou intalar o aplicativo
+	App elemento;
+	
+	//zerando elemento
+	elemento.tam = -2;
+	elemento.id = -2;
+	
+	//se a lista estiver cheia
+	if(*disp == -1) {
+		gotoxy(5, 20);
+		printf("-Memoria Cheia");
+		gotoxy(2, 28);
+		system("PAUSE");
+	   	return;	
+	}
 	
 	while(1) {
 		if(pagina == 15) {
 			system("cls");
 			telaInsta();
+			imprimirED(storeED);
 		}else {
 			system("cls");
 			telaInsta();
+			imprimirEDpro(storeED);
 		}	
 		
 		//Recebendo id selecionado
@@ -682,8 +697,88 @@ void funInsta(App aplicativos[], int quant, App myapps[], int pagina) {
 		scanf("%d", & id);
 		gotoxy(0, 50);
 				
-		//vendo se o app ja foi instalado
+		if(meusappsED->vet[meusappsED->IL].info.tam != -2) {//vendo se o app ja foi instalado
+		    for(x = meusappsED->IL; x < T; x = meusappsED->vet[x].prox) {
+		    	if(x == -1) {
+					break;
+				}		    	
+		    	
+				if(id == meusappsED->vet[x].info.id) {
+					gotoxy(5, 20);
+					printf("-Aplicativo instalado");
+					gotoxy(2, 28);
+					system("PAUSE");
+					return;	
+				}
+		    }
+		}
+		
+		//buscando qual app vou instalar e intalando
+	    for(x = storeED.IL; x < T; x = storeED.vet[x].prox) {
+	    	if(x == -1) {
+				break;
+			}
+			
+			if(id == storeED.vet[x].info.id) {
+				elemento = storeED.vet[x].info;
+				break;
+			}
+	    }
+	    
+		if(elemento.tam != -2) {
+			inserirL(meusappsED, elemento, disp);
+			return;
+		}else {
+			while(1) {
+				gotoxy(5, 20);
+				printf("-Aplicativo nao encontrado");
+				gotoxy(2, 28);
+				system("PAUSE");
+				return;
+				
+						
+				//Recebendo id selecionado
+				gotoxy(2,20);
+				printf("Id:");
+				scanf("%d", & id);
+				gotoxy(0, 50);	
+						
+				if(meusappsED->vet[meusappsED->IL].info.tam != -2) {//vendo se o app ja foi instalado
+				    for(x = meusappsED->IL; x < T; x = meusappsED->vet[x].prox) {
+				    	if(x == -1) {
+							break;
+						}
+												
+						if(id == meusappsED->vet[x].info.id) {
+							gotoxy(5, 20);
+							printf("-Aplicativo instalado");
+							gotoxy(2, 28);
+							system("PAUSE");
+							return;	
+						}
+				    }
+				}
+				
+				//buscando qual app vou instalar e intalando
+			    for(x = storeED.IL; x < T; x = storeED.vet[x].prox) {
+			    	if(x == -1) {
+						break;
+					}	
+							    	
+					if(id == storeED.vet[x].info.id) {
+						elemento = storeED.vet[x].info;
+						break;
+					}
+			    }
+			    
+	    		if(elemento.tam != -2) {
+					inserirL(meusappsED, elemento, disp);
+					return;
+				}						
+			} 	
+		}	  			
 	}
+	return;
 }	
 
 //funções do menu inicial
@@ -712,7 +807,7 @@ void funStoreED(LLSE *storeED, LLSE *meusappsED, int disp[]) {
 				return;
  			break;
  			case 'q':
-     			
+     			funInsta(*storeED, meusappsED, &disp[1], pagina);
             break;
         	case ',':
 				if(pagina != 15) {
