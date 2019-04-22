@@ -23,17 +23,26 @@ typedef struct {
     no vet[T];
 }LLSE;
 
-int disp[L];//controla quem esta disponivel nas listas
-
 //importando da função gotoxy
 void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
 
+//devolve onde eu vou inserir na lista
+int alocaNo(LLSE *lista, int *disp) {
+    int d;
+    if(*disp == -1) {
+        return -3;//se a lista estiver cheia
+    }
+    d = *disp;
+    *disp = lista->vet[*disp].prox;
+    return d;
+}
+
 //iniciando listas
-void inicia(LLSE *lista, int local) {
+void inicia(LLSE *lista, int *disp) {
     int i;
-    disp[local] = 1;
+    *disp = 1;
     
 	for(i = 0; i < T; i++) {
         lista->vet[i].prox = i + 1;
@@ -45,6 +54,77 @@ void inicia(LLSE *lista, int local) {
     lista->vet[T - 1].info.tam = -2;
     lista->vet[T - 1].info.id = -2;
     lista->IL = 0;
+}
+
+//inseirir um elemento na lista
+void inserirL(LLSE *lista, App elemento, int *disp) {
+	int indice;
+	int x;
+	int posi;
+	int ant;
+	int pro;
+	
+	indice = alocaNo(lista, disp);
+	
+	//se alista estiver cheia
+	if(indice == -3) {
+		gotoxy(10, 20);
+		printf(" Memoria Cheia");
+		x = 0;
+		while(x < 9) {
+			  printf("\n");
+			  x++;
+		  }
+		system("PAUSE");
+	}
+	
+	//fazendo a primeira inserção na LLSE
+	if(lista->vet[0].info.tam == -2) {
+		lista->vet[0].info = elemento;
+		lista->vet[lista->IL].prox = -1;
+		return;
+	}
+	
+	//buscando em qual posição eu vou inserir meu elemento
+	for(x = lista->IL; x < T; x = lista->vet[x].prox) {
+		if(x == -1) {//parar quando chegar ao ultimo elemento da lista
+			break;
+		}
+		
+		if(elemento.tam <= lista->vet[x].info.tam && x == lista->IL) {//insetir no inicio
+			posi = 1;
+			break;
+		}
+		
+		if(elemento.tam >= lista->vet[x].info.tam && lista->vet[x].prox == -1) {//inserir no final
+			posi = 2;
+			ant = x;
+			break; //recebendo o indice do elemento ao qual o ultimo vai apontar
+		}
+		
+		if(elemento.tam >= lista->vet[x].info.tam && elemento.tam <= lista->vet[lista->vet[x].prox].info.tam) {
+			ant = x;//indice que deve ser o anterior ao elemento quando ele entrar na LLSE
+			pro = lista->vet[x].prox; //para onde o elemento vai apontar
+			break;
+		}
+	}
+	
+	//inserindo o elemento
+	if(indice != -3) {//lista não vazia
+		if(posi == 1) {//inicio
+			lista->vet[indice].info = elemento;//recebendo elemento inicial
+			lista->vet[indice].prox = lista->IL;//apontando para proximo
+			lista->IL = indice; //atualizando inicio
+		}else if(posi == 2) {//final
+			lista->vet[indice].info = elemento;//recebendo final
+			lista->vet[ant].prox = indice;//anterior apontando para o final
+			lista->vet[indice].prox = -1;//atualizando o final
+		}else if(posi != 1 && posi != 2){//meio
+			lista->vet[indice].info = elemento;//recebendo elemento
+			lista->vet[indice].prox = pro;//apontando para o proximo
+			lista->vet[ant].prox = indice;//anterior apontando para esse indice
+		}
+	}
 }
 
 //funções para iimprimir os apps
@@ -528,8 +608,7 @@ void telaMeusappED() {
 }		   	
 
 //função para ler o arquivo
-void lerArq(LLSE *storeED) {
-	int indice;
+void lerArq(LLSE *storeED, int *disp) {
 	App elemento;
 	FILE *arquivo;
 	
@@ -548,6 +627,7 @@ void lerArq(LLSE *storeED) {
 		fscanf(arquivo, "%d\n", & elemento.id);
 		
 		//inserindo elemento
+		inserirL(storeED, elemento, disp);
 			
 	}
 	//fechando arquivo
@@ -912,16 +992,17 @@ int main() {
 	LLSE storeED;
 	LLSE meusappsED;
 	LLSE apprumED;
+	int disp[L];//controla quem esta disponivel nas listas
 	char operacao;
 	int pausa;
-	
+
 	//iniciando as listas
-	inicia(&storeED, 0);
-	inicia(&meusappsED, 1);
-	inicia(&apprumED, 2);
+	inicia(&storeED, &disp[0]);
+	inicia(&meusappsED, &disp[1]);
+	inicia(&apprumED, &disp[2]);
 	
 	//chamando a leitura do arquivo
-
+	lerArq(&storeED, &disp[0]);
 
 	while(1) {
 		telaIni();
