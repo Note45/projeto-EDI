@@ -140,7 +140,11 @@ void imprimirED(LLSE lista) {
 	gotoxy(29, 2);
 	printf("Id:");
 	
-    for(x = lista.IL; y < 17; x = lista.vet[x].prox) {
+	if(lista.vet[lista.IL].info.tam == -2) {
+		return;
+	}
+	
+    for(x = lista.IL; y < 17; x = lista.vet[x].prox) {//lista vazia
     	if(x == -1) {
 			break;
 		}
@@ -167,6 +171,10 @@ void imprimirEDpro(LLSE lista) {
 	printf("Tamanho:");
 	gotoxy(29, 2); 
 	printf("Id:");
+	
+	if(lista.vet[lista.IL].info.tam == -2) {//se a lista estiver vazia
+		return;
+	}
 	
 	for(x = lista.IL; y < 15; x = lista.vet[x].prox) {
 		if(x == -1) {//recebendo qual o indice de numero 16	
@@ -762,7 +770,7 @@ void funInsta(LLSE storeED, LLSE *meusappsED, int *disp, int pagina) {
 				//buscando qual app vou instalar e intalando
 			    for(x = storeED.IL; x < T; x = storeED.vet[x].prox) {
 			    	if(x == -1) {
-						break;
+						break;;
 					}	
 							    	
 					if(id == storeED.vet[x].info.id) {
@@ -782,7 +790,7 @@ void funInsta(LLSE storeED, LLSE *meusappsED, int *disp, int pagina) {
 }	
 
 //funções do menu inicial
-void funStoreED(LLSE *storeED, LLSE *meusappsED, int disp[]) {	
+void funStoreED(LLSE *storeED, LLSE *meusappsED, int *disp) {	
 	char operacao;
 	int pausa;
 	int pagina = 15;
@@ -807,7 +815,7 @@ void funStoreED(LLSE *storeED, LLSE *meusappsED, int disp[]) {
 				return;
  			break;
  			case 'q':
-     			funInsta(*storeED, meusappsED, &disp[1], pagina);
+     			funInsta(*storeED, meusappsED, disp, pagina);
             break;
         	case ',':
 				if(pagina != 15) {
@@ -855,19 +863,19 @@ void funStoreED(LLSE *storeED, LLSE *meusappsED, int disp[]) {
 }
 
 //função para 2(MeusappsEd) opção do meunu
-void funMeusappsED(App myapps[], App rum[]) {
+void funMeusappsED(LLSE meusappsED, LLSE *apprumED, int *disp[]) {
 	char operacao;
 	int pausa;
 	int pagina = 15;
 	int quant;
 	
 	//imprimindo interface
-	while(1) {
-		//contando a quantidade de apps caso um seja removido
-		
+	while(1) {		
 		if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
 			telaMeusappED();
+			imprimirED(meusappsED);
+			
 		}
 				
 		//Recebendo operação selecionada
@@ -881,7 +889,7 @@ void funMeusappsED(App myapps[], App rum[]) {
 				if(pagina != 15) {
 					pagina--;
 					telaMeusappED();
-					//imprimir pagina anterior
+					imprimirED(meusappsED);
 				}else {
 	        		gotoxy(12, 20);
 	  				printf("- Pagina Inicial\n");
@@ -897,7 +905,7 @@ void funMeusappsED(App myapps[], App rum[]) {
 				if(operacao == '.') {
 					pagina++;
 					telaMeusappED();
-					//imprimir proxima pagina
+					imprimirEDpro(meusappsED);
 				}else {
 		       		gotoxy(12, 20);
 		  				printf("- Pagina Final\n");
@@ -913,7 +921,7 @@ void funMeusappsED(App myapps[], App rum[]) {
 				return;
  			break;
  			case 'q':
-     			
+     			funInsta(meusappsED, apprumED ,disp , pagina);//rodando um app
             break;
         	case 'w':
         		
@@ -1036,10 +1044,10 @@ int main() {
 			
 		switch(operacao) {
 			case 'q'://StoreED
-				funStoreED(&storeED, &meusappsED, disp);
+				funStoreED(&storeED, &meusappsED, &disp[1]);
 	  		break;
 		  	case 'w'://MeusAppsED
-   	  		   
+   	  		    funMeusappsED(meusappsED, &apprumED, &disp[2]);
 			break;
 			case 'e'://AppRumED
 				
