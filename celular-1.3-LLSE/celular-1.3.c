@@ -639,7 +639,6 @@ void lerArq(LLSE *storeED, int *disp) {
 void funRemo(App myapps[], int pagina, App rum[]) {
 	int id = -1;
 	int x;
-	int quant;
 	
 	//so remove se tiver apps intalados
 	if(0) {
@@ -713,7 +712,7 @@ void funInsta(LLSE storeED, LLSE *meusappsED, int *disp, int pagina) {
 		    	
 				if(id == meusappsED->vet[x].info.id) {
 					gotoxy(5, 20);
-					printf("-Aplicativo instalado");
+					printf("-Aplicativo ja selecionado");
 					gotoxy(2, 28);
 					system("PAUSE");
 					return;	
@@ -759,7 +758,7 @@ void funInsta(LLSE storeED, LLSE *meusappsED, int *disp, int pagina) {
 												
 						if(id == meusappsED->vet[x].info.id) {
 							gotoxy(5, 20);
-							printf("-Aplicativo instalado");
+							printf("-Aplicativo ja selecionado");
 							gotoxy(2, 28);
 							system("PAUSE");
 							return;	
@@ -794,7 +793,6 @@ void funStoreED(LLSE *storeED, LLSE *meusappsED, int *disp) {
 	char operacao;
 	int pausa;
 	int pagina = 15;
-	int quant;
 	
 	//imprimindo interface StoreED
 	while(1) {
@@ -940,19 +938,17 @@ void funMeusappsED(LLSE meusappsED, LLSE *apprumED, int *disp[]) {
 }
 
 //função para 3(AppRumED) opçao do menu
-void funAppRumED(App rum[]) {	
+void funAppRumED(LLSE *apprumED) {	
 	char operacao;
 	int pausa;
 	int pagina = 15;
-	int quant;
 	
 	//imprimindo interface rum
 	while(1) {
-		//recebendo novo quant caso algum app seja removido
-		
-		if(pagina == 15) {
+			if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
-
+			telaAppRum();
+			imprimirED(*apprumED);
 		}
 		
 		//Recebendo operação selecionada
@@ -972,7 +968,7 @@ void funAppRumED(App rum[]) {
 				if(pagina != 15) {
 					pagina--;
 					telaAppRum();
-					//imprimir pagina anterior
+					imprimirED(*apprumED);
 				}else {
 	        		gotoxy(12, 20);
 	  				printf(" - Pagina Inicial\n");
@@ -988,7 +984,7 @@ void funAppRumED(App rum[]) {
 				if(operacao == '.') {
 					pagina++;
 					telaAppRum();
-					//imprimir proxima pagina
+					imprimirEDpro(*apprumED);
 				}else {
 	       			gotoxy(12, 20);
 	  				printf(" - Pagina Final\n");
@@ -1050,7 +1046,7 @@ int main() {
    	  		    funMeusappsED(meusappsED, &apprumED, &disp[2]);
 			break;
 			case 'e'://AppRumED
-				
+				funAppRumED(&apprumED);
 			break;
 			case ';':
 				system("cls");
