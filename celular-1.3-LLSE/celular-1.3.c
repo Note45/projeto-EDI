@@ -23,32 +23,34 @@ typedef struct {
     no vet[T];
 }LLSE;
 
+int disp[L];//controla quem esta disponivel nas listas
+
 //importando da função gotoxy
 void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
 
 //liberando indice do vetor
-void liberaNo(LLSE * lista, int ind, int *disp) {
-    lista->vet[ind].prox = *disp;
-    *disp = ind;
+void liberaNo(LLSE * lista, int ind, int local) {
+    lista->vet[ind].prox = disp[local];
+    disp[local] = ind;
 }
 
 //devolve onde eu vou inserir na lista
-int alocaNo(LLSE *lista, int *disp) {
+int alocaNo(LLSE *lista, int local) {
     int d;
-    if(*disp == -1) {
+    if(disp[local] == -1) {
         return -3;//se a lista estiver cheia
     }
-    d = *disp;
-    *disp = lista->vet[*disp].prox;
+    d = disp[local];
+    disp[local] = lista->vet[disp[local]].prox;
     return d;
 }
 
 //iniciando listas
-void inicia(LLSE *lista, int *disp) {
+void inicia(LLSE *lista, int local) {
     int i;
-    *disp = 1;
+    disp[local] = 1;
     
 	for(i = 0; i < T; i++) {
         lista->vet[i].prox = i + 1;
@@ -63,14 +65,14 @@ void inicia(LLSE *lista, int *disp) {
 }
 
 //inseirir um elemento na lista
-void inserirL(LLSE *lista, App elemento, int *disp) {
+void inserirL(LLSE *lista, App elemento, int local) {
 	int indice;
 	int x;
 	int posi;
 	int ant;
 	int pro;
 	
-	indice = alocaNo(lista, disp);
+	indice = alocaNo(lista, local);
 	
 	//se alista estiver cheia
 	if(indice == -3) {
@@ -134,7 +136,7 @@ void inserirL(LLSE *lista, App elemento, int *disp) {
 }
 
 //removendo um elemento da lista
-void removerL(LLSE *lista, App elemento, int *disp) {
+void removerL(LLSE *lista, App elemento, int local) {
 	int x;
 	int liberar;
 	int posi;
@@ -178,15 +180,15 @@ void removerL(LLSE *lista, App elemento, int *disp) {
 	if(posi == 1) {//remover no inicio
 		liberar = lista->IL;//antigo inicio da lista
 		lista->IL = lista->vet[liberar].prox;//novo inicio
-		liberaNo(lista, liberar, disp);//liberar antigo inicio
+		liberaNo(lista, liberar, local);//liberar antigo inicio
 		return;
 	}else if(posi == 3){//remover no meio
 		lista->vet[ant].prox = pro;//anteririo ou liberado vai apontar para o proximo ao liberado
-		liberaNo(lista, liberar, disp); //liberar o No
+		liberaNo(lista, liberar, local); //liberar o No
 		return;
 	}else if(posi == 2){//remover no fim
 		lista->vet[ant].prox = -1;//anterior vira o final
-		liberaNo(lista, liberar, disp);//liberando antigo final
+		liberaNo(lista, liberar, local);//liberando antigo final
 		return;
 	}
 }
@@ -673,7 +675,7 @@ void telaMeusappED() {
 }		   	
 
 //função para ler o arquivo
-void lerArq(LLSE *storeED, int *disp) {
+void lerArq(LLSE *storeED, int local) {
 	App elemento;
 	FILE *arquivo;
 	
@@ -692,14 +694,14 @@ void lerArq(LLSE *storeED, int *disp) {
 		fscanf(arquivo, "%d\n", & elemento.id);
 		
 		//inserindo elemento
-		inserirL(storeED, elemento, disp);
+		inserirL(storeED, elemento, local);
 			
 	}
 	//fechando arquivo
 	fclose(arquivo);
 }
 //função para rodar um app
-void funRum(LLSE meusappsED, LLSE *apprumED, int *disp, int pagina) {
+void funRum(LLSE meusappsED, LLSE *apprumED, int pagina, int local) {
 	int x;
 	int id;
 	App elemento;
@@ -763,7 +765,7 @@ void funRum(LLSE meusappsED, LLSE *apprumED, int *disp, int pagina) {
 	    }
 	    
 		if(elemento.tam != -2) {
-			inserirL(apprumED, elemento, disp);
+			inserirL(apprumED, elemento, local);
 			return;
 		}else {
 			while(1) {
@@ -808,7 +810,7 @@ void funRum(LLSE meusappsED, LLSE *apprumED, int *disp, int pagina) {
 			    }
 			    
 				if(elemento.tam != -2) {
-					inserirL(apprumED, elemento, disp);
+					inserirL(apprumED, elemento, local);
 					break;
 				}						
 			} 	
@@ -817,7 +819,7 @@ void funRum(LLSE meusappsED, LLSE *apprumED, int *disp, int pagina) {
 }
 
 //função da opção de remover um app
-void funRemo(LLSE *remove, int pagina, int *disp, LLSE *apprumED) {
+void funRemo(LLSE *remove, int pagina, LLSE *apprumED, int local) {
 	int id = -1;
 	int x;
 	App elemento;
@@ -851,36 +853,14 @@ void funRemo(LLSE *remove, int pagina, int *disp, LLSE *apprumED) {
 			}
 			
 			if(id == remove->vet[x].info.id) {
-				elemento = remove->vet[x].info;
+				elemento = remove->vet[x].info;//removendo do meusappsED
 				break;
 			}
 	    }			
 		
 		if(elemento.tam != -2) {
-			removerL(remove, elemento, disp);	
-        		
-			if(apprumED->vet[apprumED->IL].info.tam != -2) {
-				//checando se é um indice valido
-			    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
-			    	if(x == -1) {
-						break;
-					}
-					
-					if(id == apprumED->vet[x].info.id) {
-						elemento = apprumED->vet[x].info;
-						break;
-					}
-			    }			
-				
-				if(elemento.tam != -2) {
-					removerL(apprumED, elemento, &disp[2]);
-					break;	
-				}else {
-					return;
-				}					   	
-			}else {
-				return;
-			}			
+			removerL(remove, elemento, local);	
+      	    return;			
 		}else {
 			while(1) {
 				gotoxy(5, 20);
@@ -907,38 +887,16 @@ void funRemo(LLSE *remove, int pagina, int *disp, LLSE *apprumED) {
 			    }			
 				
 				if(elemento.tam != -2) {
-					removerL(remove, elemento, disp);
-				}
-        		
-        		if(apprumED->vet[apprumED->IL].info.tam != -2) {
-					//checando se é um indice valido
-				    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
-				    	if(x == -1) {
-							break;
-						}
-						
-						if(id == apprumED->vet[x].info.id) {
-							elemento = apprumED->vet[x].info;
-							break;
-						}
-				    }			
-					
-					if(elemento.tam != -2) {
-						removerL(apprumED, elemento, &disp[2]);
-						return;	
-					}else {
-						return;
-					}					   	
-				}else {
+					removerL(remove, elemento, local);//removendo do meusappsED
 					return;
-				}								
+				}							
 			}		
 		}
 	}
 }
 
 //função para intalação de apps
-void funInsta(LLSE storeED, LLSE *meusappsED, int *disp, int pagina) {
+void funInsta(LLSE storeED, LLSE *meusappsED, int pagina) {
 	int id = -2;
 	int x;
 	App elemento;
@@ -1002,7 +960,7 @@ void funInsta(LLSE storeED, LLSE *meusappsED, int *disp, int pagina) {
 	    }
 	    
 		if(elemento.tam != -2) {
-			inserirL(meusappsED, elemento, disp);
+			inserirL(meusappsED, elemento, 1);
 			return;
 		}else {
 			while(1) {
@@ -1048,7 +1006,7 @@ void funInsta(LLSE storeED, LLSE *meusappsED, int *disp, int pagina) {
 			    }
 			    
 	    		if(elemento.tam != -2) {
-					inserirL(meusappsED, elemento, disp);
+					inserirL(meusappsED, elemento, 1);
 					return;
 				}						
 			} 	
@@ -1058,7 +1016,7 @@ void funInsta(LLSE storeED, LLSE *meusappsED, int *disp, int pagina) {
 }	
 
 //funções do menu inicial
-void funStoreED(LLSE *storeED, LLSE *meusappsED, int *disp) {	
+void funStoreED(LLSE *storeED, LLSE *meusappsED) {	
 	char operacao;
 	int pausa;
 	int pagina = 15;
@@ -1082,7 +1040,7 @@ void funStoreED(LLSE *storeED, LLSE *meusappsED, int *disp) {
 				return;
  			break;
  			case 'q':
-     			funInsta(*storeED, meusappsED, disp, pagina);
+     			funInsta(*storeED, meusappsED, pagina);
             break;
         	case ',':
 				if(pagina != 15) {
@@ -1130,7 +1088,7 @@ void funStoreED(LLSE *storeED, LLSE *meusappsED, int *disp) {
 }
 
 //função para 2(MeusappsEd) opção do meunu
-void funMeusappsED(LLSE *meusappsED, LLSE *apprumED, int *disp) {
+void funMeusappsED(LLSE *meusappsED, LLSE *apprumED) {
 	char operacao;
 	int pausa;
 	int pagina = 15;
@@ -1187,10 +1145,10 @@ void funMeusappsED(LLSE *meusappsED, LLSE *apprumED, int *disp) {
 				return;
  			break;
  			case 'q'://rodar um app
-				funRum(*meusappsED, apprumED, disp, pagina);
+				funRum(*meusappsED, apprumED, pagina, 2);
             break;
         	case 'w'://removendo elemento
-        		funRemo(meusappsED, pagina, disp, apprumED);
+        		funRemo(meusappsED, pagina, apprumED, 2);
         	break;	
         	default:
         		gotoxy(10, 20);
@@ -1281,17 +1239,16 @@ int main() {
 	LLSE storeED;
 	LLSE meusappsED;
 	LLSE apprumED;
-	int disp[L];//controla quem esta disponivel nas listas
 	char operacao;
 	int pausa;
 
 	//iniciando as listas
-	inicia(&storeED, &disp[0]);
-	inicia(&meusappsED, &disp[1]);
-	inicia(&apprumED, &disp[2]);
+	inicia(&storeED, 0);
+	inicia(&meusappsED, 1);
+	inicia(&apprumED, 2);
 	
 	//chamando a leitura do arquivo
-	lerArq(&storeED, &disp[0]);
+	lerArq(&storeED, 0);
 
 	while(1) {
 		telaIni();
@@ -1308,10 +1265,10 @@ int main() {
 			
 		switch(operacao) {
 			case 'q'://StoreED
-				funStoreED(&storeED, &meusappsED, &disp[1]);
+				funStoreED(&storeED, &meusappsED);
 	  		break;
 		  	case 'w'://MeusAppsED
-   	  		    funMeusappsED(&meusappsED, &apprumED, &disp[2]);
+   	  		    funMeusappsED(&meusappsED, &apprumED);
 			break;
 			case 'e'://AppRumED
 				funAppRumED(&apprumED);
