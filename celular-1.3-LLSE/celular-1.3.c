@@ -28,6 +28,12 @@ void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
 
+//liberando indice do vetor
+void liberaNo(LLSE * lista, int ind, int *disp) {
+    lista->vet[ind].prox = *disp;
+    *disp = ind;
+}
+
 //devolve onde eu vou inserir na lista
 int alocaNo(LLSE *lista, int *disp) {
     int d;
@@ -124,6 +130,64 @@ void inserirL(LLSE *lista, App elemento, int *disp) {
 			lista->vet[indice].prox = pro;//apontando para o proximo
 			lista->vet[ant].prox = indice;//anterior apontando para esse indice
 		}
+	}
+}
+
+//removendo um elemento da lista
+void removerL(LLSE *lista, App elemento, int *disp) {
+	int x;
+	int liberar;
+	int posi;
+	int ant;
+	int pro;
+	
+	//se a lista estiver vazia
+	if(lista->vet[lista->IL].info.tam == -2) {
+		printf("Lista Vazia!\n");
+		system("PAUSE");
+	}
+	
+	//buscando qual no vou remover
+	for(x = lista->IL; x < T; x = lista->vet[x].prox) {
+		if(x == -1) {//parar quando chegar ao ultimo elemento da lista
+			break;
+		}
+		
+		if(elemento.tam == lista->vet[x].info.tam && x == lista->IL) {//remover no inicio
+			posi = 1;
+			break;
+		}
+		
+		if(elemento.tam == lista->vet[x].info.tam && lista->vet[x].prox == -1) {//remover no final
+			posi = 2;
+			liberar = x;
+			break; 
+		}
+		
+		if(elemento.tam == lista->vet[x].info.tam) {
+			posi = 3;
+			pro = lista->vet[x].prox; //para onde o elemento vai apontar
+			liberar = x;
+			break;
+		}
+		
+		ant = x;//recebendo o anterior ao atual
+	}
+	
+	//removendo elemento
+	if(posi == 1) {//remover no inicio
+		liberar = lista->IL;//antigo inicio da lista
+		lista->IL = lista->vet[liberar].prox;//novo inicio
+		liberaNo(lista, liberar, disp);//liberar antigo inicio
+		return;
+	}else if(posi == 3){//remover no meio
+		lista->vet[ant].prox = pro;//anteririo ou liberado vai apontar para o proximo ao liberado
+		liberaNo(lista, liberar, disp); //liberar o No
+		return;
+	}else if(posi == 2){//remover no fim
+		lista->vet[ant].prox = -1;//anterior vira o final
+		liberaNo(lista, liberar, disp);//liberando antigo final
+		return;
 	}
 }
 
@@ -634,37 +698,242 @@ void lerArq(LLSE *storeED, int *disp) {
 	//fechando arquivo
 	fclose(arquivo);
 }
-
-//função da opção de remover um app
-void funRemo(App myapps[], int pagina, App rum[]) {
-	int id = -1;
+//função para rodar um app
+void funRum(LLSE meusappsED, LLSE *apprumED, int *disp, int pagina) {
 	int x;
+	int id;
+	App elemento;
 	
-	//so remove se tiver apps intalados
-	if(0) {
-		while(1) {
-			if(pagina == 15) {
-				system("cls");
-				telaMeusappED();
-			}else {
-				system("cls");
-				telaMeusappED();
-			}	
+	//zerando elemento
+	elemento.tam = -2;
+	elemento.id = -2;
 	
-			//Recebendo o id
-			gotoxy(2,20);
-			printf("Id:");
-			scanf("%d", & id);
-			gotoxy(0, 50);	
-			
-			//checando se é um indice valido
-		}
-	}else{
-		gotoxy(2,20);
-		printf("Nenhum app instalado!");
+	//se a lista estiver cheia
+	if(disp[2] == -1) {
+		gotoxy(5, 20);
+		printf("-Memoria Cheia");
 		gotoxy(2, 28);
 		system("PAUSE");
-		return;	
+	   	return;	
+	}
+	
+	while(1) {
+		if(pagina == 15) {
+			system("cls");
+			telaInsta();
+			imprimirED(meusappsED);
+		}else {
+			system("cls");
+			telaInsta();
+			imprimirEDpro(meusappsED);
+		}	
+		
+		//Recebendo id selecionado
+		gotoxy(2,20);
+		printf("Id:");
+		scanf("%d", & id);
+		gotoxy(0, 50);
+				
+		if(apprumED->vet[apprumED->IL].info.tam != -2) {//vendo se o app ja foi instalado
+		    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
+		    	if(x == -1) {
+					break;
+				}		    	
+		    	
+				if(id == apprumED->vet[x].info.id) {
+					gotoxy(5, 20);
+					printf("-Aplicativo ja selecionado");
+					gotoxy(2, 28);
+					system("PAUSE");
+					return;	
+				}
+		    }
+		}
+		
+		//buscando qual app vou instalar e intalando
+	    for(x = meusappsED.IL; x < T; x = meusappsED.vet[x].prox) {
+	    	if(x == -1) {
+				break;
+			}
+			
+			if(id == meusappsED.vet[x].info.id) {
+				elemento = meusappsED.vet[x].info;
+				break;
+			}
+	    }
+	    
+		if(elemento.tam != -2) {
+			inserirL(apprumED, elemento, disp);
+			return;
+		}else {
+			while(1) {
+				gotoxy(5, 20);
+				printf("-Aplicativo nao encontrado");
+				gotoxy(2, 28);
+				system("PAUSE");
+				return;
+				
+						
+				//Recebendo id selecionado
+				gotoxy(2,20);
+				printf("Id:");
+				scanf("%d", & id);
+				gotoxy(0, 50);	
+						
+				if(apprumED->vet[apprumED->IL].info.tam != -2) {//vendo se o app ja foi instalado
+				    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
+				    	if(x == -1) {
+							break;
+						}		    	
+				    	
+						if(id == apprumED->vet[x].info.id) {
+							gotoxy(5, 20);
+							printf("-Aplicativo ja selecionado");
+							gotoxy(2, 28);
+							system("PAUSE");
+							break;	
+						}
+				    }
+				}
+				
+	 	 	    for(x = meusappsED.IL; x < T; x = meusappsED.vet[x].prox) {
+			    	if(x == -1) {
+						break;
+					}
+					
+					if(id ==  meusappsED.vet[x].info.id) {
+						elemento = meusappsED.vet[x].info;
+						break;
+					}
+			    }
+			    
+				if(elemento.tam != -2) {
+					inserirL(apprumED, elemento, disp);
+					break;
+				}						
+			} 	
+		}	  			
+	}
+}
+
+//função da opção de remover um app
+void funRemo(LLSE *remove, int pagina, int *disp, LLSE *apprumED) {
+	int id = -1;
+	int x;
+	App elemento;
+	
+	//zerando elemento
+	elemento.tam = -2;
+	elemento.id = -2;
+	
+	//so remove se tiver apps intalados
+	while(1) {
+		if(pagina == 15) {
+			system("cls");
+			telaMeusappED();
+			imprimirED(*remove);
+		}else {
+			system("cls");
+			telaMeusappED();
+			imprimirEDpro(*remove);
+		}	
+
+		//Recebendo o id
+		gotoxy(2,20);
+		printf("Id:");
+		scanf("%d", & id);
+		gotoxy(0, 50);	
+		
+		//checando se é um indice valido
+	    for(x = remove->IL; x < T; x = remove->vet[x].prox) {
+	    	if(x == -1) {
+				break;
+			}
+			
+			if(id == remove->vet[x].info.id) {
+				elemento = remove->vet[x].info;
+				break;
+			}
+	    }			
+		
+		if(elemento.tam != -2) {
+			removerL(remove, elemento, disp);	
+        		
+			if(apprumED->vet[apprumED->IL].info.tam != -2) {
+				//checando se é um indice valido
+			    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
+			    	if(x == -1) {
+						break;
+					}
+					
+					if(id == apprumED->vet[x].info.id) {
+						elemento = apprumED->vet[x].info;
+						break;
+					}
+			    }			
+				
+				if(elemento.tam != -2) {
+					removerL(apprumED, elemento, &disp[2]);
+					break;	
+				}else {
+					return;
+				}					   	
+			}else {
+				return;
+			}			
+		}else {
+			while(1) {
+				gotoxy(5, 20);
+				printf("-Aplicativo nao encontrado");	
+				gotoxy(2, 28);
+				system("PAUSE");
+				return;	
+				
+				//Recebendo o id
+				gotoxy(2,20);
+				printf("Id:");
+				scanf("%d", & id);
+				gotoxy(0, 50);	
+				
+				//checando se é um indice valido
+			    for(x = remove->IL; x < T; x = remove->vet[x].prox) {
+			    	if(x == -1) {
+						break;
+					}
+					
+					if(id == remove->vet[x].info.id) {
+						elemento = remove->vet[x].info;;
+					}
+			    }			
+				
+				if(elemento.tam != -2) {
+					removerL(remove, elemento, disp);
+				}
+        		
+        		if(apprumED->vet[apprumED->IL].info.tam != -2) {
+					//checando se é um indice valido
+				    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
+				    	if(x == -1) {
+							break;
+						}
+						
+						if(id == apprumED->vet[x].info.id) {
+							elemento = apprumED->vet[x].info;
+							break;
+						}
+				    }			
+					
+					if(elemento.tam != -2) {
+						removerL(apprumED, elemento, &disp[2]);
+						return;	
+					}else {
+						return;
+					}					   	
+				}else {
+					return;
+				}								
+			}		
+		}
 	}
 }
 
@@ -861,24 +1130,23 @@ void funStoreED(LLSE *storeED, LLSE *meusappsED, int *disp) {
 }
 
 //função para 2(MeusappsEd) opção do meunu
-void funMeusappsED(LLSE meusappsED, LLSE *apprumED, int *disp[]) {
+void funMeusappsED(LLSE *meusappsED, LLSE *apprumED, int *disp) {
 	char operacao;
 	int pausa;
 	int pagina = 15;
-	int quant;
 	
 	//imprimindo interface
 	while(1) {		
 		if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
 			telaMeusappED();
-			imprimirED(meusappsED);
+			imprimirED(*meusappsED);
 			
 		}
 				
 		//Recebendo operação selecionada
 		gotoxy(2, 20);
-		printf("Action:");
+		printf("Operacao:");
 		scanf(" %c", & operacao);
 		gotoxy(0, 50);
 		
@@ -887,7 +1155,7 @@ void funMeusappsED(LLSE meusappsED, LLSE *apprumED, int *disp[]) {
 				if(pagina != 15) {
 					pagina--;
 					telaMeusappED();
-					imprimirED(meusappsED);
+					imprimirED(*meusappsED);
 				}else {
 	        		gotoxy(12, 20);
 	  				printf("- Pagina Inicial\n");
@@ -903,7 +1171,7 @@ void funMeusappsED(LLSE meusappsED, LLSE *apprumED, int *disp[]) {
 				if(operacao == '.') {
 					pagina++;
 					telaMeusappED();
-					imprimirEDpro(meusappsED);
+					imprimirEDpro(*meusappsED);
 				}else {
 		       		gotoxy(12, 20);
 		  				printf("- Pagina Final\n");
@@ -918,11 +1186,11 @@ void funMeusappsED(LLSE meusappsED, LLSE *apprumED, int *disp[]) {
 			case 'e':
 				return;
  			break;
- 			case 'q':
-     			funInsta(meusappsED, apprumED ,disp , pagina);//rodando um app
+ 			case 'q'://rodar um app
+				funRum(*meusappsED, apprumED, disp, pagina);
             break;
-        	case 'w':
-        		
+        	case 'w'://removendo elemento
+        		funRemo(meusappsED, pagina, disp, apprumED);
         	break;	
         	default:
         		gotoxy(10, 20);
@@ -1043,7 +1311,7 @@ int main() {
 				funStoreED(&storeED, &meusappsED, &disp[1]);
 	  		break;
 		  	case 'w'://MeusAppsED
-   	  		    funMeusappsED(meusappsED, &apprumED, &disp[2]);
+   	  		    funMeusappsED(&meusappsED, &apprumED, &disp[2]);
 			break;
 			case 'e'://AppRumED
 				funAppRumED(&apprumED);

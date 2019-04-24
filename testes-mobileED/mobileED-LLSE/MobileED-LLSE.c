@@ -123,7 +123,7 @@ void inserir(LLSE *lista, int elemento) {
 	}
 }
 
-void remover(LLSE *lista, int elemento) {
+void removerL(LLSE *lista, int elemento) {
 	int x;
 	int liberar;
 	int posi;
@@ -200,7 +200,7 @@ int main() {
 				printf("\nDigite o elemento: ");
 				scanf("%d", & elemento);
 				
-				remover(&lista, elemento);
+				removerL(&lista, elemento);
 				printf("\n");
 			break;
 			case 3:
