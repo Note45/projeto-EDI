@@ -819,7 +819,7 @@ void funRum(LLSE meusappsED, LLSE *apprumED, int pagina, int local) {
 }
 
 //função da opção de remover um app
-void funRemo(LLSE *remove, int pagina, LLSE *apprumED, int local) {
+int funRemo(LLSE *remove, int pagina, LLSE *apprumED, int local) {
 	int id = -1;
 	int x;
 	App elemento;
@@ -860,14 +860,13 @@ void funRemo(LLSE *remove, int pagina, LLSE *apprumED, int local) {
 		
 		if(elemento.tam != -2) {
 			removerL(remove, elemento, local);	
-      	    return;			
+      	    return id;			
 		}else {
 			while(1) {
 				gotoxy(5, 20);
 				printf("-Aplicativo nao encontrado");	
 				gotoxy(2, 28);
-				system("PAUSE");
-				return;	
+				system("PAUSE");	
 				
 				//Recebendo o id
 				gotoxy(2,20);
@@ -888,7 +887,7 @@ void funRemo(LLSE *remove, int pagina, LLSE *apprumED, int local) {
 				
 				if(elemento.tam != -2) {
 					removerL(remove, elemento, local);//removendo do meusappsED
-					return;
+					return id;
 				}							
 			}		
 		}
@@ -1092,6 +1091,9 @@ void funMeusappsED(LLSE *meusappsED, LLSE *apprumED) {
 	char operacao;
 	int pausa;
 	int pagina = 15;
+	App elemento; 
+	int id;
+	int x;
 	
 	//imprimindo interface
 	while(1) {		
@@ -1148,7 +1150,31 @@ void funMeusappsED(LLSE *meusappsED, LLSE *apprumED) {
 				funRum(*meusappsED, apprumED, pagina, 2);
             break;
         	case 'w'://removendo elemento
-        		funRemo(meusappsED, pagina, apprumED, 2);
+        		id = funRemo(meusappsED, pagina, apprumED, 2);
+			
+				if(id != -2) {
+					//zerando elemento
+					elemento.tam = -2;
+					elemento.id = -2;				
+					
+					//checando se o app está rodando para remover
+					if(apprumED->vet[apprumED->IL].info.tam != -2) {
+					    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
+					    	if(x == -1) {
+								break;
+							}
+							
+							if(id == apprumED->vet[x].info.id) {
+								elemento = apprumED->vet[x].info;//removendo do meusappsED
+								break;
+							}
+					    }			
+						
+						if(elemento.tam != -2) {
+							removerL(apprumED, elemento, 2);					
+						}
+					}
+				}        			
         	break;	
         	default:
         		gotoxy(10, 20);
