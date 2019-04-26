@@ -144,6 +144,7 @@ void removerL(LLSE *lista, int elemento) {
 		
 		if(elemento == lista->vet[x].info && x == lista->IL) {//remover no inicio
 			posi = 1;
+			liberar = x;
 			break;
 		}
 		
@@ -165,9 +166,14 @@ void removerL(LLSE *lista, int elemento) {
 	
 	//removendo elemento
 	if(posi == 1) {//remover no inicio
-		liberar = lista->IL;//antigo inicio da lista
-		lista->IL = lista->vet[liberar].prox;//novo inicio
-		liberaNo(lista, liberar);//liberar antigo inicio
+		if(lista->vet[lista->IL].prox == -1) {
+			lista->vet[liberar].info = -2;
+			lista->IL = liberar;
+			liberaNo(lista, liberar);
+		}else {
+			lista->IL = lista->vet[liberar].prox;
+			liberaNo(lista, liberar);
+		}
 	}else if(posi == 3){//remover no meio
 		lista->vet[ant].prox = pro;//anteririo ou liberado vai apontar para o proximo ao liberado
 		liberaNo(lista, liberar); //liberar o No

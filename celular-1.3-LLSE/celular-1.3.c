@@ -77,7 +77,7 @@ void inserirL(LLSE *lista, App elemento, int local) {
 	//se alista estiver cheia
 	if(indice == -3) {
 		gotoxy(10, 20);
-		printf(" Memoria Cheia");
+		printf("    Memoria Cheia");
 		x = 0;
 		while(x < 9) {
 			  printf("\n");
@@ -87,8 +87,8 @@ void inserirL(LLSE *lista, App elemento, int local) {
 	}
 	
 	//fazendo a primeira inserção na LLSE
-	if(lista->vet[0].info.tam == -2) {
-		lista->vet[0].info = elemento;
+	if(lista->vet[lista->IL].info.tam == -2) {
+		lista->vet[lista->IL].info = elemento;
 		lista->vet[lista->IL].prox = -1;
 		return;
 	}
@@ -157,6 +157,7 @@ void removerL(LLSE *lista, App elemento, int local) {
 		
 		if(elemento.tam == lista->vet[x].info.tam && x == lista->IL) {//remover no inicio
 			posi = 1;
+			liberar = x;
 			break;
 		}
 		
@@ -178,9 +179,15 @@ void removerL(LLSE *lista, App elemento, int local) {
 	
 	//removendo elemento
 	if(posi == 1) {//remover no inicio
-		liberar = lista->IL;//antigo inicio da lista
-		lista->IL = lista->vet[liberar].prox;//novo inicio
-		liberaNo(lista, liberar, local);//liberar antigo inicio
+		if(lista->vet[lista->IL].prox == -1) {//se o inicio for o final da lista
+			lista->vet[liberar].info.tam = -2;
+			lista->vet[liberar].info.id = -2;
+			lista->IL = liberar;
+			liberaNo(lista, liberar, local);
+		}else {
+			lista->IL = lista->vet[liberar].prox;
+			liberaNo(lista, liberar, local);
+		}		
 		return;
 	}else if(posi == 3){//remover no meio
 		lista->vet[ant].prox = pro;//anteririo ou liberado vai apontar para o proximo ao liberado
