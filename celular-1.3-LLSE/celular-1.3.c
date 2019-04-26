@@ -267,9 +267,27 @@ void imprimirEDpro(LLSE lista) {
 }
 
 //área de funções relacionadas a telas
-void telaIni() {
+void telaIni(LLSE lista) {
 	int x;
-	int quant;
+	int i = 0;
+	int vet[6];//recebe os indices dos elementos
+	   
+	//zerendo vetor   	
+	for(x = 0; x < 6; x++) {
+		vet[x] = -2;
+	}
+	
+	//recebendo indices
+	if(lista.vet[lista.IL].info.tam != -2) {
+		for(x = lista.IL; i < 6; x = lista.vet[x].prox) {
+			if(x == -1) {
+				break;
+			}	
+						
+			vet[i] = x;
+			i++;		
+		} 
+	}
 	
 	system("cls");
 	
@@ -309,100 +327,100 @@ void telaIni() {
 		printf("%c", 219);
 	}
 	
-	/*imprimindo apps iniciais
-	if(ControleL[1].IL != -1 && ControleL[1].FL != -1) {
-		if(quant == 1 || quant > 1) {
+	//imprimindo apps iniciais
+	if(lista.vet[lista.IL].info.tam != -2) {
+		if(lista.vet[vet[0]].info.tam != -2 && vet[0] != -2) {
 			gotoxy(2, 3);
 			printf("Nome:");	
 			gotoxy(3, 4);
-			printf("%s", vet[ControleL[1].IL].nome);
+			printf("%s", lista.vet[vet[0]].info.nome);
 			gotoxy(2, 5);
 			printf("Tamanho:");
 			gotoxy(3, 6);
-			printf("%d MB", vet[ControleL[1].IL].tam);
+			printf("%d MB", lista.vet[vet[0]].info.tam);
 			gotoxy(2, 7);
 			printf("Id:");
 			gotoxy(3, 8);
-			printf("%d", vet[ControleL[1].IL].id);
+			printf("%d", lista.vet[vet[0]].info.id);
 		}
 					
-		if( quant == 2 || quant > 2) {
+		if(lista.vet[vet[1]].info.tam != -2 && vet[1] != -2) {
 			gotoxy(16, 3);
 			printf("Nome:");	
 			gotoxy(17, 4);
-			printf("%s", vet[ControleL[1].IL + 1].nome);
+			printf("%s", lista.vet[vet[1]].info.nome);
 			gotoxy(16, 5);
 			printf("Tamanho:");
 			gotoxy(17, 6);
-			printf("%d MB", vet[ControleL[1].IL + 1].tam);
+			printf("%d MB", lista.vet[vet[1]].info.tam);
 			gotoxy(16, 7);
 			printf("Id:");
 			gotoxy(17, 8);
-			printf("%d", vet[ControleL[1].IL + 1].id);
+			printf("%d", lista.vet[vet[1]].info.id);
 		}											
 			
-		if(quant == 3 || quant > 3) {
+		if(lista.vet[vet[2]].info.tam!= -2 && vet[2] != -2) {
 			gotoxy(30, 3);
 			printf("Nome:");	
 			gotoxy(31, 4);
-			printf("%s", vet[ControleL[1].IL + 2].nome);
+			printf("%s", lista.vet[vet[2]].info.nome);
 			gotoxy(30, 5);
 			printf("Tamanho:");
 			gotoxy(31, 6);
-			printf("%d MB", vet[ControleL[1].IL + 2].tam);
+			printf("%d MB", lista.vet[vet[2]].info.tam);
 			gotoxy(30, 7);
 			printf("Id:");
 			gotoxy(31, 8);
-			printf("%d", vet[ControleL[1].IL + 2].id);			
+			printf("%d", lista.vet[vet[2]].info.id);			
 		}											
 		
-		if(quant == 4 || quant > 4) {
+		if(lista.vet[vet[3]].info.tam != -2 && vet[3] != -2) {
 			gotoxy(2, 12);
 			printf("Nome:");	
 			gotoxy(3, 13);
-			printf("%s", vet[ControleL[1].IL + 3].nome);
+			printf("%s", lista.vet[vet[3]].info.nome);
 			gotoxy(2, 14);
 			printf("Tamanho:");
 			gotoxy(3, 15);
-			printf("%d MB", vet[ControleL[1].IL + 3].tam);
+			printf("%d MB", lista.vet[vet[3]].info.tam);
 			gotoxy(2, 16);
 			printf("Id:");
 			gotoxy(3, 17);
-			printf("%d", vet[ControleL[1].IL + 3].id);
+			printf("%d", lista.vet[vet[3]].info.id);
 		}
 	
 				
-		if(quant == 5 || quant > 5) {
+		if(lista.vet[vet[4]].info.tam != -2 && vet[4] != -2) {
 			gotoxy(16, 12);
 			printf("Nome:");	
 			gotoxy(17, 13);
-			printf("%s", vet[ControleL[1].IL + 4].nome);
+			printf("%s", lista.vet[vet[4]].info.nome);
 			gotoxy(16, 14);
 			printf("Tamanho:");
 			gotoxy(17, 15);
-			printf("%d MB", vet[ControleL[1].IL + 4].tam);
+			printf("%d MB", lista.vet[vet[4]].info.tam);
 			gotoxy(16, 16);
 			printf("Id:");
 			gotoxy(17, 17);
-			printf("%d", vet[ControleL[1].IL + 4].id);
+			printf("%d", lista.vet[vet[4]].info.id);
 		}											
 			
-		if(quant == 5 || quant > 5) {
+		if(lista.vet[vet[5]].info.tam != -2 && vet[5] != -2) {
 			gotoxy(30, 12);
 			printf("Nome:");	
 			gotoxy(31, 13);
-			printf("%s", vet[ControleL[1].IL + 5].nome);
+			printf("%s", lista.vet[vet[5]].info.nome);
 			gotoxy(30, 14);
 			printf("Tamanho:");
 			gotoxy(31, 15);
-			printf("%d MB", vet[ControleL[1].IL + 5].tam);
+			printf("%d MB", lista.vet[vet[5]].info.tam);
 		   	gotoxy(30, 16);
 			printf("Id:");
 			gotoxy(31, 17);
-			printf("%d", vet[ControleL[1].IL + 5].id);			
+			printf("%d", lista.vet[vet[5]].info.id);			
 		}
-    }
-	*/		
+    }	
+
 							
 	//divisoria da matriz(vertical)
 	for(x = 2; x < 20; x++) {
@@ -722,11 +740,11 @@ void funRum(LLSE meusappsED, LLSE *apprumED, int pagina, int local) {
 	while(1) {
 		if(pagina == 15) {
 			system("cls");
-			telaInsta();
+			telaMeusappED();	
 			imprimirED(meusappsED);
 		}else {
 			system("cls");
-			telaInsta();
+			telaMeusappED();
 			imprimirEDpro(meusappsED);
 		}	
 		
@@ -819,7 +837,7 @@ void funRum(LLSE meusappsED, LLSE *apprumED, int pagina, int local) {
 }
 
 //função da opção de remover um app
-int funRemo(LLSE *remove, int pagina, LLSE *apprumED, int local) {
+int funRemo(LLSE *remove, int pagina, LLSE *apprumED, int local, int chamada) {
 	int id = -1;
 	int x;
 	App elemento;
@@ -832,11 +850,19 @@ int funRemo(LLSE *remove, int pagina, LLSE *apprumED, int local) {
 	while(1) {
 		if(pagina == 15) {
 			system("cls");
-			telaMeusappED();
+			if(chamada == 1) {
+				telaMeusappED();	
+			}else if(chamada == 2) {
+				telaAppRum();
+			}
 			imprimirED(*remove);
 		}else {
 			system("cls");
-			telaMeusappED();
+			if(chamada == 1) {
+				telaMeusappED();	
+			}else if(chamada == 2) {
+				telaAppRum();
+			}
 			imprimirEDpro(*remove);
 		}	
 
@@ -895,7 +921,7 @@ int funRemo(LLSE *remove, int pagina, LLSE *apprumED, int local) {
 }
 
 //função para intalação de apps
-void funInsta(LLSE storeED, LLSE *meusappsED, int pagina) {
+void funInsta(LLSE storeED, LLSE *meusappsED, int pagina, int local) {
 	int id = -2;
 	int x;
 	App elemento;
@@ -916,11 +942,23 @@ void funInsta(LLSE storeED, LLSE *meusappsED, int pagina) {
 	while(1) {
 		if(pagina == 15) {
 			system("cls");
-			telaInsta();
+			if(local == 0) {
+				telaInsta();
+			}else if(local == 1) {
+				telaMeusappED();
+			}else if(local == 2) {
+				telaAppRum();
+			}
 			imprimirED(storeED);
 		}else {
 			system("cls");
-			telaInsta();
+			if(local == 0) {
+				telaInsta();
+			}else if(local == 1) {
+				telaMeusappED();
+			}else if(local == 2) {
+				telaAppRum();
+			}
 			imprimirEDpro(storeED);
 		}	
 		
@@ -1039,7 +1077,7 @@ void funStoreED(LLSE *storeED, LLSE *meusappsED) {
 				return;
  			break;
  			case 'q':
-     			funInsta(*storeED, meusappsED, pagina);
+     			funInsta(*storeED, meusappsED, pagina, 0);
             break;
         	case ',':
 				if(pagina != 15) {
@@ -1150,7 +1188,7 @@ void funMeusappsED(LLSE *meusappsED, LLSE *apprumED) {
 				funRum(*meusappsED, apprumED, pagina, 2);
             break;
         	case 'w'://removendo elemento
-        		id = funRemo(meusappsED, pagina, apprumED, 2);
+        		id = funRemo(meusappsED, pagina, apprumED, 2, 1);
 			
 				if(id != -2) {
 					//zerando elemento
@@ -1214,7 +1252,7 @@ void funAppRumED(LLSE *apprumED) {
 				return;
  			break;
  			case 'q':
-     			
+     			funRemo(apprumED, pagina, apprumED, 2, 2);
             break;
         	case ',':
 				if(pagina != 15) {
@@ -1277,7 +1315,7 @@ int main() {
 	lerArq(&storeED, 0);
 
 	while(1) {
-		telaIni();
+		telaIni(meusappsED);
 		
 		//opção de saida
 		gotoxy(2, 28);
