@@ -33,12 +33,6 @@ void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
 
-//liberando indice do vetor
-void liberaNo(LLDE * lista, int ind, int local) {
-    lista->vet[ind].prox = disp[local];
-    disp[local] = ind;
-}
-
 //devolve onde eu vou inserir na lista
 int alocaNo(LLDE *lista, int local) {
     int d;
@@ -110,7 +104,7 @@ void inserirL(LLDE *lista, App elemento, int local) {
 			
 			if(elemento.tam >= lista->vet[x].info.tam && lista->vet[x].prox == -1) {//inserir no final
 				posi = 2;
-				break; //recebendo o indice do elemento ao qual o ultimo vai apontar
+				break; 
 			}
 			
 			if(elemento.tam <= lista->vet[x].info.tam) {//meio
@@ -170,8 +164,6 @@ void removerL(LLDE *lista, App elemento, int local) {
 	int x;
 	int liberar;
 	int posi;
-	int ant;
-	int pro;
 	
 	//se a lista estiver vazia
 	if(lista->vet[lista->IL].info.tam == -2) {
@@ -179,53 +171,74 @@ void removerL(LLDE *lista, App elemento, int local) {
 		system("PAUSE");
 	}
 	
-	//buscando qual no vou remover
-	for(x = lista->IL; x < T; x = lista->vet[x].prox) {
-		if(x == -1) {//parar quando chegar ao ultimo elemento da lista
-			break;
+	//buscando em qual posição eu vou remover o elemento
+	if(abs(elemento.tam - lista->vet[lista->IL].info.tam) <= abs(elemento.tam - lista->vet[lista->FL].info.tam)) {
+		for(x = lista->IL; x < T; x = lista->vet[x].prox) {//se for melhor correr pelo inicio
+			if(x == -1) {//parar quando chegar ao ultimo elemento da lista
+				break;
+			}
+			
+			if(elemento.id == lista->vet[x].info.id && x == lista->IL && x == lista->FL) {//remover no inicio
+				posi = 3;
+				break;
+			}
+
+			if(elemento.id == lista->vet[x].info.id && x == lista->IL) {//remover no inicio
+				posi = 1;
+				break;
+			}						
+			
+			if(elemento.id == lista->vet[x].info.id && x == lista->FL) {//remover no final
+				posi = 2;
+				break; 
+			}
+			
+			if(elemento.id == lista->vet[x].info.id) {//meio
+				posi = x;			
+				break;
+			}
 		}
-		
-		if(elemento.tam == lista->vet[x].info.tam && x == lista->IL) {//remover no inicio
-			posi = 1;
-			liberar = x;
-			break;
+	}else {//se for melhor correr pelo fim
+		for(x = lista->FL; x < T; x = lista->vet[x].ante) {
+			if(x == -1) {//parar quando chegar ao ultimo elemento da lista
+				break;
+			}
+			
+			if(elemento.id == lista->vet[x].info.id && x == lista->IL && x == lista->FL) {//remover no inicio
+				posi = 3;
+				break;
+			}
+
+			if(elemento.id == lista->vet[x].info.id && x == lista->IL) {//remover no inicio
+				posi = 1;
+				break;
+			}						
+			
+			if(elemento.id == lista->vet[x].info.id && x == lista->FL) {//inserir no final
+				posi = 2;
+				break; 
+			}
+			
+			if(elemento.id == lista->vet[x].info.id) {//meio
+				posi = x;			
+				break;
+			}
 		}
-		
-		if(elemento.tam == lista->vet[x].info.tam && lista->vet[x].prox == -1) {//remover no final
-			posi = 2;
-			liberar = x;
-			break; 
-		}
-		
-		if(elemento.tam == lista->vet[x].info.tam) {
-			posi = 3;
-			pro = lista->vet[x].prox; //para onde o elemento vai apontar
-			liberar = x;
-			break;
-		}
-		
-		ant = x;//recebendo o anterior ao atual
 	}
 	
 	//removendo elemento
-	if(posi == 1) {//remover no inicio
-		if(lista->vet[lista->IL].prox == -1) {//se o inicio for o final da lista
-			lista->vet[liberar].info.tam = -2;
-			lista->vet[liberar].info.id = -2;
-			lista->IL = liberar;
-			liberaNo(lista, liberar, local);
-		}else {
-			lista->IL = lista->vet[liberar].prox;
-			liberaNo(lista, liberar, local);
-		}		
+	if(posi == 1) {//remover no inicio 
+		lista->vet[disp[local]].ante = lista->IL;
+		lista->IL = lista->vet[lista->IL].prox;
+		lista->vet[lista->IL].ante = -1;
+		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];
+		disp[local] = lista->vet[disp[local]].ante;
 		return;
 	}else if(posi == 3){//remover no meio
-		lista->vet[ant].prox = pro;//anteririo ou liberado vai apontar para o proximo ao liberado
-		liberaNo(lista, liberar, local); //liberar o No
+	
 		return;
 	}else if(posi == 2){//remover no fim
-		lista->vet[ant].prox = -1;//anterior vira o final
-		liberaNo(lista, liberar, local);//liberando antigo final
+		
 		return;
 	}
 }
