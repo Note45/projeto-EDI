@@ -162,7 +162,6 @@ void inserirL(LLDE *lista, App elemento, int local) {
 //removendo um elemento da lista
 void removerL(LLDE *lista, App elemento, int local) {
 	int x;
-	int liberar;
 	int posi;
 	
 	//se a lista estiver vazia
@@ -234,11 +233,27 @@ void removerL(LLDE *lista, App elemento, int local) {
 		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];
 		disp[local] = lista->vet[disp[local]].ante;
 		return;
-	}else if(posi == 3){//remover no meio
-	
-		return;
 	}else if(posi == 2){//remover no fim
-		
+		lista->vet[disp[local]].ante = lista->FL;
+		lista->FL = lista->vet[lista->FL].ante;
+		lista->vet[lista->FL].prox = -1;
+		lista->vet[lista->vet[disp[local]].ante].ante = -1;
+		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];
+		disp[local] = lista->vet[disp[local]].ante;
+		return;
+	}else if(posi == 3){//removendo a unica informação da lista
+		lista->vet[lista->IL].info.tam = -2;
+		lista->vet[disp[local]].ante = lista->IL;
+		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];
+		disp[local] = lista->vet[disp[local]].ante;
+		return;
+	}else if(posi != 1 && posi != 2 && posi != 3){//removendo no meio
+		lista->vet[lista->vet[posi].ante].prox = lista->vet[posi].prox;
+		lista->vet[lista->vet[posi].prox].ante = lista->vet[posi].ante;
+		lista->vet[posi].ante = -1;
+		lista->vet[posi].prox = disp[local];
+		lista->vet[disp[local]].ante = posi;
+		disp[local] = posi;		
 		return;
 	}
 }
