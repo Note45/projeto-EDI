@@ -145,16 +145,16 @@ void inserirL(LLDE *lista, App elemento, int local) {
 			lista->vet[indice].ante = -1;//anterior do novo = -1
 		}else if(posi == 2) {//final
 			lista->vet[indice].info = elemento;//recebendo final
-			lista->vet[indice].ante = lista->FL;
-			lista->vet[lista->FL].prox = indice;
-			lista->FL = indice;
-			lista->vet[indice].prox = -1;
+			lista->vet[indice].ante = lista->FL;//anterior do elemento apontando para o antigo final da lista
+			lista->vet[lista->FL].prox = indice;//proximo do antigo final da lista apontando para o novo FL
+			lista->FL = indice;//atualizando o final da lista
+			lista->vet[indice].prox = -1;//proximo do elemento = -1
 		}else if(posi != 1 && posi != 2){//meio
 			lista->vet[indice].info = elemento;//recebendo elemento
-			lista->vet[indice].prox = posi;
-			lista->vet[indice].ante = lista->vet[posi].ante;
-			lista->vet[lista->vet[posi].ante].prox = indice;
-			lista->vet[posi].ante = indice;
+			lista->vet[indice].prox = posi;//proximo do elemento para o indice
+			lista->vet[indice].ante = lista->vet[posi].ante;//anterior do elemento recebendo o anterior da sua posição
+			lista->vet[lista->vet[posi].ante].prox = indice;//anterior recebe como proximo o indice que entra
+			lista->vet[posi].ante = indice;//proximo recebe como anterior o indice que entra
 		}
 	}
 }
@@ -177,7 +177,7 @@ void removerL(LLDE *lista, App elemento, int local) {
 				break;
 			}
 			
-			if(elemento.id == lista->vet[x].info.id && x == lista->IL && x == lista->FL) {//remover no inicio
+			if(elemento.id == lista->vet[x].info.id && x == lista->IL && x == lista->FL) {//remover no inicio e for o unico
 				posi = 3;
 				break;
 			}
@@ -203,7 +203,7 @@ void removerL(LLDE *lista, App elemento, int local) {
 				break;
 			}
 			
-			if(elemento.id == lista->vet[x].info.id && x == lista->IL && x == lista->FL) {//remover no inicio
+			if(elemento.id == lista->vet[x].info.id && x == lista->IL && x == lista->FL) {//remover no inicio e for o unico
 				posi = 3;
 				break;
 			}
@@ -227,33 +227,33 @@ void removerL(LLDE *lista, App elemento, int local) {
 	
 	//removendo elemento
 	if(posi == 1) {//remover no inicio 
-		lista->vet[disp[local]].ante = lista->IL;
-		lista->IL = lista->vet[lista->IL].prox;
-		lista->vet[lista->IL].ante = -1;
-		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];
-		disp[local] = lista->vet[disp[local]].ante;
+		lista->vet[disp[local]].ante = lista->IL;//anterior do disponivel recebe o IL
+		lista->IL = lista->vet[lista->IL].prox;//IL recebe o seu proximo como novo IL
+		lista->vet[lista->IL].ante = -1;//anterior do novo IL recebe -1
+		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];//antigo IL recebe como proximo o disponivel
+		disp[local] = lista->vet[disp[local]].ante;//antigo IL se torna o novo disponivel
 		return;
 	}else if(posi == 2){//remover no fim
-		lista->vet[disp[local]].ante = lista->FL;
-		lista->FL = lista->vet[lista->FL].ante;
-		lista->vet[lista->FL].prox = -1;
-		lista->vet[lista->vet[disp[local]].ante].ante = -1;
-		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];
-		disp[local] = lista->vet[disp[local]].ante;
+		lista->vet[disp[local]].ante = lista->FL;//anterior do disponivel = atual FL
+		lista->FL = lista->vet[lista->FL].ante;//FL recebe o anteror do atual FL
+		lista->vet[lista->FL].prox = -1;//proximo do FL = -1
+		lista->vet[lista->vet[disp[local]].ante].ante = -1;//anterior do antigo FL recebe -1
+		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];//proximo do antigo FL = atual disponivel
+		disp[local] = lista->vet[disp[local]].ante;//antigo final da lista vira o disponivel
 		return;
 	}else if(posi == 3){//removendo a unica informação da lista
-		lista->vet[lista->IL].info.tam = -2;
-		lista->vet[disp[local]].ante = lista->IL;
-		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];
-		disp[local] = lista->vet[disp[local]].ante;
+		lista->vet[lista->IL].info.tam = -2;//zerando o elemento
+		lista->vet[disp[local]].ante = lista->IL;//anterior do disponivel recebe FL ou IL
+		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];//antigo IL o FL recebe como proximo o disponivel
+		disp[local] = lista->vet[disp[local]].ante;//disponivel recebe como anterior o antigo IL ou FL da lista
 		return;
 	}else if(posi != 1 && posi != 2 && posi != 3){//removendo no meio
-		lista->vet[lista->vet[posi].ante].prox = lista->vet[posi].prox;
-		lista->vet[lista->vet[posi].prox].ante = lista->vet[posi].ante;
-		lista->vet[posi].ante = -1;
-		lista->vet[posi].prox = disp[local];
-		lista->vet[disp[local]].ante = posi;
-		disp[local] = posi;		
+		lista->vet[lista->vet[posi].ante].prox = lista->vet[posi].prox;//anterior aponta para o proximo do removido
+		lista->vet[lista->vet[posi].prox].ante = lista->vet[posi].ante;//proximo do removido aponta para o anterior
+		lista->vet[posi].ante = -1;//anterior do removido recebe -1
+		lista->vet[posi].prox = disp[local];//proximo do removido recebe atual disponivel
+		lista->vet[disp[local]].ante = posi;//anterior do atual disponivel recebe removido
+		disp[local] = posi;//removido vira atual disponivel
 		return;
 	}
 }
@@ -1127,6 +1127,7 @@ void funStoreED(LLDE *storeED, LLDE *meusappsED) {
 	while(1) {
 		if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
+			system("cls");
 			telaStoreED();
 			imprimirED(*storeED);
 		}
@@ -1147,6 +1148,7 @@ void funStoreED(LLDE *storeED, LLDE *meusappsED) {
         	case ',':
 				if(pagina != 15) {
 					pagina--;
+					system("cls");
 					telaStoreED();
 					imprimirED(*storeED);
 				}else {
@@ -1163,6 +1165,7 @@ void funStoreED(LLDE *storeED, LLDE *meusappsED) {
 			case '.':
 				if(operacao == '.') {
 					pagina++;
+					system("cls");
 					telaStoreED();
 				    imprimirEDpro(*storeED);
 				}else {
@@ -1218,6 +1221,7 @@ void funMeusappsED(LLDE *meusappsED, LLDE *apprumED) {
 			case ',':
 				if(pagina != 15) {
 					pagina--;
+					system("cls");
 					telaMeusappED();
 					imprimirED(*meusappsED);
 				}else {
@@ -1234,6 +1238,7 @@ void funMeusappsED(LLDE *meusappsED, LLDE *apprumED) {
 			case '.':
 				if(operacao == '.') {
 					pagina++;
+					system("cls");
 					telaMeusappED();
 					imprimirEDpro(*meusappsED);
 				}else {
@@ -1324,6 +1329,7 @@ void funAppRumED(LLDE *apprumED) {
         	case ',':
 				if(pagina != 15) {
 					pagina--;
+					system("cls");
 					telaAppRum();
 					imprimirED(*apprumED);
 				}else {
@@ -1340,6 +1346,7 @@ void funAppRumED(LLDE *apprumED) {
 			case '.':
 				if(operacao == '.') {
 					pagina++;
+					system("cls");
 					telaAppRum();
 					imprimirEDpro(*apprumED);
 				}else {
