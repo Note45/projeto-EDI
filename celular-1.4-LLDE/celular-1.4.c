@@ -1202,6 +1202,7 @@ void funMeusappsED(LLDE *meusappsED, LLDE *apprumED) {
 	while(1) {		
 		if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
+			system("cls");
 			telaMeusappED();
 			imprimirED(*meusappsED);
 			
@@ -1302,6 +1303,7 @@ void funAppRumED(LLDE *apprumED) {
 	while(1) {
 			if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
+			system("cls");
 			telaAppRum();
 			imprimirED(*apprumED);
 		}
