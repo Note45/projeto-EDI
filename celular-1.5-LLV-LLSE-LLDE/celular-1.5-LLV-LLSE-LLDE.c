@@ -331,6 +331,58 @@ void removerL(LLDE *lista, App elemento, int local) {
 	}
 }
 
+//funcao para imprimir a LLV
+void imprimirLVVed(App aplicativos[], int lista) {
+	int x;
+	int y = 0;
+	int local = 1;
+	
+	//complementando a interface
+	gotoxy(2, 2);
+	printf("Nome:");
+	gotoxy(15, 2);
+	printf("Tamanho:");
+	gotoxy(29, 2);
+	printf("Id:");
+	
+	if(lista == 1) {
+		for(x = ControleLLV.IL; x <= ControleLLV.FL; x++) {
+			if(y < 15) {
+				y++;
+			}else {
+				local = x;
+				break;
+			}
+        }	
+	}
+	
+	y = 2;
+	
+	if(aplicativos[ControleLLV.IL].tam == -1) {
+		return;
+	}else if(lista == 0) {
+	    for(x = ControleLLV.IL; (y - 1) <= ControleLLV.FL && y <= 16; x++) {
+			gotoxy(2, y + 1);
+			printf("%s", aplicativos[x].nome);
+			gotoxy(18, y + 1);
+			printf("%d MB",aplicativos[x].tam);
+			gotoxy(32, y + 1);
+			printf("%d", aplicativos[x].id);
+			y++;
+        }		
+	}else {		
+		for(x = local; x <= ControleLLV.FL; x++) {
+			gotoxy(2, y + 1);
+			printf("%s", aplicativos[x].nome);
+			gotoxy(18, y + 1);
+			printf("%d MB",aplicativos[x].tam);
+			gotoxy(32, y + 1);
+			printf("%d", aplicativos[x].id);
+			y++;
+		}
+	}	
+}
+
 //funcoes para imprimir os apps
 void imprimirED(LLDE lista) {
 	int x;
@@ -1223,7 +1275,7 @@ void funInsta(LLDE storeED, LLDE *meusappsED, int pagina, int local) {
 }	
 
 //funcoes do menu inicial
-void funStoreED(App *storeED, LLDE *meusappsED) {	
+void funStoreED(App storeED[], LLDE *meusappsED) {	
 	char operacao;
 	int pausa;
 	int pagina = 15;
@@ -1234,7 +1286,7 @@ void funStoreED(App *storeED, LLDE *meusappsED) {
 			//imprimindo os 16 apps iniciais
 			system("cls");
 			telaStoreED();
-			//imprimirED(*storeED);
+			imprimirLVVed(storeED, 0);
 		}
 		
 		//Recebendo opera��o selecionada
@@ -1255,7 +1307,7 @@ void funStoreED(App *storeED, LLDE *meusappsED) {
 					pagina--;
 					system("cls");
 					telaStoreED();
-					//imprimirED(*storeED);
+					imprimirLVVed(storeED, 0);
 				}else {
 	        		gotoxy(12, 20);
 	  				printf(" - Pagina Inicial\n");
@@ -1272,7 +1324,7 @@ void funStoreED(App *storeED, LLDE *meusappsED) {
 					pagina++;
 					system("cls");
 					telaStoreED();
-				    //imprimirEDpro(*storeED);
+				    imprimirLVVed(storeED, 1);
 				}else {
 		       		gotoxy(12, 20);
 		  				printf(" - Pagina Final\n");
@@ -1507,7 +1559,7 @@ int main() {
 			
 		switch(operacao) {
 			case 'q'://StoreED
-				funStoreED(&storeED, &meusappsED);
+				funStoreED(storeED, &meusappsED);
 	  		break;
 		  	case 'w'://MeusAppsED
    	  		    funMeusappsED(&meusappsED, &apprumED);
