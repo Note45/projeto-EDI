@@ -26,9 +26,18 @@ typedef struct {
     no vet[T];
 }LLDE;
 
+typedef struct {
+	int IL;
+	int FL;
+	int IA;
+	int FA;
+}Cont;
+
+Cont ControleLLV;//Variavel de controle da LLV
+
 int disp[L];//controla quem esta disponivel nas listas
 
-//importando da função gotoxy
+//importando da funcao gotoxy
 void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
@@ -63,6 +72,70 @@ void inicia(LLDE *lista, int local) {
     lista->FL = 0;
 }
 
+//funï¿½ï¿½o para inserir um em uma LLV
+void inserirLLV(App StoreED[], int indice, App elemento) {
+	int x;		
+		
+	//caso a lista ja esteja cheia
+	if((ControleLLV.IL == ControleLLV.IA) && (ControleLLV.FL == ControleLLV.FA)) {
+		return;
+	}else {
+		if(ControleLLV.IL == -1 && ControleLLV.FL == -1) {//lista estiver vazia
+			ControleLLV.IL = 15;
+			ControleLLV.FL = 15;
+			StoreED[15] = elemento;
+			return;
+		}	
+			
+		if(ControleLLV.IL > indice) {//adicionando no inicio da lista
+			if(ControleLLV.IL != 1) {
+				ControleLLV.IL--;
+				StoreED[ControleLLV.IL] = elemento;
+			}else {
+				ControleLLV.FL++;
+					
+				for(x = ControleLLV.FL; x >= 0; x--) {
+					StoreED[x] = StoreED[x - 1];	
+				}
+						
+				StoreED[ControleLLV.IL] = elemento;						
+			}
+			return;
+		}
+			
+		if((indice == (ControleLLV.FL + 1)) && (ControleLLV.FL != ControleLLV.FA)) {//adicionando no final
+			ControleLLV.FL++;
+			StoreED[indice] = elemento;
+			return;			
+		}else if((ControleLLV.IL != ControleLLV.IA) && (ControleLLV.FL == ControleLLV.FA)) {
+			ControleLLV.IL--;
+			
+			for(x = ControleLLV.IL; x < indice; x++) {
+				StoreED[x] = StoreED[x + 1];
+			}
+			StoreED[indice - 1] = elemento;
+			return;
+		}			
+			
+		if((indice - ControleLLV.IL) < (ControleLLV.IL - indice) && ControleLLV.IL != ControleLLV.IA) {	//adicionando no meio da lista
+			ControleLLV.IL--;
+			for(x = ControleLLV.IL; x < indice; x++) {
+				StoreED[x] = StoreED[x + 1];
+			}
+			StoreED[indice] = elemento;
+			return;
+		}else {
+		   	ControleLLV.FL++;
+				
+			for(x = ControleLLV.FL; x > indice; x--) {
+			   	StoreED[x] = StoreED[x - 1];
+			}
+			StoreED[indice] = elemento;
+			return;
+		}  
+    }					
+}
+
 //inseirir um elemento na lista
 void inserirL(LLDE *lista, App elemento, int local) {
 	int indice;//recebe o indice disponivel
@@ -83,14 +156,14 @@ void inserirL(LLDE *lista, App elemento, int local) {
 		system("PAUSE");
 	}
 	
-	//fazendo a primeira inserção na LLDE
+	//fazendo a primeira inserï¿½ï¿½o na LLDE
 	if(lista->vet[lista->IL].info.tam == -2) {
 		lista->vet[lista->IL].info = elemento;
 		lista->vet[lista->IL].prox = -1;
 		return;
 	}
 	
-	//buscando em qual posição eu vou inserir meu elemento
+	//buscando em qual posiï¿½ï¿½o eu vou inserir meu elemento
 	if(abs(elemento.tam - lista->vet[lista->IL].info.tam) <= abs(elemento.tam - lista->vet[lista->FL].info.tam)) {
 		for(x = lista->IL; x < T; x = lista->vet[x].prox) {//se for melhor correr pelo inicio
 			if(x == -1) {//parar quando chegar ao ultimo elemento da lista
@@ -136,7 +209,7 @@ void inserirL(LLDE *lista, App elemento, int local) {
 	}
 	
 	//inserindo o elemento
-	if(indice != -3) {//lista não vazia
+	if(indice != -3) {//lista nï¿½o vazia
 		if(posi == 1) {//inicio
 			lista->vet[indice].info = elemento;//recebendo elemento inicial
 			lista->vet[indice].prox = lista->IL;//apontando para proximo
@@ -152,7 +225,7 @@ void inserirL(LLDE *lista, App elemento, int local) {
 		}else if(posi != 1 && posi != 2){//meio
 			lista->vet[indice].info = elemento;//recebendo elemento
 			lista->vet[indice].prox = posi;//proximo do elemento para o indice
-			lista->vet[indice].ante = lista->vet[posi].ante;//anterior do elemento recebendo o anterior da sua posição
+			lista->vet[indice].ante = lista->vet[posi].ante;//anterior do elemento recebendo o anterior da sua posiï¿½ï¿½o
 			lista->vet[lista->vet[posi].ante].prox = indice;//anterior recebe como proximo o indice que entra
 			lista->vet[posi].ante = indice;//proximo recebe como anterior o indice que entra
 		}
@@ -170,7 +243,7 @@ void removerL(LLDE *lista, App elemento, int local) {
 		system("PAUSE");
 	}
 	
-	//buscando em qual posição eu vou remover o elemento
+	//buscando em qual posiï¿½ï¿½o eu vou remover o elemento
 	if(abs(elemento.tam - lista->vet[lista->IL].info.tam) <= abs(elemento.tam - lista->vet[lista->FL].info.tam)) {
 		for(x = lista->IL; x < T; x = lista->vet[x].prox) {//se for melhor correr pelo inicio
 			if(x == -1) {//parar quando chegar ao ultimo elemento da lista
@@ -241,7 +314,7 @@ void removerL(LLDE *lista, App elemento, int local) {
 		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];//proximo do antigo FL = atual disponivel
 		disp[local] = lista->vet[disp[local]].ante;//antigo final da lista vira o disponivel
 		return;
-	}else if(posi == 3){//removendo a unica informação da lista
+	}else if(posi == 3){//removendo a unica informaï¿½ï¿½o da lista
 		lista->vet[lista->IL].info.tam = -2;//zerando o elemento
 		lista->vet[disp[local]].ante = lista->IL;//anterior do disponivel recebe FL ou IL
 		lista->vet[lista->vet[disp[local]].ante].prox = disp[local];//antigo IL o FL recebe como proximo o disponivel
@@ -258,7 +331,7 @@ void removerL(LLDE *lista, App elemento, int local) {
 	}
 }
 
-//funções para imprimir os apps
+//funcoes para imprimir os apps
 void imprimirED(LLDE lista) {
 	int x;
 	int y = 2;
@@ -331,7 +404,7 @@ void imprimirEDpro(LLDE lista) {
     }	
 }
 
-//área de funções relacionadas a telas
+//Area de funcoes relacionadas a telas
 void telaIni(LLDE lista) {
 	int x;
 	int i = 0;
@@ -370,7 +443,7 @@ void telaIni(LLDE lista) {
 		printf("%c\n", 219);
 	}
 
-	//espaçamentos superiores
+	//espaï¿½amentos superiores
 	for(x = 2; x < 42; x++) {
 		gotoxy(x, 21);
 		printf("%c", 220);
@@ -553,7 +626,7 @@ void telaStoreED() {
 	gotoxy(30, 18);
 	printf(". - proximo");
 	
-	//espaçamentos superiores
+	//espaï¿½amentos superiores
 	for(x = 2; x < 42; x++) {
 		gotoxy(x, 21);
 		printf("%c", 220);
@@ -610,7 +683,7 @@ void telaAppRum() {
 	gotoxy(30, 18);
 	printf(". - proximo");
 	
-	//espaçamentos superiores
+	//espaï¿½amentos superiores
 	for(x = 2; x < 42; x++) {
 		gotoxy(x, 21);
 		printf("%c", 220);
@@ -667,7 +740,7 @@ void telaInsta() {
 	gotoxy(30, 18);
 	printf(". - proximo");
 	
-	//espaçamentos superiores
+	//espaï¿½amentos superiores
 	for(x = 2; x < 42; x++) {
 		gotoxy(x, 21);
 		printf("%c", 220);
@@ -724,7 +797,7 @@ void telaMeusappED() {
 	gotoxy(30, 18);
 	printf(". - proximo");
 	
-	//espaçamentos superiores
+	//espaï¿½amentos superiores
 	for(x = 2; x < 42; x++) {
 		gotoxy(x, 21);
 		printf("%c", 220);
@@ -757,10 +830,23 @@ void telaMeusappED() {
 	printf("e-Sair\n\n\n");
 }		   	
 
-//função para ler o arquivo
-void lerArq(LLDE *storeED, int local) {
+//funcao para ler o arquivo
+void lerArq(App storeED[]) {
 	App elemento;
 	FILE *arquivo;
+	int indice;
+	int x;
+	
+	//iniciando LLV
+	ControleLLV.IL = -1;	 
+    ControleLLV.FL = -1;
+	ControleLLV.IA = 1;
+	ControleLLV.FA = 30;			
+
+	for(x = 0; x < T; x++) {
+		storeED[x].tam = -1;
+		storeED[x].id = -1;
+	}
 	
 	//abrindo o arquivo
 	arquivo = fopen("vStore.txt", "r");
@@ -770,20 +856,39 @@ void lerArq(LLDE *storeED, int local) {
 		exit(1);
 	}
 	
-	//ordenando e adicionando até o final do arquivo
+	//ordenando e adicionando ate o final do arquivo
 	while(feof(arquivo) == 0) {
 		fgets(elemento.nome, 15, arquivo);
 		fscanf(arquivo, "%d\n", & elemento.tam);
 		fscanf(arquivo, "%d\n", & elemento.id);
 		
+		//buscando onde vou adiconar o elemento
+		if(ControleLLV.IL == -1 && ControleLLV.FL == -1) {//se a lista estiver vazia
+			indice = -5;		
+		}else {
+			if(elemento.tam <= storeED[ControleLLV.IL].tam) {//se for no comeï¿½o da lista
+				indice = ControleLLV.IL - 1;
+			}
+			if(elemento.tam >= storeED[ControleLLV.FL].tam) {//se for no final
+				indice = ControleLLV.FL + 1;
+			}else { // se for no meio
+				for(x = ControleLLV.IL; x <= ControleLLV.FL; x++) {
+					if(elemento.tam < storeED[x].tam) {
+						indice =  x;
+						break;
+					}
+				}
+			}
+		}
+		
 		//inserindo elemento
-		inserirL(storeED, elemento, local);
-			
+		inserirLLV(storeED, indice, elemento);		
 	}
 	//fechando arquivo
 	fclose(arquivo);
 }
-//função para rodar um app
+
+//funcao para rodar um app
 void funRum(LLDE meusappsED, LLDE *apprumED, int pagina, int local) {
 	int x;
 	int id;
@@ -901,7 +1006,7 @@ void funRum(LLDE meusappsED, LLDE *apprumED, int pagina, int local) {
 	}
 }
 
-//função da opção de remover um app
+//funcao da opcao de remover um app
 int funRemo(LLDE *remove, int pagina, LLDE *apprumED, int local, int chamada) {
 	int id = -1;
 	int x;
@@ -937,7 +1042,7 @@ int funRemo(LLDE *remove, int pagina, LLDE *apprumED, int local, int chamada) {
 		scanf("%d", & id);
 		gotoxy(0, 50);	
 		
-		//checando se é um indice valido
+		//checando se ï¿½ um indice valido
 	    for(x = remove->IL; x < T; x = remove->vet[x].prox) {
 	    	if(x == -1) {
 				break;
@@ -965,7 +1070,7 @@ int funRemo(LLDE *remove, int pagina, LLDE *apprumED, int local, int chamada) {
 				scanf("%d", & id);
 				gotoxy(0, 50);	
 				
-				//checando se é um indice valido
+				//checando se ï¿½ um indice valido
 			    for(x = remove->IL; x < T; x = remove->vet[x].prox) {
 			    	if(x == -1) {
 						break;
@@ -985,7 +1090,7 @@ int funRemo(LLDE *remove, int pagina, LLDE *apprumED, int local, int chamada) {
 	}
 }
 
-//função para intalação de apps
+//funcao para intalacao de apps
 void funInsta(LLDE storeED, LLDE *meusappsED, int pagina, int local) {
 	int id = -2;
 	int x;
@@ -1117,8 +1222,8 @@ void funInsta(LLDE storeED, LLDE *meusappsED, int pagina, int local) {
 	return;
 }	
 
-//funções do menu inicial
-void funStoreED(LLDE *storeED, LLDE *meusappsED) {	
+//funcoes do menu inicial
+void funStoreED(App *storeED, LLDE *meusappsED) {	
 	char operacao;
 	int pausa;
 	int pagina = 15;
@@ -1129,10 +1234,10 @@ void funStoreED(LLDE *storeED, LLDE *meusappsED) {
 			//imprimindo os 16 apps iniciais
 			system("cls");
 			telaStoreED();
-			imprimirED(*storeED);
+			//imprimirED(*storeED);
 		}
 		
-		//Recebendo operação selecionada
+		//Recebendo operaï¿½ï¿½o selecionada
 		gotoxy(2,20);
 		printf("Operacao:");
 		scanf(" %c", & operacao);
@@ -1143,14 +1248,14 @@ void funStoreED(LLDE *storeED, LLDE *meusappsED) {
 				return;
  			break;
  			case 'q':
-     			funInsta(*storeED, meusappsED, pagina, 0);
+     			
             break;
         	case ',':
 				if(pagina != 15) {
 					pagina--;
 					system("cls");
 					telaStoreED();
-					imprimirED(*storeED);
+					//imprimirED(*storeED);
 				}else {
 	        		gotoxy(12, 20);
 	  				printf(" - Pagina Inicial\n");
@@ -1167,7 +1272,7 @@ void funStoreED(LLDE *storeED, LLDE *meusappsED) {
 					pagina++;
 					system("cls");
 					telaStoreED();
-				    imprimirEDpro(*storeED);
+				    //imprimirEDpro(*storeED);
 				}else {
 		       		gotoxy(12, 20);
 		  				printf(" - Pagina Final\n");
@@ -1192,7 +1297,7 @@ void funStoreED(LLDE *storeED, LLDE *meusappsED) {
 	}	
 }
 
-//função para 2(MeusappsEd) opção do meunu
+//funcao para 2(MeusappsEd) opcao do meunu
 void funMeusappsED(LLDE *meusappsED, LLDE *apprumED) {
 	char operacao;
 	int pausa;
@@ -1211,7 +1316,7 @@ void funMeusappsED(LLDE *meusappsED, LLDE *apprumED) {
 			
 		}
 				
-		//Recebendo operação selecionada
+		//Recebendo operacao selecionada
 		gotoxy(2, 20);
 		printf("Operacao:");
 		scanf(" %c", & operacao);
@@ -1266,7 +1371,7 @@ void funMeusappsED(LLDE *meusappsED, LLDE *apprumED) {
 					elemento.tam = -2;
 					elemento.id = -2;				
 					
-					//checando se o app está rodando para remover
+					//checando se o app estï¿½ rodando para remover
 					if(apprumED->vet[apprumED->IL].info.tam != -2) {
 					    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
 					    	if(x == -1) {
@@ -1298,7 +1403,7 @@ void funMeusappsED(LLDE *meusappsED, LLDE *apprumED) {
 	}
 }
 
-//função para 3(AppRumED) opçao do menu
+//funcao para 3(AppRumED) opcao do menu
 void funAppRumED(LLDE *apprumED) {	
 	char operacao;
 	int pausa;
@@ -1313,7 +1418,7 @@ void funAppRumED(LLDE *apprumED) {
 			imprimirED(*apprumED);
 		}
 		
-		//Recebendo operação selecionada
+		//Recebendo operacao selecionada
 		gotoxy(2,20);
 		printf("Operacao:");
 		scanf(" %c", & operacao);
@@ -1374,28 +1479,27 @@ void funAppRumED(LLDE *apprumED) {
 }
 
 int main() {
-	LLDE storeED;
+	App storeED[T];
 	LLDE meusappsED;
 	LLDE apprumED;
 	char operacao;
 	int pausa;
 
 	//iniciando as listas
-	inicia(&storeED, 0);
 	inicia(&meusappsED, 1);
 	inicia(&apprumED, 2);
 	
 	//chamando a leitura do arquivo
-	lerArq(&storeED, 0);
+	lerArq(storeED);
 
 	while(1) {
 		telaIni(meusappsED);
 		
-		//opção de saida
+		//opcao de saida
 		gotoxy(2, 28);
 		printf("Para desligar o MobileED pressione ';'");
 			
-		//Recebendo operação selecionada
+		//Recebendo operacao selecionada
 		gotoxy(2,20);
 		printf("Operacao:");
 		scanf(" %c", & operacao);
