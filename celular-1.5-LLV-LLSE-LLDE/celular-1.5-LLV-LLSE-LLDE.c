@@ -54,14 +54,25 @@ void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
 }
 
-//devolve onde eu vou inserir na lista
-int alocaNo(LLDE *lista, int local) {
+//devolve onde eu vou inserir na LLDE
+int alocaNoLLDE(LLDE *lista) {
     int d;
     if(dispLLDE == -1) {
         return -3;//se a lista estiver cheia
     }
     d = dispLLDE;
     dispLLDE = lista->vet[dispLLDE].prox;
+    return d;
+}
+
+//onde vou inserir na LLSE
+int alocaNoLLSE(LLSE *lista) {
+    int d;
+    if(dispLLSE == -1) {
+        return -3;//se a lista estiver cheia
+    }
+    d = dispLLSE;
+    dispLLSE = lista->vet[dispLLSE].prox;
     return d;
 }
 
@@ -166,12 +177,13 @@ void inserirLLV(App StoreED[], int indice, App elemento) {
 }
 
 //inseirir um elemento na lista
-void inserirL(LLDE *lista, App elemento, int local) {
+void inserirLLDE(LLDE *lista, App elemento) {
 	int indice;//recebe o indice disponivel
 	int x;
 	int posi = -1;
+	int local = -1;
 
-	indice = alocaNo(lista, local);
+	indice = alocaNoLLDE(lista);
 	
 	//se alista estiver cheia
 	if(indice == -3) {
@@ -185,7 +197,7 @@ void inserirL(LLDE *lista, App elemento, int local) {
 		system("PAUSE");
 	}
 	
-	//fazendo a primeira inserï¿½ï¿½o na LLDE
+	//fazendo a primeira inserïr na LLDE
 	if(lista->vet[lista->IL].info.tam == -2) {
 		lista->vet[lista->IL].info = elemento;
 		lista->vet[lista->IL].prox = -1;
@@ -210,7 +222,7 @@ void inserirL(LLDE *lista, App elemento, int local) {
 			}
 			
 			if(elemento.tam <= lista->vet[x].info.tam) {//meio
-				posi = x;			
+				local = x;			
 				break;
 			}
 		}
@@ -231,14 +243,14 @@ void inserirL(LLDE *lista, App elemento, int local) {
 			}
 			
 			if(elemento.tam >= lista->vet[x].info.tam) {//meio
-				posi = lista->vet[x].prox;
+				local = lista->vet[x].prox;
 				break;
 			}
 		}
 	}
 	
 	//inserindo o elemento
-	if(indice != -3) {//lista nï¿½o vazia
+	if(indice != -3) {//lista nao vazia
 		if(posi == 1) {//inicio
 			lista->vet[indice].info = elemento;//recebendo elemento inicial
 			lista->vet[indice].prox = lista->IL;//apontando para proximo
@@ -251,12 +263,83 @@ void inserirL(LLDE *lista, App elemento, int local) {
 			lista->vet[lista->FL].prox = indice;//proximo do antigo final da lista apontando para o novo FL
 			lista->FL = indice;//atualizando o final da lista
 			lista->vet[indice].prox = -1;//proximo do elemento = -1
+		}else if(local != -1){//meio
+			lista->vet[indice].info = elemento;//recebendo elemento
+			lista->vet[indice].prox = local;//proximo do elemento para o indice
+			lista->vet[indice].ante = lista->vet[local].ante;//anterior do elemento recebendo o anterior da sua posiï¿½ï¿½o
+			lista->vet[lista->vet[local].ante].prox = indice;//anterior recebe como proximo o indice que entra
+			lista->vet[local].ante = indice;//proximo recebe como anterior o indice que entra
+		}
+	}
+}
+
+//inseirir um elemento na LLSE
+void inserirLLSE(LLSE *lista, App elemento) {
+	int indice;
+	int x;
+	int posi;
+	int ant;
+	int pro;
+	
+	indice = alocaNoLLSE(lista);
+	
+	//se alista estiver cheia
+	if(indice == -3) {
+		gotoxy(10, 20);
+		printf("    Memoria Cheia");
+		x = 0;
+		while(x < 9) {
+			  printf("\n");
+			  x++;
+		  }
+		system("PAUSE");
+	}
+	
+	//fazendo a primeira inserção na LLSE
+	if(lista->vet[lista->IL].info.tam == -2) {
+		lista->vet[lista->IL].info = elemento;
+		lista->vet[lista->IL].prox = -1;
+		return;
+	}
+	
+	//buscando em qual posição eu vou inserir meu elemento
+	for(x = lista->IL; x < T; x = lista->vet[x].prox) {
+		if(x == -1) {//parar quando chegar ao ultimo elemento da lista
+			break;
+		}
+		
+		if(elemento.tam <= lista->vet[x].info.tam && x == lista->IL) {//insetir no inicio
+			posi = 1;
+			break;
+		}
+		
+		if(elemento.tam >= lista->vet[x].info.tam && lista->vet[x].prox == -1) {//inserir no final
+			posi = 2;
+			ant = x;
+			break; //recebendo o indice do elemento ao qual o ultimo vai apontar
+		}
+		
+		if(elemento.tam >= lista->vet[x].info.tam && elemento.tam <= lista->vet[lista->vet[x].prox].info.tam) {
+			ant = x;//indice que deve ser o anterior ao elemento quando ele entrar na LLSE
+			pro = lista->vet[x].prox; //para onde o elemento vai apontar
+			break;
+		}
+	}
+	
+	//inserindo o elemento
+	if(indice != -3) {//lista não vazia
+		if(posi == 1) {//inicio
+			lista->vet[indice].info = elemento;//recebendo elemento inicial
+			lista->vet[indice].prox = lista->IL;//apontando para proximo
+			lista->IL = indice; //atualizando inicio
+		}else if(posi == 2) {//final
+			lista->vet[indice].info = elemento;//recebendo final
+			lista->vet[ant].prox = indice;//anterior apontando para o final
+			lista->vet[indice].prox = -1;//atualizando o final
 		}else if(posi != 1 && posi != 2){//meio
 			lista->vet[indice].info = elemento;//recebendo elemento
-			lista->vet[indice].prox = posi;//proximo do elemento para o indice
-			lista->vet[indice].ante = lista->vet[posi].ante;//anterior do elemento recebendo o anterior da sua posiï¿½ï¿½o
-			lista->vet[lista->vet[posi].ante].prox = indice;//anterior recebe como proximo o indice que entra
-			lista->vet[posi].ante = indice;//proximo recebe como anterior o indice que entra
+			lista->vet[indice].prox = pro;//apontando para o proximo
+			lista->vet[ant].prox = indice;//anterior apontando para esse indice
 		}
 	}
 }
@@ -343,7 +426,7 @@ void removerL(LLDE *lista, App elemento, int local) {
 		lista->vet[lista->vet[dispLLDE].ante].prox = dispLLDE;//proximo do antigo FL = atual disponivel
 		dispLLDE = lista->vet[dispLLDE].ante;//antigo final da lista vira o disponivel
 		return;
-	}else if(posi == 3){//removendo a unica informaï¿½ï¿½o da lista
+	}else if(posi == 3){//removendo a unica informacao da lista
 		lista->vet[lista->IL].info.tam = -2;//zerando o elemento
 		lista->vet[dispLLDE].ante = lista->IL;//anterior do disponivel recebe FL ou IL
 		lista->vet[lista->vet[dispLLDE].ante].prox = dispLLDE;//antigo IL o FL recebe como proximo o disponivel
@@ -1074,7 +1157,7 @@ void funRum(LLSE meusappsED, LLDE *apprumED, int pagina, int local) {
 	    }
 	    
 		if(elemento.tam != -2) {
-			inserirL(apprumED, elemento, local);
+			//inserir o elemento no AppRumED
 			return;
 		}else {
 			while(1) {
@@ -1119,7 +1202,7 @@ void funRum(LLSE meusappsED, LLDE *apprumED, int pagina, int local) {
 			    }
 			    
 				if(elemento.tam != -2) {
-					inserirL(apprumED, elemento, local);
+					//inserir elemento noAppumED
 					break;
 				}						
 			} 	
@@ -1212,7 +1295,7 @@ int funRemo(LLDE *remove, int pagina, LLDE *apprumED, int local, int chamada) {
 }
 
 //funcao para intalacao de apps
-void funInsta(LLDE storeED, LLSE *meusappsED, int pagina, int local) {
+void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 	int id = -2;
 	int x;
 	App elemento;
@@ -1222,7 +1305,7 @@ void funInsta(LLDE storeED, LLSE *meusappsED, int pagina, int local) {
 	elemento.id = -2;
 	
 	//se a lista estiver cheia
-	if(dispLLDE == -1) {
+	if(dispLLSE == -1) {
 		gotoxy(5, 20);
 		printf("-Memoria Cheia");
 		gotoxy(2, 28);
@@ -1232,64 +1315,28 @@ void funInsta(LLDE storeED, LLSE *meusappsED, int pagina, int local) {
 	
 	while(1) {
 		if(pagina == 15) {
+		   	//imprimindo os 16 apps iniciais
 			system("cls");
-			if(local == 0) {
-				telaInsta();
-			}else if(local == 1) {
-				telaMeusappED();
-			}else if(local == 2) {
-				telaAppRum();
-			}
-			imprimirED(storeED);
+			telaStoreED();
+			imprimirLVVed(storeED, 0);
 		}else {
 			system("cls");
-			if(local == 0) {
-				telaInsta();
-			}else if(local == 1) {
-				telaMeusappED();
-			}else if(local == 2) {
-				telaAppRum();
-			}
-			imprimirEDpro(storeED);
+			telaStoreED();
+		    imprimirLVVed(storeED, 1);
 		}	
 		
+		telaFila();
+	
 		//Recebendo id selecionado
 		gotoxy(2,20);
 		printf("Id:");
 		scanf("%d", & id);
 		gotoxy(0, 50);
 				
-		if(meusappsED->vet[meusappsED->IL].info.tam != -2) {//vendo se o app ja foi instalado
-		    for(x = meusappsED->IL; x < T; x = meusappsED->vet[x].prox) {
-		    	if(x == -1) {
-					break;
-				}		    	
-		    	
-				if(id == meusappsED->vet[x].info.id) {
-					gotoxy(5, 20);
-					printf("-Aplicativo ja selecionado");
-					gotoxy(2, 28);
-					system("PAUSE");
-					return;	
-				}
-		    }
-		}
-		
-		//buscando qual app vou instalar e intalando
-	    for(x = storeED.IL; x < T; x = storeED.vet[x].prox) {
-	    	if(x == -1) {
-				break;
-			}
-			
-			if(id == storeED.vet[x].info.id) {
-				elemento = storeED.vet[x].info;
-				break;
-			}
-	    }
+		//vendo se o app ja foi instalado
 	    
-		if(elemento.tam != -2) {
-			//inserirL(meusappsED, elemento, 1);
-			return;
+		if(elemento.tam != -2) {//instalando app
+
 		}else {
 			while(1) {
 				gotoxy(5, 20);
@@ -1305,38 +1352,10 @@ void funInsta(LLDE storeED, LLSE *meusappsED, int pagina, int local) {
 				scanf("%d", & id);
 				gotoxy(0, 50);	
 						
-				if(meusappsED->vet[meusappsED->IL].info.tam != -2) {//vendo se o app ja foi instalado
-				    for(x = meusappsED->IL; x < T; x = meusappsED->vet[x].prox) {
-				    	if(x == -1) {
-							break;
-						}
-												
-						if(id == meusappsED->vet[x].info.id) {
-							gotoxy(5, 20);
-							printf("-Aplicativo ja selecionado");
-							gotoxy(2, 28);
-							system("PAUSE");
-							return;	
-						}
-				    }
-				}
+				//vendo se o app ja foi instalado
 				
 				//buscando qual app vou instalar e intalando
-			    for(x = storeED.IL; x < T; x = storeED.vet[x].prox) {
-			    	if(x == -1) {
-						break;;
-					}	
-							    	
-					if(id == storeED.vet[x].info.id) {
-						elemento = storeED.vet[x].info;
-						break;
-					}
-			    }
-			    
-	    		if(elemento.tam != -2) {
-				//	inserirL(meusappsED, elemento, 1);
-					return;
-				}						
+						
 			} 	
 		}	  			
 	}
@@ -1369,7 +1388,7 @@ void funStoreED(App storeED[], LLSE *meusappsED) {
 				return;
  			break;
  			case 'q':
-     			
+     			funInstaLLSE(storeED, meusappsED, pagina);
             break;
         	case ',':
 				if(pagina != 15) {
