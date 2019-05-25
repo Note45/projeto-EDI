@@ -444,6 +444,46 @@ void imprimirED(LLDE lista) {
     }
 }
 
+void telaFila(){
+	int x; 
+	
+	//tela de intalação fila
+	for(x = 50; x < 80; x++) {//topo
+		gotoxy(x, 3);
+		printf("%c", 219);
+	}
+	
+	//laterais
+	for(x = 4; x < 8; x++) {
+		gotoxy(50, x);
+		printf("%c", 219);
+	}
+	
+	for(x = 4; x < 8; x++) {
+		gotoxy(79, x);
+		printf("%c", 219);
+	}
+	
+	//divisorias
+	for(x = 4; x < 8; x++) {
+		gotoxy(59, x);
+		printf("%c", 219);
+	}
+	
+	for(x = 4; x < 8; x++) {
+		gotoxy(69, x);
+		printf("%c", 219);
+	}
+	
+	//em baixo
+	for(x = 50; x < 80; x++) {
+		gotoxy(x, 8);
+		printf("%c", 219);
+	}
+	
+	gotoxy(50, 9);
+	printf("-Apps em FILA para a operacao-");
+}
 
 void imprimirEDpro(LLDE lista) {
 	int x;
@@ -1492,7 +1532,7 @@ void funAppRumED(LLDE *apprumED) {
 	
 	//imprimindo interface rum
 	while(1) {
-			if(pagina == 15) {
+		if(pagina == 15) {
 			//imprimindo os 16 apps iniciais
 			system("cls");
 			telaAppRum();
@@ -1575,7 +1615,7 @@ int main() {
 
 	while(1) {
 		telaIni(meusappsED);
-		
+		   	
 		//opcao de saida
 		gotoxy(2, 28);
 		printf("Para desligar o MobileED pressione ';'");
