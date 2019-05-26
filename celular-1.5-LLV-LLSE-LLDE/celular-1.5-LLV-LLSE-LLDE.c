@@ -6,7 +6,7 @@
 
 #define T 30 //define o tanto de apps maximo
 #define N 15 //define o tamanho do nome dos apps
-#define L 3  //quantidade de listas no programa
+#define L 3 //quantidade de elementos para a FILA
 
 typedef struct {
 	char nome[N];
@@ -32,6 +32,13 @@ typedef struct {
 }LLDE;
 
 typedef struct {
+	int quant;
+	int IL;
+	int FL;
+    noLLDE vet[L];
+}FILA;
+
+typedef struct {
 	int IL;
     noLLSE vet[T];
 }LLSE;
@@ -49,6 +56,10 @@ int dispLLDE;//controla quem esta disponivel na LLDE
 
 int dispLLSE;//disponivel na LLSE
 
+int dispFILA;//disponivel da FILA
+
+FILA fila; //Fila para a instalação dos apps
+
 //importando da funcao gotoxy
 void gotoxy(int x, int y){
      SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
@@ -62,6 +73,17 @@ int alocaNoLLDE(LLDE *lista) {
     }
     d = dispLLDE;
     dispLLDE = lista->vet[dispLLDE].prox;
+    return d;
+}
+
+//devolve onde eu vou inserir na FILA
+int alocaNoFILA(FILA *lista) {
+    int d;
+    if(dispFILA == -1) {
+        return -3;//se a lista estiver cheia
+    }
+    d = dispFILA;
+    dispLLDE = lista->vet[dispFILA].prox;
     return d;
 }
 
@@ -95,6 +117,26 @@ void iniciaLLDE(LLDE *lista) {
     lista->FL = 0;
 }
 
+//iniciando FILA
+void iniciaFILA(FILA *lista) {
+    int i;
+    dispFILA = 0;
+    lista->quant = 0;
+    
+	for(i = 0; i < L; i++) {
+        lista->vet[i].prox = i + 1;
+        lista->vet[i].ante = i - 1;
+        lista->vet[i].info.tam = -2;
+        lista->vet[i].info.id = -2;
+    }
+    
+    lista->vet[L - 1].prox = -1; 
+    lista->vet[L - 1].info.tam = -2;
+    lista->vet[L - 1].info.id = -2;
+    lista->IL = 0;
+    lista->FL = 0;
+}
+
 //Iniciando LLSE
 void iniciaLLSE(LLSE *lista) {
     int i;
@@ -112,7 +154,21 @@ void iniciaLLSE(LLSE *lista) {
     lista->IL = 0;
 }
 
-//funï¿½ï¿½o para inserir um em uma LLV
+//buscando um app em uma LLV
+int buscarLLV(App lista[], int id) {
+	int x;
+	
+	for(x = ControleLLV.IL; x <= ControleLLV.FL; x++) {
+		if(id == lista[x].id) {
+			return x;
+		}
+	}
+	
+	x = -2;
+	return x;
+}
+
+//funcao para inserir um em uma LLV
 void inserirLLV(App StoreED[], int indice, App elemento) {
 	int x;		
 		
@@ -344,102 +400,38 @@ void inserirLLSE(LLSE *lista, App elemento) {
 	}
 }
 
-//removendo um elemento da lista
-void removerL(LLDE *lista, App elemento, int local) {
+//inseirir um elemento na FILA
+App inserirFILA(FILA *lista, App elemento) {
+	App temp;
+	int indice;//recebe o indice disponivel
 	int x;
-	int posi;
-	
-	//se a lista estiver vazia
-	if(lista->vet[lista->IL].info.tam == -2) {
-		printf("Lista Vazia!\n");
-		system("PAUSE");
-	}
-	
-	//buscando em qual posiï¿½ï¿½o eu vou remover o elemento
-	if(abs(elemento.tam - lista->vet[lista->IL].info.tam) <= abs(elemento.tam - lista->vet[lista->FL].info.tam)) {
-		for(x = lista->IL; x < T; x = lista->vet[x].prox) {//se for melhor correr pelo inicio
-			if(x == -1) {//parar quando chegar ao ultimo elemento da lista
-				break;
-			}
-			
-			if(elemento.id == lista->vet[x].info.id && x == lista->IL && x == lista->FL) {//remover no inicio e for o unico
-				posi = 3;
-				break;
-			}
 
-			if(elemento.id == lista->vet[x].info.id && x == lista->IL) {//remover no inicio
-				posi = 1;
-				break;
-			}						
-			
-			if(elemento.id == lista->vet[x].info.id && x == lista->FL) {//remover no final
-				posi = 2;
-				break; 
-			}
-			
-			if(elemento.id == lista->vet[x].info.id) {//meio
-				posi = x;			
-				break;
-			}
-		}
-	}else {//se for melhor correr pelo fim
-		for(x = lista->FL; x < T; x = lista->vet[x].ante) {
-			if(x == -1) {//parar quando chegar ao ultimo elemento da lista
-				break;
-			}
-			
-			if(elemento.id == lista->vet[x].info.id && x == lista->IL && x == lista->FL) {//remover no inicio e for o unico
-				posi = 3;
-				break;
-			}
+	if(lista->quant < 3) {
+		lista->quant++;
+		
+		indice = alocaNoFILA(lista);
+		
+		//fazendo a primeira inserïr na FILA
+		if(lista->vet[lista->IL].info.tam == -2) {
+			lista->vet[lista->IL].info = elemento;
+			lista->vet[lista->IL].prox = -1;
+			return elemento;
+		}		
 
-			if(elemento.id == lista->vet[x].info.id && x == lista->IL) {//remover no inicio
-				posi = 1;
-				break;
-			}						
-			
-			if(elemento.id == lista->vet[x].info.id && x == lista->FL) {//inserir no final
-				posi = 2;
-				break; 
-			}
-			
-			if(elemento.id == lista->vet[x].info.id) {//meio
-				posi = x;			
-				break;
-			}
-		}
-	}
-	
-	//removendo elemento
-	if(posi == 1) {//remover no inicio 
-		lista->vet[dispLLDE].ante = lista->IL;//anterior do disponivel recebe o IL
-		lista->IL = lista->vet[lista->IL].prox;//IL recebe o seu proximo como novo IL
-		lista->vet[lista->IL].ante = -1;//anterior do novo IL recebe -1
-		lista->vet[lista->vet[dispLLDE].ante].prox = dispLLDE;//antigo IL recebe como proximo o disponivel
-		dispLLDE = lista->vet[dispLLDE].ante;//antigo IL se torna o novo disponivel
-		return;
-	}else if(posi == 2){//remover no fim
-		lista->vet[dispLLDE].ante = lista->FL;//anterior do disponivel = atual FL
-		lista->FL = lista->vet[lista->FL].ante;//FL recebe o anteror do atual FL
-		lista->vet[lista->FL].prox = -1;//proximo do FL = -1
-		lista->vet[lista->vet[dispLLDE].ante].ante = -1;//anterior do antigo FL recebe -1
-		lista->vet[lista->vet[dispLLDE].ante].prox = dispLLDE;//proximo do antigo FL = atual disponivel
-		dispLLDE = lista->vet[dispLLDE].ante;//antigo final da lista vira o disponivel
-		return;
-	}else if(posi == 3){//removendo a unica informacao da lista
-		lista->vet[lista->IL].info.tam = -2;//zerando o elemento
-		lista->vet[dispLLDE].ante = lista->IL;//anterior do disponivel recebe FL ou IL
-		lista->vet[lista->vet[dispLLDE].ante].prox = dispLLDE;//antigo IL o FL recebe como proximo o disponivel
-		dispLLDE = lista->vet[dispLLDE].ante;//disponivel recebe como anterior o antigo IL ou FL da lista
-		return;
-	}else if(posi != 1 && posi != 2 && posi != 3){//removendo no meio
-		lista->vet[lista->vet[posi].ante].prox = lista->vet[posi].prox;//anterior aponta para o proximo do removido
-		lista->vet[lista->vet[posi].prox].ante = lista->vet[posi].ante;//proximo do removido aponta para o anterior
-		lista->vet[posi].ante = -1;//anterior do removido recebe -1
-		lista->vet[posi].prox = dispLLDE;//proximo do removido recebe atual disponivel
-		lista->vet[dispLLDE].ante = posi;//anterior do atual disponivel recebe removido
-		dispLLDE = posi;//removido vira atual disponivel
-		return;
+		lista->vet[indice].info = elemento;//recebendo final
+		lista->vet[indice].ante = lista->FL;//anterior do elemento apontando para o antigo final da lista
+		lista->vet[lista->FL].prox = indice;//proximo do antigo final da lista apontando para o novo FL
+		lista->FL = indice;//atualizando o final da lista
+		lista->vet[indice].prox = -1;//proximo do elemento = -1
+		return elemento;
+	}else {
+		lista->quant = 3;
+		
+		temp = lista->vet[lista->IL].info;//recebendo o app que vai ser retornado para a intalação no meusappdED
+		lista->vet[lista->IL] = lista->vet[lista->vet[lista->IL].prox];//1 recebendo o 2
+		lista->vet[lista->vet[lista->IL].prox] = lista->vet[lista->vet[lista->vet[lista->vet[lista->IL].prox].prox].prox]; //2 recebendo 3
+		lista->vet[lista->vet[lista->vet[lista->vet[lista->IL].prox].prox].prox].info = elemento;//3 recebendo o elemento enviado
+		return temp;				
 	}
 }
 
@@ -1259,7 +1251,7 @@ int funRemo(LLDE *remove, int pagina, LLDE *apprumED, int local, int chamada) {
 	    }			
 		
 		if(elemento.tam != -2) {
-			removerL(remove, elemento, local);	
+			//removerL(remove, elemento, local);	
       	    return id;			
 		}else {
 			while(1) {
@@ -1286,7 +1278,7 @@ int funRemo(LLDE *remove, int pagina, LLDE *apprumED, int local, int chamada) {
 			    }			
 				
 				if(elemento.tam != -2) {
-					removerL(remove, elemento, local);//removendo do meusappsED
+					//removerL(remove, elemento, local);//removendo do meusappsED
 					return id;
 				}							
 			}		
@@ -1299,6 +1291,7 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 	int id = -2;
 	int x;
 	App elemento;
+	App temp;
 	
 	//zerando elemento
 	elemento.tam = -2;
@@ -1324,40 +1317,51 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 			telaStoreED();
 		    imprimirLVVed(storeED, 1);
 		}	
-		
-		telaFila();
 	
 		//Recebendo id selecionado
 		gotoxy(2,20);
 		printf("Id:");
 		scanf("%d", & id);
 		gotoxy(0, 50);
-				
-		//vendo se o app ja foi instalado
+		
+		if(fila.vet[fila.IL].info.tam != -2) {//vendo se o app ja foi instalado
+		    for(x = fila.IL; x < L; x = fila.vet[x].prox) {
+		    	if(x == -1) {
+					break;
+				}		    	
+		    	
+				if(id == fila.vet[x].info.id) {
+					gotoxy(5, 20);
+					printf("-Aplicativo ja selecionado");
+					gotoxy(2, 28);
+					system("PAUSE");
+					return;	
+				}
+		    }
+		}			
 	    
-		if(elemento.tam != -2) {//instalando app
-
+	    //buscando qual elemento vou instalar
+	    x = -2;
+		x = buscarLLV(storeED, id);
+	    
+	    if( x != -2) {
+			elemento = storeED[x];
 		}else {
-			while(1) {
-				gotoxy(5, 20);
-				printf("-Aplicativo nao encontrado");
-				gotoxy(2, 28);
-				system("PAUSE");
-				return;
-				
-						
-				//Recebendo id selecionado
-				gotoxy(2,20);
-				printf("Id:");
-				scanf("%d", & id);
-				gotoxy(0, 50);	
-						
-				//vendo se o app ja foi instalado
-				
-				//buscando qual app vou instalar e intalando
-						
-			} 	
-		}	  			
+			gotoxy(5, 20);
+			printf("-Erro na busca do app!");
+			gotoxy(2, 28);
+			system("PAUSE");
+			break;
+		}
+		
+		//colocando app na FILA de instalação
+		if(fila.quant < 3) {
+			inserirFILA(&fila, elemento);
+			return;
+		}else {
+			temp = inserirFILA(&fila, elemento);
+		}			
+		
 	}
 	return;
 }	
@@ -1376,6 +1380,9 @@ void funStoreED(App storeED[], LLSE *meusappsED) {
 			telaStoreED();
 			imprimirLVVed(storeED, 0);
 		}
+		
+		//tela da fila de instalacao
+		telaFila();
 		
 		//Recebendo operaï¿½ï¿½o selecionada
 		gotoxy(2,20);
@@ -1525,7 +1532,7 @@ void funMeusappsED(LLSE *meusappsED, LLDE *apprumED) {
 					    }			
 						
 						if(elemento.tam != -2) {
-							removerL(apprumED, elemento, 2);					
+						//	removerL(apprumED, elemento, 2);					
 						}
 					}
 				}        			
@@ -1628,6 +1635,8 @@ int main() {
 	//iniciando LLSE e LLDE
 	iniciaLLSE(&meusappsED);
 	iniciaLLDE(&apprumED);
+	iniciaFILA(&fila);
+	
 	
 	//chamando a leitura do arquivo
 	lerArq(storeED);
