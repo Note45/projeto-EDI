@@ -1360,6 +1360,7 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 			return;
 		}else {
 			temp = inserirFILA(&fila, elemento);
+			//inserir elemento no MyappsED ajeitar a FILA
 		}			
 		
 	}
