@@ -83,7 +83,7 @@ int alocaNoFILA(FILA *lista) {
         return -3;//se a lista estiver cheia
     }
     d = dispFILA;
-    dispLLDE = lista->vet[dispFILA].prox;
+    dispFILA = lista->vet[dispFILA].prox;
     return d;
 }
 
@@ -1636,7 +1636,6 @@ int main() {
 	iniciaLLSE(&meusappsED);
 	iniciaLLDE(&apprumED);
 	iniciaFILA(&fila);
-	
 	
 	//chamando a leitura do arquivo
 	lerArq(storeED);
