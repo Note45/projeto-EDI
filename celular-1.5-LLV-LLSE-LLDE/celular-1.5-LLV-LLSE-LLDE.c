@@ -58,7 +58,7 @@ int dispLLSE;//disponivel na LLSE
 
 int dispFILA;//disponivel da FILA
 
-FILA fila; //Fila para a instalação dos apps
+FILA fila; //Fila para a instalação em MyappsED
 
 //importando da funcao gotoxy
 void gotoxy(int x, int y){
@@ -428,9 +428,9 @@ App inserirFILA(FILA *lista, App elemento) {
 		lista->quant = 3;
 		
 		temp = lista->vet[lista->IL].info;//recebendo o app que vai ser retornado para a intalação no meusappdED
-		lista->vet[lista->IL] = lista->vet[lista->vet[lista->IL].prox];//1 recebendo o 2
-		lista->vet[lista->vet[lista->IL].prox] = lista->vet[lista->vet[lista->vet[lista->vet[lista->IL].prox].prox].prox]; //2 recebendo 3
-		lista->vet[lista->vet[lista->vet[lista->vet[lista->IL].prox].prox].prox].info = elemento;//3 recebendo o elemento enviado
+		lista->vet[lista->IL].info = lista->vet[lista->vet[lista->IL].prox].info;//1 recebendo o 2
+		lista->vet[lista->vet[lista->IL].prox].info = lista->vet[lista->vet[lista->vet[lista->IL].prox].prox].info; //2 recebendo 3
+		lista->vet[lista->vet[lista->vet[lista->IL].prox].prox].info = elemento;//3 recebendo o elemento enviado
 		return temp;				
 	}
 }
@@ -1286,7 +1286,7 @@ int funRemo(LLDE *remove, int pagina, LLDE *apprumED, int local, int chamada) {
 	}
 }
 
-//funcao para intalacao de apps
+//funcao para intalacao de apps na LLSE(MyappsED)
 void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 	int id = -2;
 	int x;
@@ -1358,11 +1358,11 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 		if(fila.quant < 3) {
 			inserirFILA(&fila, elemento);
 			return;
-		}else {
+		}else {//se um quarto elemento for instalado o primeiro vai para a LLSE
 			temp = inserirFILA(&fila, elemento);
-			//inserir elemento no MyappsED ajeitar a FILA
+			inserirLLSE(meusappsED, temp);
+			return;
 		}			
-		
 	}
 	return;
 }	
@@ -1383,9 +1383,9 @@ void funStoreED(App storeED[], LLSE *meusappsED) {
 		}
 		
 		//tela da fila de instalacao
-		telaFila();
 		
-		//Recebendo operaï¿½ï¿½o selecionada
+		
+		//Recebendo operacao selecionada
 		gotoxy(2,20);
 		printf("Operacao:");
 		scanf(" %c", & operacao);
