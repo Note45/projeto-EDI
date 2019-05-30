@@ -437,7 +437,7 @@ App inserirFILA(FILA *lista, App elemento) {
 	}
 }
 
-//funcao para imprimir a LLV
+//funcoes para imprimir apps
 void imprimirLVVed(App aplicativos[], int lista) {
 	int x;
 	int y = 0;
@@ -489,7 +489,78 @@ void imprimirLVVed(App aplicativos[], int lista) {
 	}	
 }
 
-//funcoes para imprimir os apps
+void imprimirLLSE(LLSE lista) {
+	int x;
+	int y = 2;
+	
+	//complementando a interface
+	gotoxy(2, 2);
+	printf("Nome:");
+	gotoxy(15, 2);
+	printf("Tamanho:");
+	gotoxy(29, 2);
+	printf("Id:");
+	
+	if(lista.vet[lista.IL].info.tam == -2) {
+		return;
+	}
+	
+    for(x = lista.IL; y < 17; x = lista.vet[x].prox) {//lista vazia
+    	if(x == -1) {
+			break;
+		}
+		
+		gotoxy(2, y + 1);
+		printf("%s", lista.vet[x].info.nome);
+		gotoxy(18, y + 1);
+		printf("%d MB",lista.vet[x].info.tam);
+		gotoxy(32, y + 1);
+		printf("%d", lista.vet[x].info.id);
+		y++;
+    }
+}
+
+
+void imprimirLLSEpro(LLSE lista) {
+	int x;
+	int y = 0;
+	
+	//complementando a interface
+	gotoxy(2, 2);
+	printf("Nome:");
+	gotoxy(18, 2);
+	printf("Tamanho:");
+	gotoxy(29, 2); 
+	printf("Id:");
+	
+	if(lista.vet[lista.IL].info.tam == -2) {//se a lista estiver vazia
+		return;
+	}
+	
+	for(x = lista.IL; y < 15; x = lista.vet[x].prox) {
+		if(x == -1) {//recebendo qual o indice de numero 16	
+			break;
+		}
+		y++;
+	}
+	
+	y = 2;
+	 
+    for(x = x; y < 17; x = lista.vet[x].prox) {
+    	if(x == -1) {
+			break;
+		}
+		
+		gotoxy(2, y + 1);
+		printf("%s", lista.vet[x].info.nome);
+		gotoxy(18, y + 1);
+		printf("%d MB",lista.vet[x].info.tam);
+		gotoxy(32, y + 1);
+		printf("%d", lista.vet[x].info.id);
+		y++;
+    }	
+}
+
 void imprimirED(LLDE lista) {
 	int x;
 	int y = 2;
@@ -1481,11 +1552,13 @@ void funMeusappsED(LLSE *meusappsED, LLDE *apprumED) {
 			//imprimindo os 16 apps iniciais
 			system("cls");
 			telaMeusappED();
-		//	imprimirED(*meusappsED);
-			
+			imprimirLLSE(*meusappsED);	
 		}
+			
+		//tela fila_myapps
+		telaFila(fila_myapps);
 				
-		//Recebendo operacao selecionada
+		//recebendo operacao selecionada
 		gotoxy(2, 20);
 		printf("Operacao:");
 		scanf(" %c", & operacao);
@@ -1497,7 +1570,7 @@ void funMeusappsED(LLSE *meusappsED, LLDE *apprumED) {
 					pagina--;
 					system("cls");
 					telaMeusappED();
-				//	imprimirED(*meusappsED);
+					imprimirLLSE(*meusappsED);
 				}else {
 	        		gotoxy(12, 20);
 	  				printf("- Pagina Inicial\n");
@@ -1514,7 +1587,7 @@ void funMeusappsED(LLSE *meusappsED, LLDE *apprumED) {
 					pagina++;
 					system("cls");
 					telaMeusappED();
-					//imprimirEDpro(*meusappsED);
+					imprimirLLSEpro(*meusappsED);
 				}else {
 		       		gotoxy(12, 20);
 		  				printf("- Pagina Final\n");
@@ -1533,31 +1606,7 @@ void funMeusappsED(LLSE *meusappsED, LLDE *apprumED) {
 				funRum(*meusappsED, apprumED, pagina, 2);
             break;
         	case 'w'://removendo elemento
-        	//	id = funRemo(meusappsED, pagina, apprumED, 2, 1);
-			
-				if(id != -2) {
-					//zerando elemento
-					elemento.tam = -2;
-					elemento.id = -2;				
-					
-					//checando se o app est� rodando para remover
-					if(apprumED->vet[apprumED->IL].info.tam != -2) {
-					    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
-					    	if(x == -1) {
-								break;
-							}
-							
-							if(id == apprumED->vet[x].info.id) {
-								elemento = apprumED->vet[x].info;//removendo do meusappsED
-								break;
-							}
-					    }			
-						
-						if(elemento.tam != -2) {
-						//	removerL(apprumED, elemento, 2);					
-						}
-					}
-				}        			
+    			
         	break;	
         	default:
         		gotoxy(10, 20);
