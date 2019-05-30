@@ -52,13 +52,15 @@ typedef struct {
 
 Cont ControleLLV;//variavel de controle da LLV
 
-int dispLLDE;//controla quem esta disponivel na LLDE
+//disponivel LLDE, LLSE, FILA
+int dispLLDE;
+int dispLLSE;
+int dispFILA;
 
-int dispLLSE;//disponivel na LLSE
-
-int dispFILA;//disponivel da FILA
-
-FILA fila; //Fila para a instalação em MyappsED
+//fila StoreED, MyappsED, AppRumED
+FILA fila; 
+FILA fila_myapps;
+FILA fila_rumapps;
 
 //importando da funcao gotoxy
 void gotoxy(int x, int y){
@@ -519,47 +521,6 @@ void imprimirED(LLDE lista) {
     }
 }
 
-void telaFila(){
-	int x; 
-	
-	//tela de intalação fila
-	for(x = 50; x < 80; x++) {//topo
-		gotoxy(x, 3);
-		printf("%c", 219);
-	}
-	
-	//laterais
-	for(x = 4; x < 8; x++) {
-		gotoxy(50, x);
-		printf("%c", 219);
-	}
-	
-	for(x = 4; x < 8; x++) {
-		gotoxy(79, x);
-		printf("%c", 219);
-	}
-	
-	//divisorias
-	for(x = 4; x < 8; x++) {
-		gotoxy(59, x);
-		printf("%c", 219);
-	}
-	
-	for(x = 4; x < 8; x++) {
-		gotoxy(69, x);
-		printf("%c", 219);
-	}
-	
-	//em baixo
-	for(x = 50; x < 80; x++) {
-		gotoxy(x, 8);
-		printf("%c", 219);
-	}
-	
-	gotoxy(50, 9);
-	printf("-Apps em FILA para a operacao-");
-}
-
 void imprimirEDpro(LLDE lista) {
 	int x;
 	int y = 0;
@@ -601,6 +562,63 @@ void imprimirEDpro(LLDE lista) {
 }
 
 //Area de funcoes relacionadas a telas
+void telaFila(FILA estrutura){
+	int x; 
+	
+	//tela de intalação fila
+	for(x = 50; x < 80; x++) {//topo
+		gotoxy(x, 3);
+		printf("%c", 219);
+	}
+	
+	//laterais
+	for(x = 4; x < 8; x++) {
+		gotoxy(50, x);
+		printf("%c", 219);
+	}
+	
+	for(x = 4; x < 8; x++) {
+		gotoxy(79, x);
+		printf("%c", 219);
+	}
+	
+	//divisorias
+	for(x = 4; x < 8; x++) {
+		gotoxy(59, x);
+		printf("%c", 219);
+	}
+	
+	for(x = 4; x < 8; x++) {
+		gotoxy(69, x);
+		printf("%c", 219);
+	}
+	
+	//imprimindo nome dos apps
+	if(estrutura.quant != 0) {
+		if(estrutura.quant >= 1) {
+			gotoxy(53, 5);
+			printf("%c%c%c", estrutura.vet[0].info.nome[0], estrutura.vet[0].info.nome[1], estrutura.vet[0].info.nome[2]);	
+		}
+		if(estrutura.quant >= 2) {
+			gotoxy(62, 5);
+			printf("%c%c%c", estrutura.vet[1].info.nome[0], estrutura.vet[1].info.nome[1], estrutura.vet[1].info.nome[2]);	
+		}
+		if(estrutura.quant == 3) {
+			gotoxy(72, 5);
+			printf("%c%c%c", estrutura.vet[2].info.nome[0], estrutura.vet[2].info.nome[1], estrutura.vet[2].info.nome[2]);	
+		}		
+	}
+	
+	//em baixo
+	for(x = 50; x < 80; x++) {
+		gotoxy(x, 8);
+		printf("%c", 219);
+	}
+	
+	gotoxy(50, 9);
+	printf("-Apps em FILA para a operacao-");
+}
+
 void telaIni(LLSE lista) {
 	int x;
 	int i = 0;
@@ -1306,7 +1324,7 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 	   	return;	
 	}
 	
-	while(1) {
+	while(1) {	
 		if(pagina == 15) {
 		   	//imprimindo os 16 apps iniciais
 			system("cls");
@@ -1317,6 +1335,9 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 			telaStoreED();
 		    imprimirLVVed(storeED, 1);
 		}	
+	
+		//tela FILA
+		telaFila(fila);	  		  		
 	
 		//Recebendo id selecionado
 		gotoxy(2,20);
@@ -1383,7 +1404,7 @@ void funStoreED(App storeED[], LLSE *meusappsED) {
 		}
 		
 		//tela da fila de instalacao
-		
+		telaFila(fila);
 		
 		//Recebendo operacao selecionada
 		gotoxy(2,20);
@@ -1633,10 +1654,12 @@ int main() {
 	char operacao;
 	int pausa;
 
-	//iniciando LLSE e LLDE
+	//iniciando LLSE e LLDE e FILAs
 	iniciaLLSE(&meusappsED);
 	iniciaLLDE(&apprumED);
 	iniciaFILA(&fila);
+	iniciaFILA(&fila_myapps);
+	iniciaFILA(&fila_rumapps);
 	
 	//chamando a leitura do arquivo
 	lerArq(storeED);
