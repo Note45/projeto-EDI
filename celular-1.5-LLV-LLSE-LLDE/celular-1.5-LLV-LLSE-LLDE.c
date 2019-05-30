@@ -55,7 +55,7 @@ Cont ControleLLV;//variavel de controle da LLV
 //disponivel LLDE, LLSE, FILA
 int dispLLDE;
 int dispLLSE;
-int dispFILA;
+int dispFILA[L];
 
 //fila StoreED, MyappsED, AppRumED
 FILA fila; //usada para instalação de apps
@@ -79,13 +79,13 @@ int alocaNoLLDE(LLDE *lista) {
 }
 
 //devolve onde eu vou inserir na FILA
-int alocaNoFILA(FILA *lista) {
+int alocaNoFILA(FILA *lista, int qual) {
     int d;
-    if(dispFILA == -1) {
+    if(dispFILA[qual] == -1) {
         return -3;//se a lista estiver cheia
     }
-    d = dispFILA;
-    dispFILA = lista->vet[dispFILA].prox;
+    d = dispFILA[qual];
+    dispFILA[qual] = lista->vet[dispFILA[qual]].prox;
     return d;
 }
 
@@ -120,9 +120,9 @@ void iniciaLLDE(LLDE *lista) {
 }
 
 //iniciando FILA
-void iniciaFILA(FILA *lista) {
+void iniciaFILA(FILA *lista, int qual) {
     int i;
-    dispFILA = 0;
+    dispFILA[qual] = 0;
     lista->quant = 0;
     
 	for(i = 0; i < L; i++) {
@@ -403,7 +403,7 @@ void inserirLLSE(LLSE *lista, App elemento) {
 }
 
 //inseirir um elemento na FILA
-App inserirFILA(FILA *lista, App elemento) {
+App inserirFILA(FILA *lista, App elemento, int qual) {
 	App temp;
 	int indice;//recebe o indice disponivel
 	int x;
@@ -411,7 +411,7 @@ App inserirFILA(FILA *lista, App elemento) {
 	if(lista->quant < 3) {
 		lista->quant++;
 		
-		indice = alocaNoFILA(lista);
+		indice = alocaNoFILA(lista, qual);
 		
 		//fazendo a primeira inserïr na FILA
 		if(lista->vet[lista->IL].info.tam == -2) {
@@ -1245,10 +1245,10 @@ void funRum(LLSE meusappsED, LLDE *apprumED, int pagina) {
 	    if(elemento.tam != -2) {
 			//colocando app na FILA de instalação
 			if(fila_rumapps.quant < 3) {
-				inserirFILA(&fila_rumapps, elemento);
+				inserirFILA(&fila_rumapps, elemento, 2);
 				return;
 			}else {//se um quarto elemento for instalado o primeiro vai para a LLSE
-				temp = inserirFILA(&fila_rumapps, elemento);
+				temp = inserirFILA(&fila_rumapps, elemento, 2);
 				inserirLLDE(apprumED, temp);
 				return;
 			}			
@@ -1335,10 +1335,10 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 		
 		//colocando app na FILA de instalação
 		if(fila.quant < 3) {
-			inserirFILA(&fila, elemento);
+			inserirFILA(&fila, elemento, 1);
 			return;
 		}else {//se um quarto elemento for instalado o primeiro vai para a LLSE
-			temp = inserirFILA(&fila, elemento);
+			temp = inserirFILA(&fila, elemento, 1);
 			inserirLLSE(meusappsED, temp);
 			return;
 		}			
@@ -1593,9 +1593,9 @@ int main() {
 	//iniciando LLSE e LLDE e FILAs
 	iniciaLLSE(&meusappsED);
 	iniciaLLDE(&apprumED);
-	iniciaFILA(&fila);
-	iniciaFILA(&fila_myapps);
-	iniciaFILA(&fila_rumapps);
+	iniciaFILA(&fila, 0);
+	iniciaFILA(&fila_myapps, 1);
+	iniciaFILA(&fila_rumapps, 2);
 	
 	//chamando a leitura do arquivo
 	lerArq(storeED);
