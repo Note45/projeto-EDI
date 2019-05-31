@@ -631,6 +631,87 @@ void imprimirLLDEpro(LLDE lista) {
 }
 
 //Area de funcoes relacionadas a telas
+void telaPILHA() {
+	int x;
+	system("cls");
+	
+	//topo
+	for(x = 0; x < 41; x++) {
+		gotoxy(0, 0);
+		printf("%c", 219);
+	}
+	
+	//esquerda e direita
+	for(x = 1; x < 25; x++) {
+		gotoxy(0, x);
+		printf("%c", 219);
+		gotoxy(42, x);
+		printf("%c\n", 219);
+	}
+
+	//parte de baixo
+	for(x = 0; x < 42; x++) {
+		gotoxy(0, x);
+		printf("%c",219);
+	}
+	
+	//espaçamentos superiores
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 19);
+		printf("%c", 219);
+	}
+	
+	for(x = 2; x < 42; x++) {
+		gotoxy(x, 21);
+		printf("%c", 220);
+	}
+	
+	//divisorias
+	for(x = 22; x < 25; x++) {
+		gotoxy(13, x);
+		printf("%c", 219);
+	}
+	
+	for(x = 22; x < 25; x++) {
+		gotoxy(29, x);
+		printf("%c", 219);
+	}
+	
+	//PILHA
+	for(x = 1; x < 19; x++) {//divisoris verticais
+		gotoxy(13, x);
+		printf("%c", 219);
+		gotoxy(29, x);
+		printf("%c\n", 219);
+	}
+	
+	//divisorias horizintais
+	for(x = 14; x < 29; x++) {
+		gotoxy(x, 5);
+		printf("%c", 219);
+	}
+	
+	for(x = 14; x < 29; x++) {
+		gotoxy(x, 10);
+		printf("%c", 219);
+	}
+	
+	for(x = 14; x < 29; x++) {
+		gotoxy(x, 15);
+		printf("%c", 219);
+	}
+		
+	//comandos da tela
+	gotoxy(2, 23);
+	printf("q-Adicionar\n\n\n");
+	
+	gotoxy(16, 23);
+	printf("w-Remover\n\n\n");
+	
+	gotoxy(32, 23);
+	printf("e-Sair\n\n\n");
+}
+
 void telaFila(FILA estrutura){
 	int x; 
 	
@@ -747,25 +828,16 @@ void telaIni(LLSE lista) {
 		gotoxy(29, x);
 		printf("%c", 219);
 	}
+
+	//Area da tela do app PILHA
+	gotoxy(3, 5);
+	printf("App PILHA");	
+	gotoxy(3, 9);
+	printf("a - Iniciar");
 	
+			
 	//imprimindo apps iniciais
-	if(lista.vet[lista.IL].info.tam != -2) {
-	/* Area da tela do app PILHA
-		if(lista.vet[vet[0]].info.tam != -2 && vet[0] != -2) {
-			gotoxy(2, 3);
-			printf("Nome:");	
-			gotoxy(3, 4);
-			printf("%s", lista.vet[vet[0]].info.nome);
-			gotoxy(2, 5);
-			printf("Tamanho:");
-			gotoxy(3, 6);
-			printf("%d MB", lista.vet[vet[0]].info.tam);
-			gotoxy(2, 7);
-			printf("Id:");
-			gotoxy(3, 8);
-			printf("%d", lista.vet[vet[0]].info.id);
-		}
-	*/				
+	if(lista.vet[lista.IL].info.tam != -2) {			
 		if(lista.vet[vet[0]].info.tam != -2 && vet[0] != -2) {
 			gotoxy(16, 3);
 			printf("Nome:");	
@@ -1348,6 +1420,44 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 }	
 
 //funcoes do menu inicial
+void funPilhaED() {
+	int x;
+	char operacao;
+	int pausa;
+	
+	while(1) {
+		telaPILHA();//tela do app PILHA
+		
+		//operação selecionada
+		gotoxy(2,20);
+		printf("Operacao:");
+		scanf(" %c", & operacao);
+		gotoxy(0, 50);
+		
+		switch(operacao) {
+			case 'q':
+				return;
+ 			break;
+ 			case 'w':
+     			
+            break;
+        	case 'e':
+        		return;
+ 			break;
+        	default:
+        		gotoxy(12, 20);
+  				printf(" - Operacao nao encontrada\n");
+  				pausa = 0;
+  				while(pausa < 9) {
+					  printf("\n");
+					  pausa++;
+				}
+				system("PAUSE");	
+		}		
+		
+	}	
+}
+
 void funStoreED(App storeED[], LLSE *meusappsED) {	
 	char operacao;
 	int pausa;
@@ -1617,6 +1727,9 @@ int main() {
 			case 'e'://AppRumED
 				funAppRumED(&apprumED);
 			break;
+			case 'a'://App PILHA
+				funPilhaED();
+			break;	
 			case ';':
 				system("cls");
 				gotoxy(0,0);
