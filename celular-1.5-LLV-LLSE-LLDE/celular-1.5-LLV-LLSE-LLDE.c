@@ -1428,6 +1428,7 @@ void funPilhaED() {
 	while(1) {
 		telaPILHA();//tela do app PILHA
 		
+		//imprimindo elementos da pilha
 		if(quantidade >= 1) {
 			gotoxy(17, 17);
 			printf("Elemento 1");
@@ -1456,7 +1457,7 @@ void funPilhaED() {
 		gotoxy(0, 50);
 		
 		switch(operacao) {
-			case 'q':
+			case 'q'://adicionar elemento a pilha
 				if(quantidade == 4) {
 	        		gotoxy(12, 20);
 	  				printf(" - Pilha cheia!\n");
@@ -1470,7 +1471,7 @@ void funPilhaED() {
 					quantidade++;	
 				}	
  			break;
- 			case 'w':
+ 			case 'w'://removr elemento da pilha
 				if(quantidade == 0) {
 	        		gotoxy(12, 20);
 	  				printf(" - Pilha vazia!\n");
@@ -1578,7 +1579,7 @@ void funStoreED(App storeED[], LLSE *meusappsED) {
 	}	
 }
 
-//funcao para 2(MeusappsEd) opcao do meunu
+//funcao para 2(MeusappsEd) opcao do menu
 void funMeusappsED(LLSE *meusappsED, LLDE *apprumED) {
 	char operacao;
 	int pausa;
