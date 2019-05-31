@@ -6,7 +6,7 @@
 
 #define T 30 //define o tanto de apps maximo
 #define N 15 //define o tamanho do nome dos apps
-#define L 3 //quantidade de elementos para a FILA
+#define L 2 //quantidade de elementos para a FILA
 
 typedef struct {
 	char nome[N];
@@ -57,9 +57,8 @@ int dispLLDE;
 int dispLLSE;
 int dispFILA[L];
 
-//fila StoreED, MyappsED, AppRumED
+//fila StoreED, AppRumED
 FILA fila; //usada para instalação de apps
-FILA fila_myapps; //usada para remorção de apps no myappsED
 FILA fila_rumapps; //usada para os apps que estão rodando
 
 //importando da funcao gotoxy
@@ -1245,11 +1244,13 @@ void funRum(LLSE meusappsED, LLDE *apprumED, int pagina) {
 	    if(elemento.tam != -2) {
 			//colocando app na FILA de instalação
 			if(fila_rumapps.quant < 3) {
-				inserirFILA(&fila_rumapps, elemento, 2);
+				inserirFILA(&fila_rumapps, elemento, 1);
+				telaFila(fila_rumapps);
 				return;
 			}else {//se um quarto elemento for instalado o primeiro vai para a LLSE
-				temp = inserirFILA(&fila_rumapps, elemento, 2);
+				temp = inserirFILA(&fila_rumapps, elemento, 1);
 				inserirLLDE(apprumED, temp);
+				telaFila(fila_rumapps);
 				return;
 			}			
 		}else {
@@ -1335,10 +1336,10 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 		
 		//colocando app na FILA de instalação
 		if(fila.quant < 3) {
-			inserirFILA(&fila, elemento, 1);
+			inserirFILA(&fila, elemento, 0);
 			return;
 		}else {//se um quarto elemento for instalado o primeiro vai para a LLSE
-			temp = inserirFILA(&fila, elemento, 1);
+			temp = inserirFILA(&fila, elemento, 0);
 			inserirLLSE(meusappsED, temp);
 			return;
 		}			
@@ -1360,10 +1361,10 @@ void funStoreED(App storeED[], LLSE *meusappsED) {
 			telaStoreED();
 			imprimirLVVed(storeED, 0);
 		}
-		
-		//tela da fila de instalacao
+
+		//imprimindo fila de instalação 
 		telaFila(fila);
-		
+			
 		//Recebendo operacao selecionada
 		gotoxy(2,20);
 		printf("Operacao:");
@@ -1441,9 +1442,6 @@ void funMeusappsED(LLSE *meusappsED, LLDE *apprumED) {
 			telaMeusappED();
 			imprimirLLSE(*meusappsED);	
 		}
-			
-		//tela fila_myapps
-		telaFila(fila_myapps);
 				
 		//recebendo operacao selecionada
 		gotoxy(2, 20);
@@ -1594,8 +1592,7 @@ int main() {
 	iniciaLLSE(&meusappsED);
 	iniciaLLDE(&apprumED);
 	iniciaFILA(&fila, 0);
-	iniciaFILA(&fila_myapps, 1);
-	iniciaFILA(&fila_rumapps, 2);
+	iniciaFILA(&fila_rumapps, 1);
 	
 	//chamando a leitura do arquivo
 	lerArq(storeED);
