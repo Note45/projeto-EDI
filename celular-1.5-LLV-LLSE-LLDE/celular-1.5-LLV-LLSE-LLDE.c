@@ -6,7 +6,7 @@
 
 #define T 30 //define o tanto de apps maximo
 #define N 15 //define o tamanho do nome dos apps
-#define L 2 //quantidade de elementos para a FILA
+#define L 3 //quantidade de elementos para a FILA
 
 typedef struct {
 	char nome[N];
@@ -55,7 +55,7 @@ Cont ControleLLV;//variavel de controle da LLV
 //disponivel LLDE, LLSE, FILA
 int dispLLDE;
 int dispLLSE;
-int dispFILA[L];
+int dispFILA[L - 1];
 
 //fila StoreED, AppRumED
 FILA fila; //usada para instalação de apps
@@ -405,7 +405,6 @@ void inserirLLSE(LLSE *lista, App elemento) {
 App inserirFILA(FILA *lista, App elemento, int qual) {
 	App temp;
 	int indice;//recebe o indice disponivel
-	int x;
 
 	if(lista->quant < 3) {
 		lista->quant++;
@@ -751,6 +750,7 @@ void telaIni(LLSE lista) {
 	
 	//imprimindo apps iniciais
 	if(lista.vet[lista.IL].info.tam != -2) {
+	/* Area da tela do app PILHA
 		if(lista.vet[vet[0]].info.tam != -2 && vet[0] != -2) {
 			gotoxy(2, 3);
 			printf("Nome:");	
@@ -765,81 +765,81 @@ void telaIni(LLSE lista) {
 			gotoxy(3, 8);
 			printf("%d", lista.vet[vet[0]].info.id);
 		}
-					
-		if(lista.vet[vet[1]].info.tam != -2 && vet[1] != -2) {
+	*/				
+		if(lista.vet[vet[0]].info.tam != -2 && vet[0] != -2) {
 			gotoxy(16, 3);
 			printf("Nome:");	
 			gotoxy(17, 4);
-			printf("%s", lista.vet[vet[1]].info.nome);
+			printf("%s", lista.vet[vet[0]].info.nome);
 			gotoxy(16, 5);
 			printf("Tamanho:");
 			gotoxy(17, 6);
-			printf("%d MB", lista.vet[vet[1]].info.tam);
+			printf("%d MB", lista.vet[vet[0]].info.tam);
 			gotoxy(16, 7);
 			printf("Id:");
 			gotoxy(17, 8);
-			printf("%d", lista.vet[vet[1]].info.id);
+			printf("%d", lista.vet[vet[0]].info.id);
 		}											
 			
-		if(lista.vet[vet[2]].info.tam!= -2 && vet[2] != -2) {
+		if(lista.vet[vet[1]].info.tam != -2 && vet[1] != -2) {
 			gotoxy(30, 3);
 			printf("Nome:");	
 			gotoxy(31, 4);
-			printf("%s", lista.vet[vet[2]].info.nome);
+			printf("%s", lista.vet[vet[1]].info.nome);
 			gotoxy(30, 5);
 			printf("Tamanho:");
 			gotoxy(31, 6);
-			printf("%d MB", lista.vet[vet[2]].info.tam);
+			printf("%d MB", lista.vet[vet[1]].info.tam);
 			gotoxy(30, 7);
 			printf("Id:");
 			gotoxy(31, 8);
-			printf("%d", lista.vet[vet[2]].info.id);			
+			printf("%d", lista.vet[vet[1]].info.id);			
 		}											
 		
-		if(lista.vet[vet[3]].info.tam != -2 && vet[3] != -2) {
+		if(lista.vet[vet[2]].info.tam!= -2 && vet[2] != -2) {
 			gotoxy(2, 12);
 			printf("Nome:");	
 			gotoxy(3, 13);
-			printf("%s", lista.vet[vet[3]].info.nome);
+			printf("%s", lista.vet[vet[2]].info.nome);
 			gotoxy(2, 14);
 			printf("Tamanho:");
 			gotoxy(3, 15);
-			printf("%d MB", lista.vet[vet[3]].info.tam);
+			printf("%d MB", lista.vet[vet[2]].info.tam);
 			gotoxy(2, 16);
 			printf("Id:");
 			gotoxy(3, 17);
-			printf("%d", lista.vet[vet[3]].info.id);
+			printf("%d", lista.vet[vet[2]].info.id);
 		}
 	
 				
-		if(lista.vet[vet[4]].info.tam != -2 && vet[4] != -2) {
+		if(lista.vet[vet[3]].info.tam != -2 && vet[3] != -2) {
 			gotoxy(16, 12);
 			printf("Nome:");	
 			gotoxy(17, 13);
-			printf("%s", lista.vet[vet[4]].info.nome);
+			printf("%s", lista.vet[vet[3]].info.nome);
 			gotoxy(16, 14);
 			printf("Tamanho:");
 			gotoxy(17, 15);
-			printf("%d MB", lista.vet[vet[4]].info.tam);
+			printf("%d MB", lista.vet[vet[3]].info.tam);
 			gotoxy(16, 16);
 			printf("Id:");
 			gotoxy(17, 17);
-			printf("%d", lista.vet[vet[4]].info.id);
+			printf("%d", lista.vet[vet[3]].info.id);
 		}											
 			
-		if(lista.vet[vet[5]].info.tam != -2 && vet[5] != -2) {
+		if(lista.vet[vet[4]].info.tam != -2 && vet[4] != -2) {
 			gotoxy(30, 12);
 			printf("Nome:");	
 			gotoxy(31, 13);
-			printf("%s", lista.vet[vet[5]].info.nome);
+			printf("%s", lista.vet[vet[4]].info.nome);
 			gotoxy(30, 14);
 			printf("Tamanho:");
 			gotoxy(31, 15);
-			printf("%d MB", lista.vet[vet[5]].info.tam);
+			printf("%d MB", lista.vet[vet[4]].info.tam);
 		   	gotoxy(30, 16);
 			printf("Id:");
 			gotoxy(31, 17);
-			printf("%d", lista.vet[vet[5]].info.id);			
+			printf("%d", lista.vet[vet[4]].info.id);			
 		}
     }	
 
@@ -1430,9 +1430,6 @@ void funMeusappsED(LLSE *meusappsED, LLDE *apprumED) {
 	char operacao;
 	int pausa;
 	int pagina = 15;
-	App elemento; 
-	int id;
-	int x;
 	
 	//imprimindo interface
 	while(1) {		
