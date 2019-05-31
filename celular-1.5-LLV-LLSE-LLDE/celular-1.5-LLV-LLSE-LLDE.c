@@ -1421,13 +1421,34 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 
 //funcoes do menu inicial
 void funPilhaED() {
-	int x;
 	char operacao;
 	int pausa;
+	int quantidade = 0;
 	
 	while(1) {
 		telaPILHA();//tela do app PILHA
 		
+		if(quantidade >= 1) {
+			gotoxy(17, 17);
+			printf("Elemento 1");
+			gotoxy(28,28);
+		}
+		if(quantidade >= 2) {
+			gotoxy(17, 13);
+			printf("Elemento 2");
+			gotoxy(28,28);
+		}
+		if(quantidade >= 3) {
+			gotoxy(17, 7);
+			printf("Elemento 3");
+			gotoxy(28,28);
+		}
+		if(quantidade >= 4) {
+			gotoxy(17, 3);
+			printf("Elemento 4");
+			gotoxy(28,28);
+		}		
+			  		
 		//operação selecionada
 		gotoxy(2,20);
 		printf("Operacao:");
@@ -1436,10 +1457,32 @@ void funPilhaED() {
 		
 		switch(operacao) {
 			case 'q':
-				return;
+				if(quantidade == 4) {
+	        		gotoxy(12, 20);
+	  				printf(" - Pilha cheia!\n");
+	  				pausa = 0;
+	  				while(pausa < 9) {
+						  printf("\n");
+						  pausa++;
+					}
+					system("PAUSE");					
+				}else {
+					quantidade++;	
+				}	
  			break;
  			case 'w':
-     			
+				if(quantidade == 0) {
+	        		gotoxy(12, 20);
+	  				printf(" - Pilha vazia!\n");
+	  				pausa = 0;
+	  				while(pausa < 9) {
+						  printf("\n");
+						  pausa++;
+					}
+					system("PAUSE");					
+				}else {
+					quantidade--;	
+				}						
             break;
         	case 'e':
         		return;
