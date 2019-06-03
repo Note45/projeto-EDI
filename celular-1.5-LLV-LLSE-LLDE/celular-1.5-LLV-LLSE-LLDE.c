@@ -99,8 +99,8 @@ int alocaNoLLSE(LLSE *lista) {
     return d;
 }
 
-//liberando indice do vetor
-void liberaNo(LLSE * lista, int ind) {
+//liberando indice do vetor LLSE
+void liberaNoLLSE(LLSE * lista, int ind) {
     lista->vet[ind].prox = dispLLSE;
     dispLLSE = ind;
 }
@@ -239,7 +239,7 @@ void inserirLLV(App StoreED[], int indice, App elemento) {
     }					
 }
 
-//inseirir um elemento na lista
+//inseirir um elemento na LLDE
 void inserirLLDE(LLDE *lista, App elemento) {
 	int indice;//recebe o indice disponivel
 	int x;
@@ -260,14 +260,14 @@ void inserirLLDE(LLDE *lista, App elemento) {
 		system("PAUSE");
 	}
 	
-	//fazendo a primeira inser�r na LLDE
+	//fazendo a primeira inserir na LLDE
 	if(lista->vet[lista->IL].info.tam == -2) {
 		lista->vet[lista->IL].info = elemento;
 		lista->vet[lista->IL].prox = -1;
 		return;
 	}
 	
-	//buscando em qual posi��o eu vou inserir meu elemento
+	//buscando em qual posicao vou inserir meu elemento
 	if(abs(elemento.tam - lista->vet[lista->IL].info.tam) <= abs(elemento.tam - lista->vet[lista->FL].info.tam)) {
 		for(x = lista->IL; x < T; x = lista->vet[x].prox) {//se for melhor correr pelo inicio
 			if(x == -1) {//parar quando chegar ao ultimo elemento da lista
@@ -358,14 +358,14 @@ void inserirLLSE(LLSE *lista, App elemento) {
 		system("PAUSE");
 	}
 	
-	//fazendo a primeira inser��o na LLSE
+	//fazendo a primeira inserir na LLSE
 	if(lista->vet[lista->IL].info.tam == -2) {
 		lista->vet[lista->IL].info = elemento;
 		lista->vet[lista->IL].prox = -1;
 		return;
 	}
 	
-	//buscando em qual posi��o eu vou inserir meu elemento
+	//buscando em qual posicao vou inserir meu elemento
 	for(x = lista->IL; x < T; x = lista->vet[x].prox) {
 		if(x == -1) {//parar quando chegar ao ultimo elemento da lista
 			break;
@@ -390,7 +390,7 @@ void inserirLLSE(LLSE *lista, App elemento) {
 	}
 	
 	//inserindo o elemento
-	if(indice != -3) {//lista n�o vazia
+	if(indice != -3) {//lista nao vazia
 		if(posi == 1) {//inicio
 			lista->vet[indice].info = elemento;//recebendo elemento inicial
 			lista->vet[indice].prox = lista->IL;//apontando para proximo
@@ -417,7 +417,7 @@ App inserirFILA(FILA *lista, App elemento, int qual) {
 		
 		indice = alocaNoFILA(lista, qual);
 		
-		//fazendo a primeira inser�r na FILA
+		//fazendo a primeira insercao na FILA
 		if(lista->vet[lista->IL].info.tam == -2) {
 			lista->vet[lista->IL].info = elemento;
 			lista->vet[lista->IL].prox = -1;
@@ -433,7 +433,7 @@ App inserirFILA(FILA *lista, App elemento, int qual) {
 	}else {
 		lista->quant = 3;
 		
-		temp = lista->vet[lista->IL].info;//recebendo o app que vai ser retornado para a intala��o no meusappdED
+		temp = lista->vet[lista->IL].info;//recebendo o app que vai ser retornado para a intalacao no meusappdED
 		lista->vet[lista->IL].info = lista->vet[lista->vet[lista->IL].prox].info;//1 recebendo o 2
 		lista->vet[lista->vet[lista->IL].prox].info = lista->vet[lista->vet[lista->vet[lista->IL].prox].prox].info; //2 recebendo 3
 		lista->vet[lista->vet[lista->vet[lista->IL].prox].prox].info = elemento;//3 recebendo o elemento enviado
@@ -441,7 +441,7 @@ App inserirFILA(FILA *lista, App elemento, int qual) {
 	}
 }
 
-//removendo um elemento da lista
+//removendo um elemento da LLSE
 void removerLLSE(LLSE *lista, App elemento) {
 	int x;
 	int liberar;
@@ -489,24 +489,24 @@ void removerLLSE(LLSE *lista, App elemento) {
 			lista->vet[liberar].info.tam = -2;
 			lista->vet[liberar].info.id = -2;
 			lista->IL = liberar;
-			liberaNo(lista, liberar);
+			liberaNoLLSE(lista, liberar);
 		}else {
 			lista->IL = lista->vet[liberar].prox;
-			liberaNo(lista, liberar);
+			liberaNoLLSE(lista, liberar);
 		}		
 		return;
 	}else if(posi == 3){//remover no meio
 		lista->vet[ant].prox = pro;//anteririo ou liberado vai apontar para o proximo ao liberado
-		liberaNo(lista, liberar); //liberar o No
+		liberaNoLLSE(lista, liberar); //liberar o No
 		return;
 	}else if(posi == 2){//remover no fim
 		lista->vet[ant].prox = -1;//anterior vira o final
-		liberaNo(lista, liberar);//liberando antigo final
+		liberaNoLLSE(lista, liberar);//liberando antigo final
 		return;
 	}
 }
 
-//removendo um elemento da lista
+//removendo um elemento da LLDE
 void removerLLDE(LLDE *lista, App elemento) {
 	int x;
 	int posi;
@@ -519,7 +519,7 @@ void removerLLDE(LLDE *lista, App elemento) {
 		return;
 	}
 	
-	//buscando em qual posi��o eu vou remover o elemento
+	//buscando em qual posicao eu vou remover o elemento
 	if(abs(elemento.tam - lista->vet[lista->IL].info.tam) <= abs(elemento.tam - lista->vet[lista->FL].info.tam)) {
 		for(x = lista->IL; x < T; x = lista->vet[x].prox) {//se for melhor correr pelo inicio
 			if(x == -1) {//parar quando chegar ao ultimo elemento da lista
@@ -888,7 +888,7 @@ void telaPILHA() {
 void telaFila(FILA estrutura){
 	int x; 
 	
-	//tela de intala��o fila
+	//tela de instalacao fila
 	for(x = 50; x < 80; x++) {//topo
 		gotoxy(x, 3);
 		printf("%c", 219);
@@ -1587,7 +1587,7 @@ void funRum(LLSE meusappsED, LLDE *apprumED, int pagina) {
 	    }		
 	    
 	    if(elemento.tam != -2) {
-			//colocando app na FILA de instala��o
+			//colocando app na FILA de instalacao
 			if(fila_rumapps.quant < 3) {
 				inserirFILA(&fila_rumapps, elemento, 1);
 				telaFila(fila_rumapps);
@@ -1679,7 +1679,7 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 			break;
 		}
 		
-		//colocando app na FILA de instala��o
+		//colocando app na FILA de instalacao
 		if(fila.quant < 3) {
 			inserirFILA(&fila, elemento, 0);
 			return;
@@ -1692,7 +1692,7 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 	return;
 }	
 
-//funcoes do menu inicial
+//funcoes PILHA do menu
 void funPilhaED() {
 	char operacao;
 	int pausa;
@@ -1775,6 +1775,7 @@ void funPilhaED() {
 	}	
 }
 
+//funcao para 1(StoreED) opcao do menu
 void funStoreED(App storeED[], LLSE *meusappsED) {	
 	char operacao;
 	int pausa;
@@ -1789,7 +1790,7 @@ void funStoreED(App storeED[], LLSE *meusappsED) {
 			imprimirLVVed(storeED, 0);
 		}
 
-		//imprimindo fila de instala��o 
+		//imprimindo fila de instalacao
 		telaFila(fila);
 			
 		//Recebendo operacao selecionada
@@ -1955,7 +1956,7 @@ void funAppRumED(LLSE *meusappsED ,LLDE *apprumED) {
 			case 'w':
 				return;
  			break;
- 			case 'q'://parando a instancia de um app
+ 			case 'q'://parar a instancia de um app
      			funRemo(meusappsED, apprumED, pagina, 1);
             break;
         	case ',':
@@ -2062,9 +2063,7 @@ int main() {
 			    }
 				system("PAUSE");
 	  			break;
-		}
-				
+		}			
 	}		
-
 	return 0;		
 }
