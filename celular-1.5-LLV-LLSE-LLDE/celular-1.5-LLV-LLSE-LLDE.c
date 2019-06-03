@@ -58,8 +58,8 @@ int dispLLSE;
 int dispFILA[L - 1];
 
 //fila StoreED, AppRumED
-FILA fila; //usada para instalação de apps
-FILA fila_rumapps; //usada para os apps que estão rodando
+FILA fila; //usada para instalaï¿½ï¿½o de apps
+FILA fila_rumapps; //usada para os apps que estï¿½o rodando
 
 //importando da funcao gotoxy
 void gotoxy(int x, int y){
@@ -97,6 +97,12 @@ int alocaNoLLSE(LLSE *lista) {
     d = dispLLSE;
     dispLLSE = lista->vet[dispLLSE].prox;
     return d;
+}
+
+//liberando indice do vetor
+void liberaNo(LLSE * lista, int ind) {
+    lista->vet[ind].prox = dispLLSE;
+    dispLLSE = ind;
 }
 
 //iniciando LLDE
@@ -254,7 +260,7 @@ void inserirLLDE(LLDE *lista, App elemento) {
 		system("PAUSE");
 	}
 	
-	//fazendo a primeira inserïr na LLDE
+	//fazendo a primeira inserï¿½r na LLDE
 	if(lista->vet[lista->IL].info.tam == -2) {
 		lista->vet[lista->IL].info = elemento;
 		lista->vet[lista->IL].prox = -1;
@@ -352,14 +358,14 @@ void inserirLLSE(LLSE *lista, App elemento) {
 		system("PAUSE");
 	}
 	
-	//fazendo a primeira inserção na LLSE
+	//fazendo a primeira inserï¿½ï¿½o na LLSE
 	if(lista->vet[lista->IL].info.tam == -2) {
 		lista->vet[lista->IL].info = elemento;
 		lista->vet[lista->IL].prox = -1;
 		return;
 	}
 	
-	//buscando em qual posição eu vou inserir meu elemento
+	//buscando em qual posiï¿½ï¿½o eu vou inserir meu elemento
 	for(x = lista->IL; x < T; x = lista->vet[x].prox) {
 		if(x == -1) {//parar quando chegar ao ultimo elemento da lista
 			break;
@@ -384,7 +390,7 @@ void inserirLLSE(LLSE *lista, App elemento) {
 	}
 	
 	//inserindo o elemento
-	if(indice != -3) {//lista não vazia
+	if(indice != -3) {//lista nï¿½o vazia
 		if(posi == 1) {//inicio
 			lista->vet[indice].info = elemento;//recebendo elemento inicial
 			lista->vet[indice].prox = lista->IL;//apontando para proximo
@@ -411,7 +417,7 @@ App inserirFILA(FILA *lista, App elemento, int qual) {
 		
 		indice = alocaNoFILA(lista, qual);
 		
-		//fazendo a primeira inserïr na FILA
+		//fazendo a primeira inserï¿½r na FILA
 		if(lista->vet[lista->IL].info.tam == -2) {
 			lista->vet[lista->IL].info = elemento;
 			lista->vet[lista->IL].prox = -1;
@@ -427,11 +433,178 @@ App inserirFILA(FILA *lista, App elemento, int qual) {
 	}else {
 		lista->quant = 3;
 		
-		temp = lista->vet[lista->IL].info;//recebendo o app que vai ser retornado para a intalação no meusappdED
+		temp = lista->vet[lista->IL].info;//recebendo o app que vai ser retornado para a intalaï¿½ï¿½o no meusappdED
 		lista->vet[lista->IL].info = lista->vet[lista->vet[lista->IL].prox].info;//1 recebendo o 2
 		lista->vet[lista->vet[lista->IL].prox].info = lista->vet[lista->vet[lista->vet[lista->IL].prox].prox].info; //2 recebendo 3
 		lista->vet[lista->vet[lista->vet[lista->IL].prox].prox].info = elemento;//3 recebendo o elemento enviado
 		return temp;				
+	}
+}
+
+//removendo um elemento da lista
+void removerLLSE(LLSE *lista, App elemento) {
+	int x;
+	int liberar;
+	int posi;
+	int ant;
+	int pro;
+	
+	//se a lista estiver vazia
+	if(lista->vet[lista->IL].info.tam == -2) {
+		printf("Lista Vazia!\n");
+		system("PAUSE");
+	}
+	
+	//buscando qual no vou remover
+	for(x = lista->IL; x < T; x = lista->vet[x].prox) {
+		if(x == -1) {//parar quando chegar ao ultimo elemento da lista
+			break;
+		}
+		
+		if(elemento.tam == lista->vet[x].info.tam && x == lista->IL) {//remover no inicio
+			posi = 1;
+			liberar = x;
+			break;
+		}
+		
+		if(elemento.tam == lista->vet[x].info.tam && lista->vet[x].prox == -1) {//remover no final
+			posi = 2;
+			liberar = x;
+			break; 
+		}
+		
+		if(elemento.tam == lista->vet[x].info.tam) {
+			posi = 3;
+			pro = lista->vet[x].prox; //para onde o elemento vai apontar
+			liberar = x;
+			break;
+		}
+		
+		ant = x;//recebendo o anterior ao atual
+	}
+	
+	//removendo elemento
+	if(posi == 1) {//remover no inicio
+		if(lista->vet[lista->IL].prox == -1) {//se o inicio for o final da lista
+			lista->vet[liberar].info.tam = -2;
+			lista->vet[liberar].info.id = -2;
+			lista->IL = liberar;
+			liberaNo(lista, liberar);
+		}else {
+			lista->IL = lista->vet[liberar].prox;
+			liberaNo(lista, liberar);
+		}		
+		return;
+	}else if(posi == 3){//remover no meio
+		lista->vet[ant].prox = pro;//anteririo ou liberado vai apontar para o proximo ao liberado
+		liberaNo(lista, liberar); //liberar o No
+		return;
+	}else if(posi == 2){//remover no fim
+		lista->vet[ant].prox = -1;//anterior vira o final
+		liberaNo(lista, liberar);//liberando antigo final
+		return;
+	}
+}
+
+//removendo um elemento da lista
+void removerLLDE(LLDE *lista, App elemento) {
+	int x;
+	int posi;
+	int local = -2;
+	
+	//se a lista estiver vazia
+	if(lista->vet[lista->IL].info.tam == -2) {
+		printf("Lista Vazia!\n");
+		system("PAUSE");
+		return;
+	}
+	
+	//buscando em qual posiï¿½ï¿½o eu vou remover o elemento
+	if(abs(elemento.tam - lista->vet[lista->IL].info.tam) <= abs(elemento.tam - lista->vet[lista->FL].info.tam)) {
+		for(x = lista->IL; x < T; x = lista->vet[x].prox) {//se for melhor correr pelo inicio
+			if(x == -1) {//parar quando chegar ao ultimo elemento da lista
+				break;
+			}
+			
+			if(elemento.id == lista->vet[x].info.id && x == lista->IL && x == lista->FL) {//remover no inicio e for o unico
+				posi = 3;
+				break;
+			}
+
+			if(elemento.id == lista->vet[x].info.id && x == lista->IL) {//remover no inicio
+				posi = 1;
+				break;
+			}						
+			
+			if(elemento.id == lista->vet[x].info.id && x == lista->FL) {//remover no final
+				posi = 2;
+				break; 
+			}
+			
+			if(elemento.id == lista->vet[x].info.id) {//meio
+				posi = x;			
+				break;
+			}
+		}
+	}else {//se for melhor correr pelo fim
+		for(x = lista->FL; x < T; x = lista->vet[x].ante) {
+			if(x == -1) {//parar quando chegar ao ultimo elemento da lista
+				break;
+			}
+			
+			if(elemento.id == lista->vet[x].info.id && x == lista->IL && x == lista->FL) {//remover no inicio e for o unico
+				posi = 3;
+				break;
+			}
+
+			if(elemento.id == lista->vet[x].info.id && x == lista->IL) {//remover no inicio
+				posi = 1;
+				break;
+			}						
+			
+			if(elemento.id == lista->vet[x].info.id && x == lista->FL) {//inserir no final
+				posi = 2;
+				break; 
+			}
+			
+			if(elemento.id == lista->vet[x].info.id) {//meio
+				local = x;
+				posi = 4;			
+				break;
+			}
+		}
+	}
+	
+	//removendo elemento
+	if(posi == 1) {//remover no inicio 
+		lista->vet[dispLLDE].ante = lista->IL;//anterior do disponivel recebe o IL
+		lista->IL = lista->vet[lista->IL].prox;//IL recebe o seu proximo como novo IL
+		lista->vet[lista->IL].ante = -1;//anterior do novo IL recebe -1
+		lista->vet[lista->vet[dispLLDE].ante].prox = dispLLDE;//antigo IL recebe como proximo o disponivel
+		dispLLDE = lista->vet[dispLLDE].ante;//antigo IL se torna o novo disponivel
+		return;
+	}else if(posi == 2){//remover no fim
+		lista->vet[dispLLDE].ante = lista->FL;//anterior do disponivel = atual FL
+		lista->FL = lista->vet[lista->FL].ante;//FL recebe o anteror do atual FL
+		lista->vet[lista->FL].prox = -1;//proximo do FL = -1
+		lista->vet[lista->vet[dispLLDE].ante].ante = -1;//anterior do antigo FL recebe -1
+		lista->vet[lista->vet[dispLLDE].ante].prox = dispLLDE;//proximo do antigo FL = atual disponivel
+		dispLLDE = lista->vet[dispLLDE].ante;//antigo final da lista vira o disponivel
+		return;
+	}else if(posi == 3){//removendo a unica informaï¿½ï¿½o da lista
+		lista->vet[lista->IL].info.tam = -2;//zerando o elemento
+		lista->vet[dispLLDE].ante = lista->IL;//anterior do disponivel recebe FL ou IL
+		lista->vet[lista->vet[dispLLDE].ante].prox = dispLLDE;//antigo IL o FL recebe como proximo o disponivel
+		dispLLDE = lista->vet[dispLLDE].ante;//disponivel recebe como anterior o antigo IL ou FL da lista
+		return;
+	}else if(posi == 4){//removendo no meio
+		lista->vet[lista->vet[local].ante].prox = lista->vet[local].prox;//anterior aponta para o proximo do removido
+		lista->vet[lista->vet[local].prox].ante = lista->vet[local].ante;//proximo do removido aponta para o anterior
+		lista->vet[local].ante = -1;//anterior do removido recebe -1
+		lista->vet[local].prox = dispLLDE;//proximo do removido recebe atual disponivel
+		lista->vet[dispLLDE].ante = local;//anterior do atual disponivel recebe removido
+		dispLLDE = local;//removido vira atual disponivel
+		return;
 	}
 }
 
@@ -655,7 +828,7 @@ void telaPILHA() {
 		printf("%c",219);
 	}
 	
-	//espaçamentos superiores
+	//espaï¿½amentos superiores
 	for(x = 2; x < 42; x++) {
 		gotoxy(x, 19);
 		printf("%c", 219);
@@ -715,7 +888,7 @@ void telaPILHA() {
 void telaFila(FILA estrutura){
 	int x; 
 	
-	//tela de intalação fila
+	//tela de intalaï¿½ï¿½o fila
 	for(x = 50; x < 80; x++) {//topo
 		gotoxy(x, 3);
 		printf("%c", 219);
@@ -1244,6 +1417,106 @@ void lerArq(App storeED[]) {
 	fclose(arquivo);
 }
 
+//funcao de remover um app
+void funRemo(LLSE *remove, LLDE *apprumED, int pagina, int chamada) {
+	int id = -1;
+	int x;
+	App elemento;
+	
+	if(remove->vet[remove->IL].info.tam == -2) {//lista vazia
+		gotoxy(12, 20);
+		printf("-Nenhum app intalado!");	
+		gotoxy(2, 28);
+		system("PAUSE");	
+		return;	
+	}
+	
+	//zerando elemento
+	elemento.tam = -2;
+	elemento.id = -2;
+	
+	//so remove se tiver apps intalados
+	while(1) {
+		if(pagina == 15) {
+			system("cls");
+			if(chamada == 0) {
+				telaMeusappED();
+				imprimirLLSE(*remove);	
+			}else if(chamada == 1) {
+				telaAppRum();
+				imprimirLLDE(*apprumED);
+			}
+		}else {
+			system("cls");
+			if(chamada == 0) {
+				telaMeusappED();
+				imprimirLLSEpro(*remove);		
+			}else if(chamada == 1) {
+				telaAppRum();
+				imprimirLLDEpro(*apprumED);
+			}
+		}	
+
+		//Recebendo o id
+		gotoxy(2,20);
+		printf("Id:");
+		scanf("%d", & id);
+		gotoxy(0, 50);	
+		
+		//checando se e um indice valido
+	    for(x = remove->IL; x < T; x = remove->vet[x].prox) {
+	    	if(x == -1) {
+				break;
+			}
+			
+			if(id == remove->vet[x].info.id) {
+				elemento = remove->vet[x].info;//removendo do meusappsED
+				break;
+			}
+	    }			
+		
+		if(elemento.tam != -2) {
+			removerLLSE(remove, elemento);//removendo do MeusappsED
+			
+			if(apprumED->vet[apprumED->IL].info.tam != -2) {//buscando elemento em apprumED
+				//zerando elemento
+				elemento.tam = -2;
+				elemento.id = -2;
+				
+			    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
+			    	if(x == -1) {
+						break;
+					}
+					
+					if(id == apprumED->vet[x].info.id) {
+						elemento = apprumED->vet[x].info;//removendo do meusappsED
+						break;
+					}
+			    }
+				
+				if(elemento.tam != -2) {
+					removerLLDE(apprumED, elemento);
+					return;
+				}else {
+					gotoxy(5, 20);
+					printf("-Erro ao parar o app!");	
+					gotoxy(2, 28);
+					system("PAUSE");
+				}				
+			}	
+      	    return;			
+		}
+		else {
+			gotoxy(5, 20);
+			printf("-Aplicativo nao encontrado");	
+			gotoxy(2, 28);
+			system("PAUSE");
+			return;	
+
+		}
+	}
+}
+
 //funcao para rodar um app
 void funRum(LLSE meusappsED, LLDE *apprumED, int pagina) {
 	int x;
@@ -1314,7 +1587,7 @@ void funRum(LLSE meusappsED, LLDE *apprumED, int pagina) {
 	    }		
 	    
 	    if(elemento.tam != -2) {
-			//colocando app na FILA de instalação
+			//colocando app na FILA de instalaï¿½ï¿½o
 			if(fila_rumapps.quant < 3) {
 				inserirFILA(&fila_rumapps, elemento, 1);
 				telaFila(fila_rumapps);
@@ -1406,7 +1679,7 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 			break;
 		}
 		
-		//colocando app na FILA de instalação
+		//colocando app na FILA de instalaï¿½ï¿½o
 		if(fila.quant < 3) {
 			inserirFILA(&fila, elemento, 0);
 			return;
@@ -1450,7 +1723,7 @@ void funPilhaED() {
 			gotoxy(28,28);
 		}		
 			  		
-		//operação selecionada
+		//operaï¿½ï¿½o selecionada
 		gotoxy(2,20);
 		printf("Operacao:");
 		scanf(" %c", & operacao);
@@ -1516,7 +1789,7 @@ void funStoreED(App storeED[], LLSE *meusappsED) {
 			imprimirLVVed(storeED, 0);
 		}
 
-		//imprimindo fila de instalação 
+		//imprimindo fila de instalaï¿½ï¿½o 
 		telaFila(fila);
 			
 		//Recebendo operacao selecionada
@@ -1642,7 +1915,7 @@ void funMeusappsED(LLSE *meusappsED, LLDE *apprumED) {
 				funRum(*meusappsED, apprumED, pagina);
             break;
         	case 'w'://removendo elemento
-    			
+    			funRemo(meusappsED, apprumED, pagina, 0);
         	break;	
         	default:
         		gotoxy(10, 20);
@@ -1658,7 +1931,7 @@ void funMeusappsED(LLSE *meusappsED, LLDE *apprumED) {
 }
 
 //funcao para 3(AppRumED) opcao do menu
-void funAppRumED(LLDE *apprumED) {	
+void funAppRumED(LLSE *meusappsED ,LLDE *apprumED) {	
 	char operacao;
 	int pausa;
 	int pagina = 15;
@@ -1682,8 +1955,8 @@ void funAppRumED(LLDE *apprumED) {
 			case 'w':
 				return;
  			break;
- 			case 'q':
-     			
+ 			case 'q'://parando a instancia de um app
+     			funRemo(meusappsED, apprumED, pagina, 1);
             break;
         	case ',':
 				if(pagina != 15) {
@@ -1769,7 +2042,7 @@ int main() {
    	  		    funMeusappsED(&meusappsED, &apprumED);
 			break;
 			case 'e'://AppRumED
-				funAppRumED(&apprumED);
+				funAppRumED(&meusappsED, &apprumED);
 			break;
 			case 'a'://App PILHA
 				funPilhaED();
