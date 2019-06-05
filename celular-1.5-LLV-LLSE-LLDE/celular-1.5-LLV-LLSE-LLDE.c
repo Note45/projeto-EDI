@@ -1423,20 +1423,29 @@ void funRemo(LLSE *remove, LLDE *apprumED, int pagina, int chamada) {
 	int x;
 	App elemento;
 	
-	if(remove->vet[remove->IL].info.tam == -2) {//lista vazia
-		gotoxy(12, 20);
-		printf("-Nenhum app intalado!");	
-		gotoxy(2, 28);
-		system("PAUSE");	
-		return;	
+	if(chamada == 0) {
+		if(remove->vet[remove->IL].info.tam == -2) {//lista vazia
+			gotoxy(12, 20);
+			printf("-Nenhum app intalado!");	
+			gotoxy(2, 28);
+			system("PAUSE");	
+			return;	
+		}
+	}else {
+		if(apprumED->vet[apprumED->IL].info.tam == -2) {//lista vazia
+			gotoxy(12, 20);
+			printf("-Nenhum app rodando!");	
+			gotoxy(2, 28);
+			system("PAUSE");	
+			return;	
+		}		   	
 	}
 	
 	//zerando elemento
 	elemento.tam = -2;
 	elemento.id = -2;
 	
-	//so remove se tiver apps intalados
-	while(1) {
+	while(1) {//imprimindo tela de onde foi chamado
 		if(pagina == 15) {
 			system("cls");
 			if(chamada == 0) {
@@ -1463,26 +1472,34 @@ void funRemo(LLSE *remove, LLDE *apprumED, int pagina, int chamada) {
 		scanf("%d", & id);
 		gotoxy(0, 50);	
 		
-		//checando se e um indice valido
-	    for(x = remove->IL; x < T; x = remove->vet[x].prox) {
-	    	if(x == -1) {
-				break;
-			}
-			
-			if(id == remove->vet[x].info.id) {
-				elemento = remove->vet[x].info;//removendo do meusappsED
-				break;
-			}
-	    }			
+		if(chamada == 0) {//checando se e um indice valido
+		    for(x = remove->IL; x < T; x = remove->vet[x].prox) {
+		    	if(x == -1) {
+					break;
+				}
+				
+				if(id == remove->vet[x].info.id) {
+					elemento = remove->vet[x].info;//removendo do meusappsED
+					break;
+				}
+		    }
+		}else {			
+		    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
+		    	if(x == -1) {
+					break;
+				}
+				
+				if(id == apprumED->vet[x].info.id) {
+					elemento = apprumED->vet[x].info;//removendo do meusappsED
+					break;
+				}
+		    }			
+		}			
 		
 		if(elemento.tam != -2) {
-			removerLLSE(remove, elemento);//removendo do MeusappsED
-			
-			if(apprumED->vet[apprumED->IL].info.tam != -2) {//buscando elemento em apprumED
-				//zerando elemento
-				elemento.tam = -2;
-				elemento.id = -2;
-				
+			if(chamada == 0) {
+				removerLLSE(remove, elemento);//removendo do MeusappsED
+					
 			    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
 			    	if(x == -1) {
 						break;
@@ -1502,17 +1519,26 @@ void funRemo(LLSE *remove, LLDE *apprumED, int pagina, int chamada) {
 					printf("-Erro ao parar o app!");	
 					gotoxy(2, 28);
 					system("PAUSE");
+				}					
+	      	    return;				
+			}else {//se for chamada de AppRumED
+				if(elemento.tam != -2) {
+					removerLLDE(apprumED, elemento);
+					return;
+				}else {
+					gotoxy(5, 20);
+					printf("-Erro ao parar o app!");	
+					gotoxy(2, 28);
+					system("PAUSE");
 				}				
 			}	
-      	    return;			
-		}
-		else {
+      	    return;												
+		}else {
 			gotoxy(5, 20);
 			printf("-Aplicativo nao encontrado");	
 			gotoxy(2, 28);
 			system("PAUSE");
 			return;	
-
 		}
 	}
 }
