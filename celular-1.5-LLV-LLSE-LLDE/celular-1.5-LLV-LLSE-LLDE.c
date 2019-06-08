@@ -55,11 +55,9 @@ Cont ControleLLV;//variavel de controle da LLV
 //disponivel LLDE, LLSE, FILA
 int dispLLDE;
 int dispLLSE;
-int dispFILA[L - 1];
+int dispFILA;
 
-//fila StoreED, AppRumED
-FILA fila; //usada para instala��o de apps
-FILA fila_rumapps; //usada para os apps que est�o rodando
+FILA fila; //usada para instalacao de apps
 
 //importando da funcao gotoxy
 void gotoxy(int x, int y){
@@ -78,13 +76,13 @@ int alocaNoLLDE(LLDE *lista) {
 }
 
 //devolve onde eu vou inserir na FILA
-int alocaNoFILA(FILA *lista, int qual) {
+int alocaNoFILA(FILA *lista) {
     int d;
-    if(dispFILA[qual] == -1) {
+    if(dispFILA == -1) {
         return -3;//se a lista estiver cheia
     }
-    d = dispFILA[qual];
-    dispFILA[qual] = lista->vet[dispFILA[qual]].prox;
+    d = dispFILA;
+    dispFILA = lista->vet[dispFILA].prox;
     return d;
 }
 
@@ -125,9 +123,9 @@ void iniciaLLDE(LLDE *lista) {
 }
 
 //iniciando FILA
-void iniciaFILA(FILA *lista, int qual) {
+void iniciaFILA(FILA *lista) {
     int i;
-    dispFILA[qual] = 0;
+    dispFILA = 0;
     lista->quant = 0;
     
 	for(i = 0; i < L; i++) {
@@ -408,14 +406,14 @@ void inserirLLSE(LLSE *lista, App elemento) {
 }
 
 //inseirir um elemento na FILA
-App inserirFILA(FILA *lista, App elemento, int qual) {
+App inserirFILA(FILA *lista, App elemento) {
 	App temp;
 	int indice;//recebe o indice disponivel
 
 	if(lista->quant < 3) {
 		lista->quant++;
 		
-		indice = alocaNoFILA(lista, qual);
+		indice = alocaNoFILA(lista);
 		
 		//fazendo a primeira insercao na FILA
 		if(lista->vet[lista->IL].info.tam == -2) {
@@ -453,6 +451,7 @@ void removerLLSE(LLSE *lista, App elemento) {
 	if(lista->vet[lista->IL].info.tam == -2) {
 		printf("Lista Vazia!\n");
 		system("PAUSE");
+		return;
 	}
 	
 	//buscando qual no vou remover
@@ -1499,26 +1498,31 @@ void funRemo(LLSE *remove, LLDE *apprumED, int pagina, int chamada) {
 		if(elemento.tam != -2) {
 			if(chamada == 0) {
 				removerLLSE(remove, elemento);//removendo do MeusappsED
-					
-			    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
-			    	if(x == -1) {
-						break;
-					}
-					
-					if(id == apprumED->vet[x].info.id) {
-						elemento = apprumED->vet[x].info;//removendo do meusappsED
-						break;
-					}
-			    }
 				
-				if(elemento.tam != -2) {
-					removerLLDE(apprumED, elemento);
-					return;
-				}else {
-					gotoxy(5, 20);
-					printf("-Erro ao parar o app!");	
-					gotoxy(2, 28);
-					system("PAUSE");
+				if(apprumED->vet[apprumED->IL].info.tam != -2) {//removendo app se ele estiver rodando
+					elemento.tam = -2;
+					elemento.id = -2;
+					
+				    for(x = apprumED->IL; x < T; x = apprumED->vet[x].prox) {
+				    	if(x == -1) {
+							break;
+						}
+						
+						if(id == apprumED->vet[x].info.id) {
+							elemento = apprumED->vet[x].info;//removendo do meusappsED
+							break;
+						}
+				    }
+					
+					if(elemento.tam != -2) {
+						removerLLDE(apprumED, elemento);
+						return;
+					}else {
+						gotoxy(5, 20);
+						printf("-Erro ao parar o app!");	
+						gotoxy(2, 28);
+						system("PAUSE");
+					}
 				}					
 	      	    return;				
 			}else {//se for chamada de AppRumED
@@ -1548,15 +1552,12 @@ void funRum(LLSE meusappsED, LLDE *apprumED, int pagina) {
 	int x;
 	int id;
 	App elemento;
-	App temp;
 	
 	//zerando elemento e temp
 	elemento.tam = -2;
 	elemento.id = -2;
-	temp.tam = -2;
-	temp.id = -2;
 	
-	//se a lista estiver cheia
+	//se a LLDE estiver cheia
 	if(dispLLDE == -1) {
 		gotoxy(5, 20);
 		printf("-Memoria Cheia");
@@ -1564,73 +1565,62 @@ void funRum(LLSE meusappsED, LLDE *apprumED, int pagina) {
 		system("PAUSE");
 	   	return;	
 	}
-		
-		if(pagina == 15) {
-		   	//imprimindo os 16 apps iniciais
-			system("cls");
-			telaMeusappED();
-			imprimirLLSE(meusappsED);
-		}else {
-			system("cls");
-			telaMeusappED();
-		    imprimirLLSEpro(meusappsED);
-		}	
-		//tela FILA
-		telaFila(fila_rumapps);
-		
-		//Recebendo id selecionado
-		gotoxy(2,20);
-		printf("Id:");
-		scanf("%d", & id);
-		gotoxy(0, 50);
-		
-		if(fila_rumapps.vet[fila_rumapps.IL].info.tam != -2) {//vendo se o app ja foi iniciados
-		    for(x = fila_rumapps.IL; x < L; x = fila_rumapps.vet[x].prox) {
-		    	if(x == -1) {
-					break;
-				}		    	
-		    	
-				if(id == fila_rumapps.vet[x].info.id) {
-					gotoxy(5, 20);
-					printf("-Aplicativo ja selecionado");
-					gotoxy(2, 28);
-					system("PAUSE");
-					return;	
-				}
-		    }
-		}			
-	    
-	    //buscando qual elemento vou instalar  
-		for(x = meusappsED.IL ; x < T; x = meusappsED.vet[x].prox) {
+	
+	if(pagina == 15) {
+	   	//imprimindo os 16 apps iniciais
+		system("cls");
+		telaMeusappED();
+		imprimirLLSE(meusappsED);
+	}else {
+		system("cls");
+		telaMeusappED();
+	    imprimirLLSEpro(meusappsED);
+	}
+	
+	//Recebendo id selecionado
+	gotoxy(2,20);
+	printf("Id:");
+	scanf("%d", & id);
+	gotoxy(0, 50);
+	
+	if(apprumED->vet[apprumED->IL].info.tam != -2) {//vendo se o app ja foi iniciados
+	    for(x = apprumED->IL; x < L; x = apprumED->vet[x].prox) {
 	    	if(x == -1) {
 				break;
+			}		    	
+	    	
+			if(id == apprumED->vet[x].info.id) {
+				gotoxy(5, 20);
+				printf("-Aplicativo ja selecionado");
+				gotoxy(2, 28);
+				system("PAUSE");
+				return;	
 			}
-			
-			if(id == meusappsED.vet[x].info.id) {
-				elemento = meusappsED.vet[x].info;
-				break;
-			}
-	    }		
-	    
-	    if(elemento.tam != -2) {
-			//colocando app na FILA de instalacao
-			if(fila_rumapps.quant < 3) {
-				inserirFILA(&fila_rumapps, elemento, 1);
-				telaFila(fila_rumapps);
-				return;
-			}else {//se um quarto elemento for instalado o primeiro vai para a LLSE
-				temp = inserirFILA(&fila_rumapps, elemento, 1);
-				inserirLLDE(apprumED, temp);
-				telaFila(fila_rumapps);
-				return;
-			}			
-		}else {
-			gotoxy(5, 20);
-			printf("-Erro na busca do app!");
-			gotoxy(2, 28);
-			system("PAUSE");
-			return;
-		}		
+	    }
+	}			
+    
+    //buscando qual elemento vou instalar  
+	for(x = meusappsED.IL ; x < T; x = meusappsED.vet[x].prox) {
+    	if(x == -1) {
+			break;
+		}
+		
+		if(id == meusappsED.vet[x].info.id) {
+			elemento = meusappsED.vet[x].info;
+			break;
+		}
+    }		
+    
+    if(elemento.tam != -2) {
+		inserirLLDE(apprumED, elemento);
+		return;		
+	}else {
+		gotoxy(5, 20);
+		printf("-Erro na busca do app!");
+		gotoxy(2, 28);
+		system("PAUSE");
+		return;
+	}		
 	return;	
 }
 
@@ -1707,10 +1697,10 @@ void funInstaLLSE(App storeED[], LLSE *meusappsED, int pagina) {
 		
 		//colocando app na FILA de instalacao
 		if(fila.quant < 3) {
-			inserirFILA(&fila, elemento, 0);
+			inserirFILA(&fila, elemento);
 			return;
 		}else {//se um quarto elemento for instalado o primeiro vai para a LLSE
-			temp = inserirFILA(&fila, elemento, 0);
+			temp = inserirFILA(&fila, elemento);
 			inserirLLSE(meusappsED, temp);
 			return;
 		}			
@@ -1970,6 +1960,10 @@ void funAppRumED(LLSE *meusappsED ,LLDE *apprumED) {
 			system("cls");
 			telaAppRum();
 			imprimirLLDE(*apprumED);
+		}else {
+			system("cls");
+			telaAppRum();
+			imprimirLLDEpro(*apprumED);
 		}
 		
 		//Recebendo operacao selecionada
@@ -2039,11 +2033,10 @@ int main() {
 	char operacao;
 	int pausa;
 
-	//iniciando LLSE e LLDE e FILAs
+	//iniciando LLSE e LLDE
 	iniciaLLSE(&meusappsED);
 	iniciaLLDE(&apprumED);
-	iniciaFILA(&fila, 0);
-	iniciaFILA(&fila_rumapps, 1);
+	iniciaFILA(&fila);
 	
 	//chamando a leitura do arquivo
 	lerArq(storeED);
